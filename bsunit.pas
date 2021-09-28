@@ -100,7 +100,8 @@ unit bsunit;
  11/12/2020 make normalisation modal, i.e. non destructive
             change toolbar panel to TToolBar
  14/12/2020 select default protocol on startup
- 3/3/2021   fix FFF penumbra slope}
+ 3/3/2021   fix FFF penumbra slope
+ 11/9/2021  fix recognise files with tiff extension}
 
 
 {$mode objfpc}{$H+}
@@ -1215,7 +1216,7 @@ with OpenDialog do
    {$IFDEF WINDOWS}
    Filter := 'DICOM Image|*.dcm|MapCheck Text Files|*.txt|PTW|*.mcc|IBA|*.opg|Windows bitmap|*.bmp|Tiff bitmap|*.tif|JPEG image|*.jpg|HIS image|*.his|All Files|*.*';
    {$ELSE}
-   Filter := 'DICOM Image|*.dcm|MapCheck, XIO, RAW Text Files|*.txt|PTW|*.mcc|IBA|*.opg|Windows bitmap|*.bmp|Tiff bitmap|*.tif|JPEG image|*.jpg;*jpeg|HIS image|*.his|All Files|*';
+   Filter := 'DICOM Image|*.dcm|MapCheck, XIO, RAW Text Files|*.txt|PTW|*.mcc|IBA|*.opg|Windows bitmap|*.bmp|Tiff bitmap|*.tif;*.tiff|JPEG image|*.jpg;*jpeg|HIS image|*.his|All Files|*';
    {$ENDIF}
    Title := 'Open file';
    InitialDir := sExePath;
@@ -1233,7 +1234,7 @@ if OpenDialog.Execute then
       DataOK := HISOpen(OpenDialog.Filename);
    if (not DataOK) and (Dummy = '.BMP') then
       DataOK := BMPOpen(OpenDialog.Filename);
-   if (not DataOK) and (Dummy = '.TIF') then
+   if (not DataOK) and ((Dummy = '.TIF') or (Dummy = '.TIFF')) then
       DataOK := BMPOpen(OpenDialog.Filename);
    if (not DataOK) and ((Dummy = '.JPG') or (Dummy = '.JPEG')) then
       DataOK := BMPOpen(OpenDialog.Filename);
