@@ -13,8 +13,8 @@ uses
   , SysUtils              //delete SysUtils if not using heaptrc
   {$ENDIF}
   { you can add units after this }, bsunit, TAChartLazarusPkg, tachartprint,
-  dicom, define_types, dtrackbar, lnetvisual,
-  aboutunit;
+  dtrackbar, lnetvisual,
+  aboutunit, param2dfuncs, importunit, mathsfuncs, settingsunit, form2pdf;
 
 {$R *.res}
 
@@ -28,6 +28,7 @@ begin
    Application.Title:='BeamScheme';
   Application.Initialize;
   Application.CreateForm(TBSForm, BSForm);
+   Application.CreateForm(TSettingsForm, SettingsForm);
   Application.Run;
 end.
 
