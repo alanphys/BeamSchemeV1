@@ -137,7 +137,14 @@ unit bsunit;
             fix profile bug in MaxNorm and CAXNorm
  17/1/2022  create IFA data types and add to settings unit
  19/1/2022  create circular IFA
-            create TBasicBeam data class, derive TBeam and define IFA as TBasicBeam}
+            create TBasicBeam data class, derive TBeam and define IFA as TBasicBeam
+ 20/1/2022  fix SingeProfile IFA if edges not found
+            move Invert to TBasicbeam and create test
+            finally remove 2x col offset in Data from legacy MapCheck
+            move Centre to TBeam and create test
+            fix invert and centre crash with no file open
+ 24/1/2022  show full file name in cImage hint
+            fix display file name correctly on image maximise}
 
 
 {$mode objfpc}{$H+}
@@ -852,11 +859,16 @@ end;
 
 procedure TBSForm.Display(BMax,BMin:integer);
 begin
-Beam.Display(iBeam.Picture.Bitmap,BMax,BMin);
-if ShowParams then Beam.DisplayIFA(iBeam.Picture.Bitmap);
-Show2DResults(Beam);
-seXAngleChange(Self);
-seYAngleChange(Self);
+if Length(Beam.Data) > 0 then
+   begin
+   Beam.Display(iBeam.Picture.Bitmap,BMax,BMin);
+   if ShowParams and (Length(Beam.IFA.Data) > 0) then Beam.DisplayIFA(iBeam.Picture.Bitmap);
+   Show2DResults(Beam);
+   seXAngleChange(Self);
+   seYAngleChange(Self);
+   end
+  else
+   BSErrorMsg('No file open!');
 end;
 
 
@@ -935,13 +947,13 @@ if OpenDialog.Execute then
       seYAngle.MaxValue := 135;
       seYAngle.MinValue := 46;
       seYAngle.Value := 90;
-      if odd(Beam.Cols - 2) then
-         seYOffset.MaxValue := (Beam.Cols - 2) div 2
+      if odd(Beam.Cols) then
+         seYOffset.MaxValue := (Beam.Cols) div 2
         else
-        seYOffset.MaxValue := (Beam.Cols - 2) div 2 - 1;
-      seYOffset.MinValue := -((Beam.Cols - 2) div 2);
+        seYOffset.MaxValue := (Beam.Cols) div 2 - 1;
+      seYOffset.MinValue := -((Beam.Cols) div 2);
       seYOffset.Value := 0;
-      seYWidth.MaxValue := Beam.Cols - 2;
+      seYWidth.MaxValue := Beam.Cols;
       seYWidth.Value := 1;
       BMin := round(Beam.Min);
       BMax := round(Beam.Max);
@@ -959,6 +971,8 @@ if OpenDialog.Execute then
       ClearStatus;
       Display(BMax,BMin);
       Dummy := OpenDialog.FileName;
+      cImage.Hint := Dummy;
+      cImage.ShowHint := True;
       I := cImage.Canvas.TextWidth(Dummy);
       if I >= cImage.Width then
          Dummy := leftStr(Dummy, round(Length(Dummy)*cImage.Width/(2*I) - 1)) + '...'
@@ -1005,12 +1019,12 @@ if iBeam.Picture.Bitmap.Height > 0 then
    if AR >= 1 then
       begin
       PY := (Beam.Rows div 2) - MouseXY.Y*(Beam.Rows/Scale)*AR;
-      PX := MouseXY.X*((Beam.Cols - 2)/Scale) - ((Beam.Cols -2) div 2);
+      PX := MouseXY.X*((Beam.Cols)/Scale) - ((Beam.Cols) div 2);
       end
      else
       begin
       PY := (Beam.Rows div 2) - MouseXY.Y*(Beam.Rows/Scale);
-      PX := MouseXY.X*((Beam.Cols - 2)/Scale)/AR - ((Beam.Cols -2) div 2);
+      PX := MouseXY.X*((Beam.Cols)/Scale)/AR - ((Beam.Cols) div 2);
       end;
 
    R := sqrt(PX*PX + PY*PY);
@@ -1075,22 +1089,11 @@ end;
 
 procedure TBSForm.sbInvertClick(Sender: TObject);
 {Invert and rescale}
-var I,J        :integer;
-    z          :double;
-
 begin
 miInvert.Checked := tbInvert.Down;
 XPArr.ResetCoords;
 YPArr.ResetCoords;
-if Beam.Max <> Beam.Min then
-   for I:=0 to Beam.Rows - 1 do
-     for J:=2 to Beam.Cols - 1 do
-        begin
-        Z := Beam.Data[I,J];
-        Z :=(Beam.Max - Z + Beam.Min);
-        Beam.Data[I,J] := Z;
-        end;
-Beam.ResetParams;
+Beam.Invert;
 Display(DTrackBar.PositionU,DTrackBar.PositionL);
 end;
 
@@ -1138,54 +1141,19 @@ end;
 
 
 procedure TBSForm.sbCentreClick(Sender: TObject);
-{resamples the data using bi-linear interpolation}
-var I,J,
-    NI,NJ,                     {new x and y coords}
-    MaxI,MaxJ  :integer;
-    ShiftData  :TBeamData;
-    SX,SY,
-    NX,NY,
-    RemX,
-    RemY:double;
-
+{Put CoM at centre of image. Resamples the data using bi-linear interpolation}
 begin
 XPArr.ResetCoords;
 YPArr.ResetCoords;
-MaxI := Beam.Cols - 3;
-MaxJ := Beam.Rows - 1;
-with XPArr do SX := (LeftEdge.ValueX + RightEdge.ValueX)/(2*Beam.XRes);
-with YPArr do SY := (LeftEdge.ValueX + RightEdge.ValueX)/(2*Beam.YRes);
-SetLength(ShiftData,Beam.Rows);
-
-for J:= 0 to MaxJ do
-   begin
-   SetLength(ShiftData[J],Beam.Cols);
-   ShiftData[J,0] := Beam.Data[J,0];
-   ShiftData[J,1] := Beam.Data[J,1];
-   NY := J + SY;
-   NJ := Trunc(NY);
-   RemY := NY - NJ;
-   if NJ < 0 then NJ := 0
-     else
-      if NJ > MaxJ - 1 then NJ := MaxJ - 1;
-   for I:=0 to MaxI do
-      begin
-      NX := I + SX;
-      NI := Trunc(NX);
-      RemX := NX - NI;
-      if NI < 0 then NI := 0
-         else
-         if NI > MaxI - 1 then NI := MaxI - 1;
-      ShiftData[J,I+2] := Beam.Data[NJ,NI+2]*(1-RemX)*(1-RemY) + Beam.Data[NJ,NI+3]*RemX*(1-RemY)
-         + Beam.Data[NJ+1,NI+2]*(1-RemX)*RemY + Beam.Data[NJ+1,NI+3]*RemX*RemY;
-      end;
-   end;
-Beam.Data := ShiftData;
+if Length(Beam.Data) > 0 then Beam.CentreData
+   else BSErrorMsg('No file open!');
 Display(DTrackBar.PositionU,DTrackBar.PositionL);
 end;
 
 
 procedure TBSForm.sbIMaxClick(Sender: TObject);
+var I          :integer;
+    Dummy      :string;
 begin
 pBeam.Height := ClientHeight - 65;
 pBeam.Width := ClientWidth;
@@ -1198,6 +1166,12 @@ sbIMin.Enabled := True;
 sbIMin.Visible := True;
 lMin.Top := pMaxMin.Height - 20;
 DTrackbar.Height := pMaxMin.Height - 40;
+Dummy := cImage.Hint;
+I := cImage.Canvas.TextWidth(Dummy);
+if I >= cImage.Width then
+   Dummy := leftStr(Dummy, round(Length(Dummy)*cImage.Width/(2*I) - 1)) + '...'
+      + RightStr(Dummy, round(Length(Dummy)*cImage.Width/(2*I) - 1));
+cImage.Caption := Dummy;
 pXProfile.Hide;
 pYProfile.Hide;
 PResults.Hide;
@@ -1205,6 +1179,8 @@ end;
 
 
 procedure TBSForm.sbIMinClick(Sender: TObject);
+var I          :integer;
+    Dummy      :string;
 begin
 pBeam.Height := (BSForm.ClientHeight - 65) div 2 - 1;
 pBeam.Width := BSForm.ClientWidth div 2 - 1;
@@ -1219,6 +1195,12 @@ sbIMin.Visible := false;
 pMaxMin.Height := pBeam.Height - 20;
 lMin.Top := pMaxMin.Height - 20;
 DTrackbar.Height := pMaxMin.Height - 40;
+Dummy := cImage.Hint;
+I := cImage.Canvas.TextWidth(Dummy);
+if I >= cImage.Width then
+   Dummy := leftStr(Dummy, round(Length(Dummy)*cImage.Width/(2*I) - 1)) + '...'
+      + RightStr(Dummy, round(Length(Dummy)*cImage.Width/(2*I) - 1));
+cImage.Caption := Dummy;
 pXProfile.Show;
 pYProfile.Show;
 pResults.Show;

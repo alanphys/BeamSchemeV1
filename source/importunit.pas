@@ -67,11 +67,13 @@ end;
 
 
 function MapCheckOpen(sFileName:string; Beam:TBeam):boolean;
-var I,J:       integer;
+{Import Sun Nuclear MapCheck text files}
+var I,J        :integer;
     Dummy,
-    sCalFile:  string;
-    Value:     double;
-    Infile:    textfile;
+    sCalFile   :string;
+    Value      :double;
+    RowDet     :TBeamData;     {read first two cols of value matrix}
+    Infile     :textfile;
 
 begin
 Result := false;
@@ -89,7 +91,7 @@ if Dummy[1] = '*' then {file is MapCheck}
       if LeftStr(Dummy,4) = 'Rows' then
          Beam.Rows := StrToInt(copy(Dummy,6,3));
       if LeftStr(Dummy,4) = 'Cols' then
-         Beam.Cols := StrToInt(copy(Dummy,6,3)) + 2;  {include row and detector no}
+         Beam.Cols := StrToInt(copy(Dummy,6,3));
       if LeftStr(Dummy,9) = 'Dose Info' then
          if Copy(Dummy,12,4) = 'None' then
             sCalFile := 'Interpolated';
@@ -99,9 +101,16 @@ if Dummy[1] = '*' then {file is MapCheck}
    if (not eof(Infile)) and (Beam.Rows <> 0) and (Beam.Cols <> 0) then
       begin
       SetLength(Beam.Data,Beam.Rows);
+      SetLength(RowDet,Beam.Rows);
       for I := 0 to Beam.Rows - 1 do
          begin
          SetLength(Beam.Data[I],Beam.Cols);
+         SetLength(RowDet[I],2);
+         {read row and detector no}
+         Read(Infile, Value);
+         RowDet[I,0] := Value;
+         Read(Infile, Value);
+         RowDet[I,1] := Value;
          for J := 0 to Beam.Cols - 1 do
             begin
             Read(Infile, Value);
@@ -116,10 +125,10 @@ if Dummy[1] = '*' then {file is MapCheck}
       {set dimensions}
       with Beam do
          begin
-         Height := Data[0,0]*2;
+         Height := RowDet[0,0]*2;
          Width := RobustStrToFloat(Dummy)*2;
          XRes := Height/(Rows - 1);             //number of spaces are detectors - 1
-         YRes := Width/(Cols - 3)
+         YRes := Width/(Cols - 1)
          end;
       Result := true;
       end
@@ -137,12 +146,15 @@ end;
 
 
 function IBAOpen(sFileName:string; Beam:TBeam):boolean;
+{Import IBA Matrix and StarTrack text opg files}
 var I,J,K,
-    NumSets:   integer;
-    Dummy,sPart,
-    sCalFile:  string;
-    Value:     double;
-    Infile:    textfile;
+    NumSets    :integer;
+    Dummy,
+    sPart,
+    sCalFile   :string;
+    Value      :double;
+    RowDet     :array of double;
+    Infile     :textfile;
 
 begin
 Result := false;
@@ -167,12 +179,12 @@ if Dummy = '<opimrtascii>' then {file is IBA}
       if sPart = 'No. of Columns' then
          begin
          sPart:= ExtractDelimited(2,Dummy,[':']);
-         Beam.Cols := StrToInt(sPart) + 2;  {include row and detector no}
+         Beam.Cols := StrToInt(sPart);
          end;
       if sPart = 'Number of Bodies' then
          begin
          sPart:= ExtractDelimited(2,Dummy,[':']);
-         NumSets := StrToInt(sPart);  {include row and detector no}
+         NumSets := StrToInt(sPart);
          end;
       end;
    readln(Infile);                                {skip plane position}
@@ -184,27 +196,31 @@ if Dummy = '<opimrtascii>' then {file is IBA}
    {Sum data sets}
    if (not eof(Infile)) and (Beam.Rows <> 0) and (Beam.Cols <> 0) then
       begin
+      SetLength(Beam.Data,Beam.Rows);
+      SetLength(RowDet,Beam.Rows);
       for K:=1 to NumSets do
          begin
-         if K = 1 then SetLength(Beam.Data,Beam.Rows);
          for I := Beam.Rows - 1 downto 0 do
             begin
             if K = 1 then SetLength(Beam.Data[I],Beam.Cols);
-            for J := 1 to Beam.Cols - 1 do
+            {read row no}
+            Read(Infile, Value);
+            if K = 1 then RowDet[I] := Value;
+            for J := 0 to Beam.Cols - 1 do
                begin
                read(Infile, Value);
-               if (K = 1) or (J = 1) then Beam.Data[I,J] := Value
+               if (K = 1) then Beam.Data[I,J] := Value
                   else Beam.Data[I,J] := Beam.Data[I,J] + Value;
                end;
             end;
 
 
          while (Dummy <> sCalFile) and (not eof(Infile)) do
-            readln(Infile,Dummy);                       {scan to next <asciibody>}
-         readln(Infile,Dummy);                                {skip plane position}
-         readln(Infile,Dummy);                                {skip blank row}
-         readln(Infile,Dummy);                                {get col headers}
-         readln(Infile,Dummy);                                {skip Y[mm]}
+            readln(Infile,Dummy);                 {scan to next <asciibody>}
+         readln(Infile,Dummy);                    {skip plane position}
+         readln(Infile,Dummy);                    {skip blank row}
+         readln(Infile,Dummy);                    {get col headers}
+         readln(Infile,Dummy);                    {skip Y[mm]}
          end;
       end;
 
@@ -213,7 +229,7 @@ if Dummy = '<opimrtascii>' then {file is IBA}
       begin
       for I := 0 to Beam.Rows - 1 do
          begin
-         for J := 2 to Beam.Cols - 1 do
+         for J := 0 to Beam.Cols - 1 do
             begin
             Beam.Data[I,J] := Beam.Data[I,J]/NumSets;
             end;
@@ -223,10 +239,10 @@ if Dummy = '<opimrtascii>' then {file is IBA}
    {set dimensions}
    with Beam do
       begin
-      Height := Data[0,1]*0.2;
+      Height := RowDet[0]*0.2;
       Width := abs(RobustStrToFloat(Trim(sPart))*0.2);
       XRes := Height/(Rows - 1);             //number of spaces are detectors - 1
-      YRes := Width/(Cols - 3)
+      YRes := Width/(Cols - 1)
       end;
    Result := true;
    end
@@ -239,12 +255,13 @@ end;
 
 
 function PTWOpen(sFileName:string; Beam:TBeam):boolean;
-{PTW data is organised into a series of profile scans}
-var I,J:       integer;
-    Dummy:     string;
-    Value:     double;
-    Infile:    textfile;
-    Counting:  boolean;
+{Import PTW MCC text files. PTW data is organised into a series of profile scans}
+var I,J        :integer;
+    Dummy      :string;
+    Value      :double;
+    RowDet     :array of double;
+    Infile     :textfile;
+    Counting   :boolean;
 
 begin
 Result := false;
@@ -267,14 +284,15 @@ if Dummy = 'BEGIN_SCAN_DATA' then {file is PTW}
       if Counting then inc(J);
       readln(Infile,Dummy);
       Dummy := DelChars(Dummy,#9);
-						end;
+      end;
    Beam.Rows := I;
-   Beam.Cols := Round(J/I + 1);
+   Beam.Cols := Round(J/I - 1);
 
    Reset(Infile);
    if(not eof(Infile)) and (Beam.Rows <> 0) and (Beam.Cols <> 0) then
       begin
       SetLength(Beam.Data,Beam.Rows);
+      SetLength(RowDet,Beam.Rows);
       I := 0;
       Counting := false;
       readln(Infile,Dummy);
@@ -284,11 +302,11 @@ if Dummy = 'BEGIN_SCAN_DATA' then {file is PTW}
          if (DelChars(Dummy,#9) = 'END_DATA') then Counting := false;
          if Counting then
             begin
-            inc(J);
             Dummy := ExtractDelimited(3,Dummy,[#9]);
             Value := RobustStrToFloat(Dummy);
             Value := Value*100;                                {convert to cGy}
-            Beam.Data[Beam.Rows - I,J + 1] := Value;
+            Beam.Data[Beam.Rows - I,J] := Value;
+            inc(J);
             end;
          if (DelChars(Dummy,#9) = 'BEGIN_DATA') then
             begin
@@ -298,12 +316,12 @@ if Dummy = 'BEGIN_SCAN_DATA' then {file is PTW}
          if (LeftStr(Dummy,11) = 'BEGIN_SCAN ') then
             begin
             inc(I);
-            SetLength(Beam.Data[Beam.Rows - I],Beam.Cols + 1);
+            SetLength(Beam.Data[Beam.Rows - I],Beam.Cols);
             end;
          if LeftStr(Dummy,20) = 'SCAN_OFFAXIS_INPLANE' then
             begin
             Copy2SymbDel(Dummy,'=');
-            Beam.Data[Beam.Rows - I,0] := RobustStrToFloat(Dummy);
+            RowDet[Beam.Rows - I] := RobustStrToFloat(Dummy);
             end;
          readln(Infile,Dummy);
          Dummy := TrimLeftSet(Dummy,StdWordDelims);
@@ -313,10 +331,10 @@ if Dummy = 'BEGIN_SCAN_DATA' then {file is PTW}
       {set dimensions}
       with Beam do
          begin
-         Height := Data[0,0]/5;
+         Height := RowDet[0]/5;
          Width := Height;                      {assume square for now}
          XRes := Height/(Rows - 1);             //number of spaces are detectors - 1
-         YRes := Width/(Cols - 3)
+         YRes := Width/(Cols - 1)
          end;
       Result := true;
    end
@@ -329,28 +347,29 @@ end;
 
 
 function DICOMOpen(sFileName:string; Beam:TBeam):boolean;
+{Import DICOM RI and RD files}
 
 type  IntRA = array [0..0] of integer;
       IntP0 = ^IntRA;
 
 
-var Infile:    file;
-    sDICOMhdr: string;
+var Infile     :file;
+    sDICOMhdr  :string;
     I,J,K,
     I12,
     ImageStart,
     AllocSliceSz,
     StoreSliceSz,
     StoreSliceVox,
-    size:      integer;
+    size       :integer;
     Value      :double;
-    bImgOK:    boolean = false;
-    bHdrOK:    boolean = false;
-    gDICOMData:DiCOMDATA;
+    bImgOK     :boolean = false;
+    bHdrOK     :boolean = false;
+    gDICOMData :DiCOMDATA;
     lBuff,
-    TmpBuff:   bYTEp0;
-    lBuff16:   WordP0;
-    lBuff32:   DWordP0;
+    TmpBuff    :bYTEp0;
+    lBuff16    :WordP0;
+    lBuff32    :DWordP0;
 
 begin
 Beam.Rows := 0;
@@ -384,7 +403,7 @@ Result := false;
          AllocSLiceSz := (gDICOMdata.XYZdim[1]*gDICOMdata.XYZdim[2]{height * width} *
             gDICOMdata.Allocbits_per_pixel+7) div 8 ;
          if (AllocSLiceSz) < 1 then exit;
-         Beam.Cols := gDICOMData.XYZdim[1] + 2;
+         Beam.Cols := gDICOMData.XYZdim[1];
          Beam.Rows := gDICOMData.XYZdim[2];
          Beam.XRes := gDICOMData.XYZmm[1]/10;
          Beam.YRes := gDICOMData.XYZmm[2]/10;
@@ -469,7 +488,7 @@ Result := false;
                for K:=0 to gDicomData.XYZdim[1] - 1 do
                   begin
                   Value := lbuff32^[i];
-                  Beam.Data[J,K+2] := Value;
+                  Beam.Data[J,K] := Value;
                   inc(I);
                   end;
                end;
@@ -494,7 +513,7 @@ Result := false;
                for K:=0 to gDicomData.XYZdim[1] - 1 do
                   begin
                   Value := lbuff16^[i];
-                  Beam.Data[J,K+2] := Value;
+                  Beam.Data[J,K] := Value;
                   inc(I);
                   end;
                end;
@@ -513,7 +532,7 @@ Result := false;
                for K:=0 to gDicomData.XYZdim[1] - 1 do
                   begin
                   value := lbuff^[i];
-                  Beam.Data[J,K+2] := Value;
+                  Beam.Data[J,K] := Value;
                   inc(I);
                   end;
                end;
@@ -532,14 +551,15 @@ end;
 
 
 function HISOpen(sFileName:string; Beam:TBeam):boolean;
-var Infile:    file of word;
+{Import generic HIS files}
+var Infile     :file of word;
     I,J,K,
     size       :integer;
     FileXDim,
     FileYDim,
     ImageStart :word;
     Value      :double;
-    lBuff16:   WordP0;
+    lBuff16    :WordP0;
 
 begin
 Beam.Rows := 0;
@@ -553,18 +573,18 @@ Result := false;
    {get dimensions}
    Seek(Infile,3);
    Read(Infile,ImageStart);
-   ImageStart :=ImageStart div 2; {no of 16 bit words}
+   ImageStart := ImageStart div 2; {no of 16 bit words}
    Seek(Infile,8);
    Read(Infile,FileXDim);
    Read(Infile,FileYDim);
-   Beam.Cols := FileXDim + 2;
+   Beam.Cols := FileXDim;
    Beam.Rows := FileYDim;
    Beam.Width := FileXDim;
    Beam.Height := FileYDim;
 
    Seek(Infile, ImageStart);
    Size := FileXDim*FileYDim*2;
-   GetMem( lbuff16, Size);
+   GetMem(lbuff16, Size);
    BlockRead(Infile, lbuff16^, Size div 2);
    CloseFile(Infile);
 
@@ -577,7 +597,7 @@ Result := false;
       for K:=0 to FileXDim - 1 do
          begin
          Value := lbuff16^[i];
-         Beam.Data[J,K+2] := Value;
+         Beam.Data[J,K] := Value;
          inc(I);
          end;
       end;
@@ -590,11 +610,12 @@ end;
 
 
 function XiOOpen(sFileName:string; Beam:TBeam):boolean;
-var I,J:       integer;
-    Dummy:     string;
+{Import XiO and Monaco dose plane text files}
+var I,J        :integer;
+    Dummy      :string;
     cGy,                       {if dose is in Gy convert to cGy}
-    Value:     double;
-    Infile:    textfile;
+    Value      :double;
+    Infile     :textfile;
 
 begin
 Result := false;
@@ -606,7 +627,7 @@ for I:=1 to 16 do
    readln(Infile,Dummy);
    if LeftStr(Dummy,9) = 'DosePtsxy' then
       begin
-      Beam.Cols := StrToInt(copy(Dummy,11,3)) + 2;
+      Beam.Cols := StrToInt(copy(Dummy,11,3));
       Beam.Rows := StrToInt(copy(Dummy,15,3));
       end;
    if LeftStr(Dummy,9) = 'DoseResmm' then
@@ -633,10 +654,10 @@ if (not eof(Infile)) and (Beam.Rows <> 0) and (Beam.Cols <> 0) then
       begin
       SetLength(Beam.Data[I],Beam.Cols);
       readln(Infile,Dummy);
-      for J := 1 to Beam.Cols - 2 do
+      for J := 0 to Beam.Cols - 1 do
          begin
-         Value := RobustStrToFloat(ExtractDelimited(J,Dummy,[',']))*cGy;
-         Beam.Data[I,J+1] := Value;
+         Value := RobustStrToFloat(ExtractDelimited(J+1,Dummy,[',']))*cGy;
+         Beam.Data[I,J] := Value;
          end;
       end;
    Result := true;
@@ -650,11 +671,12 @@ end;
 
 
 function RAWOpen(sFileName:string; Beam:TBeam):boolean;
-var I,J:       integer;
+{Import raw text values, tab delimited}
+var I,J        :integer;
     Dummy,
-    sValue:    string;
-    Value:     double;
-    Infile:    textfile;
+    sValue     :string;
+    Value      :double;
+    Infile     :textfile;
 
 begin
 Result := true;
@@ -671,14 +693,14 @@ Result := true;
       J := 0;
       while Result and (Dummy <> '') do
          begin
-         SetLength(Beam.Data[I],J+3);
+         SetLength(Beam.Data[I],J+1);
          sValue := Copy2SpaceDel(Dummy);
             try
             Value := RobustStrToFloat(sValue);
             except
             Result := false;
             end;
-         Beam.Data[I,J+1] := Value;
+         Beam.Data[I,J] := Value;
          inc(J);
          end;
       inc(I);
@@ -686,7 +708,7 @@ Result := true;
    if Result then
       begin
       Beam.Rows := I;
-      Beam.Cols := J + 2;
+      Beam.Cols := J;
       Beam.XRes := DefaultRes;
       Beam.YRes := DefaultRes;
       Beam.Width := J*DefaultRes;
@@ -701,16 +723,18 @@ end;
 
 
 function BrainLabOpen(sFileName:string; Beam:TBeam):boolean;
+{Import BrainLab dose plane export text files}
 var I,J,K,
-    NumSets:   integer;
+    NumSets    :integer;
     Dummy,sPart,
     sCalFile,
-    sColHead:  string;
+    sColHead   :string;
     cGy,                       {if dose is in Gy convert to cGy}
     Value,
     LDet,                      {position of left most value}
-    RDet:      double;         {position of right most value}
-    Infile:    textfile;
+    RDet       :double;        {position of right most value}
+    RowDet     :array of double;
+    Infile     :textfile;
 
 begin
 Result := false;
@@ -737,7 +761,7 @@ if LeftStr(Dummy,8) = 'BrainLAB' then {file is BrainLab}
       if sPart = 'Number of Columns' then
          begin
          sPart:= ExtractDelimited(2,Dummy,[':']);
-         Beam.Cols := StrToInt(sPart) + 2;  {include row and detector no}
+         Beam.Cols := StrToInt(sPart);  {include row and detector no}
          end;
       if sPart = 'Number of Planes' then
          begin
@@ -753,26 +777,26 @@ if LeftStr(Dummy,8) = 'BrainLAB' then {file is BrainLab}
       begin
       for K:=1 to NumSets do
          begin
-         if K = 1 then SetLength(Beam.Data,Beam.Rows);
+         if K = 1 then
+            begin
+            SetLength(Beam.Data,Beam.Rows);
+            SetLength(RowDet,Beam.Rows);
+            end;
          for I := 0 to Beam.Rows - 1 do
             begin
             if K = 1 then SetLength(Beam.Data[I],Beam.Cols);
-            for J := 1 to Beam.Cols - 1 do
+            {read row no}
+            Read(Infile, Value);
+            if K = 1 then RowDet[I] := Value;
+            for J := 0 to Beam.Cols - 1 do
                begin
                read(Infile, Value);
                if (K = 1) then
-                  begin
-                  if (J = 1) then Beam.Data[I,J] := Value
-                     else Beam.Data[I,J] := Value*cGy;
-                  end
+                  Beam.Data[I,J] := Value*cGy
                  else
-                  begin
-                  if (J = 1) then Beam.Data[I,J] := Value
-                     else Beam.Data[I,J] := Beam.Data[I,J] + Value*cGy;
-                  end;
+                  Beam.Data[I,J] := Beam.Data[I,J] + Value*cGy;
                end;
             end;
-
 
          while (Dummy <> sCalFile) and (not eof(Infile)) do
             readln(Infile,Dummy);                       {scan to next ------}
@@ -785,7 +809,7 @@ if LeftStr(Dummy,8) = 'BrainLAB' then {file is BrainLab}
       begin
       for I := 0 to Beam.Rows - 1 do
          begin
-         for J := 2 to Beam.Cols - 1 do
+         for J := 0 to Beam.Cols - 1 do
             begin
             Beam.Data[I,J] := Beam.Data[I,J]/NumSets;
             end;
@@ -805,9 +829,9 @@ if LeftStr(Dummy,8) = 'BrainLAB' then {file is BrainLab}
          Inc(I);
          end;
       Width := abs(LDet - RDet)/10;
-      Height := abs(Data[0,1] - Data[Beam.Rows-1,1])/10;
+      Height := abs(RowDet[0] - RowDet[Beam.Rows-1])/10;
       XRes := Height/(Rows - 1);             //number of spaces are detectors - 1
-      YRes := Width/(Cols - 3);
+      YRes := Width/(Cols - 1);
       end;
    Result := true;
    end
@@ -820,6 +844,7 @@ end;
 
 
 function BMPOpen(sFileName:string; Beam:TBeam):boolean;
+{Import BM, TIFF and JPEG images. Compressed TIFF is not supported}
 var I,J,
     ResUnit    :integer;
     Value,
@@ -839,7 +864,7 @@ lRawImage.CreateData(false);
 SrcIntfImage := TLazIntfImage.Create(0,0);
 SrcIntfImage.SetRawImage(lRawImage);
 SrcIntfImage.LoadFromFile(sFileName);
-Beam.Cols := SrcIntfImage.Width + 2;
+Beam.Cols := SrcIntfImage.Width;
 Beam.Rows := SrcIntfImage.Height;
 if SrcIntfImage.ExtraCount>0 then
    try
@@ -859,17 +884,17 @@ if (Beam.Rows > 0) and (Beam.Cols > 0) then
    for I := 0 to Beam.Rows - 1 do
       begin
       SetLength(Beam.Data[I],Beam.Cols);
-      for J := 1 to Beam.Cols - 2 do
+      for J := 0 to Beam.Cols - 1 do
          begin
-         CurColor := SrcIntfImage.Colors[J-1,I];
+         CurColor := SrcIntfImage.Colors[J,I];
          Value := byte(CurColor.Red);
-         Beam.Data[I,J+1] := Value;
+         Beam.Data[I,J] := Value;
          end;
       end;
    Beam.XRes := Res;
    Beam.YRes := Res;
    Beam.Width := Beam.Rows*Res;
-   Beam.Height := (Beam.Cols - 2)*Res;
+   Beam.Height := Beam.Cols*Res;
    Result := true;
    end
   else

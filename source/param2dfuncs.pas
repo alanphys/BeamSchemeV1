@@ -127,7 +127,7 @@ end;
 
 
 function CoMVal2D(BeamArr:Tbeam):string;
-{Returns the X,Y coordinates of the Centre of Mass}
+{Returns the row,col coordinates of the Centre of Mass}
 begin
 Result := '(' + FloatToStrF(BeamArr.CoM.X,ffFixed,4,1) + ',' +
    FloatToStrF(BeamArr.CoM.Y,ffFixed,4,1) + ')';
@@ -168,7 +168,7 @@ function SymmetryAve2D(BeamArr:TBeam):string;
 {Returns the maximum difference between the IFA and the IFA rotated 180 degrees,
 normalised to the average of the IFA according to NCS-70 eq 3-6.
 max(abs(D(x,y) - D(-x,-y)))*100/Dave}
-var I,J,K,
+var I,J,
     EndRow,
     EndCol     :integer;
     Diff,
@@ -179,7 +179,7 @@ begin
 Diff := 0;
 MaxDiff := 0;
 EndRow := BeamArr.Rows - 1;
-EndCol := BeamArr.Cols - 3;
+EndCol := BeamArr.Cols - 1;
 aIFA := BeamArr.IFA.Data;
 for I:=0 to EndRow do
    for J:=0 to EndCol do

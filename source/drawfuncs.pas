@@ -150,7 +150,7 @@ I := round(Y);
 J := round(X);
 if (J >= 0) and (J < LimX) and (I >= 0) and (I < LimY) then
    begin
-   Z := Beam.Data[I,J+2];
+   Z := Beam.Data[I,J];
    if Z < DTBPL then Z := DTBPL;
    if Z > DTBPU then Z := DTBPU;
    P := P + Z;
@@ -217,7 +217,7 @@ MidP := sqrt(sqr((Stop.X - Start.X)*Beam.XRes) + sqr((Stop.Y - Start.Y)*Beam.YRe
 {Add first point}
 OverLimit := false;
 ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*Beam.XRes) + sqr((Y - Start.Y)*Beam.YRes)) - MidP;
-Z := Beam.Data[I,J+2];
+Z := Beam.Data[I,J];
 if Z < DTBPL then Z := DTBPL;
 if Z > DTBPU then Z := DTBPU;
 ProfileArr.PArrY[K] := Z;
@@ -255,7 +255,7 @@ repeat
    Inc(K);
    OverLimit := false;
    ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*Beam.XRes) + sqr((Y - Start.Y)*Beam.YRes)) - MidP;
-   Z := Beam.Data[I,J+2];
+   Z := Beam.Data[I,J];
    if Z < DTBPL then Z := DTBPL;
    if Z > DTBPU then Z := DTBPU;
    ProfileArr.PArrY[K] := Z;

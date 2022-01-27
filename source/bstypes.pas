@@ -92,9 +92,10 @@ type
      Data      :TBeamData;     {2D array containing image data}
      constructor Create;
      destructor Destroy; override;
-     procedure Display(MBitMap:TBitMap; BMax,BMin:double);
      procedure Reset;
      procedure ResetParams;
+     procedure Display(MBitMap:TBitMap; BMax,BMin:double);
+     procedure Invert;
      function GetMin:double;   {get minimum value and postion}
      function GetMax:double;   {get maximum value and position}
      function GetAve:double;   {get average of values}
@@ -120,6 +121,7 @@ type
      procedure Reset;
      procedure ResetParams;
      procedure DisplayIFA(MBitMap:TBitMap);
+     procedure CentreData;
      function GetInFieldArea:TBasicBeam;
      property IFA:TBasicBeam read GetInFieldArea;
      end;
@@ -195,39 +197,6 @@ inherited;
 end;
 
 
-procedure TBasicBeam.Display(MBitMap:TBitMap; BMax,BMin:double);
-{Transfers the array data to a bitmap for viewing}
-var IntFImage  :TLazIntfImage;
-    Description:TRawImageDescription;
-    I,J:       integer;
-    z:         double;
-    Val:       word;
-    GreyVal:   TFPColor;
-
-begin
-if (Rows>0) and (Cols>0) then
-   begin
-   IntFImage := TLazIntFImage.Create(0,0);
-   Description.Init_BPP32_B8G8R8A8_BIO_TTB(Cols-2,Rows);
-   IntFImage.DataDescription := Description;
-
-   if BMax <> BMin then
-      for I:=0 to Rows - 1 do
-        for J:=2 to Cols - 1 do
-           begin
-           Z := Data[I,J];
-           if Z < BMin then Z := BMin;
-           if Z > BMax then Z := BMax;
-           Val := Round((Z - BMin)*65535/(BMax - BMin));
-           GreyVal := FPColor(Val,Val,Val);
-           IntFImage.Colors[J-2,I] := GreyVal;
-           end;
-      MBitMap.LoadFromIntfImage(IntFImage);
-      IntFImage.Free;
-   end;
-end;
-
-
 procedure TBasicBeam.Reset;
 begin
   Cols := 0;
@@ -248,10 +217,61 @@ begin
 end;
 
 
+procedure TBasicBeam.Display(MBitMap:TBitMap; BMax,BMin:double);
+{Transfers the array data to a bitmap for viewing}
+var IntFImage  :TLazIntfImage;
+    Description:TRawImageDescription;
+    I,J:       integer;
+    z:         double;
+    Val:       word;
+    GreyVal:   TFPColor;
+
+begin
+if (Rows>0) and (Cols>0) then
+   begin
+   IntFImage := TLazIntFImage.Create(0,0);
+   Description.Init_BPP32_B8G8R8A8_BIO_TTB(Cols,Rows);
+   IntFImage.DataDescription := Description;
+
+   if BMax <> BMin then
+      for I:=0 to Rows - 1 do
+        for J:=0 to Cols - 1 do
+           begin
+           Z := Data[I,J];
+           if Z < BMin then Z := BMin;
+           if Z > BMax then Z := BMax;
+           Val := Round((Z - BMin)*65535/(BMax - BMin));
+           GreyVal := FPColor(Val,Val,Val);
+           IntFImage.Colors[J,I] := GreyVal;
+           end;
+      MBitMap.LoadFromIntfImage(IntFImage);
+      IntFImage.Free;
+   end;
+end;
+
+
+procedure TBasicBeam.Invert;
+var I,J        :integer;
+    Z          :double;
+begin
+if Max <> Min then
+   begin
+   for I:=0 to Rows - 1 do
+     for J:=0 to Cols - 1 do
+        begin
+        Z := Data[I,J];
+        Z := Max - Z + Min;
+        Data[I,J] := Z;
+        end;
+   ResetParams;
+   end;
+end;
+
+
 function TBasicBeam.GetMax:double;
 begin
 if fMax = 0 then
-   fMax:= MaxPosNan(Data,0,Rows,2,Cols).Val;
+   fMax:= MaxPosNan(Data,0,Rows,0,Cols).Val;
 Result := fMax;
 end;
 
@@ -259,7 +279,7 @@ end;
 function TBasicBeam.GetMin:double;
 begin
 if SameValue(fMin,MaxDouble) then
-   fMin:= MinPosNan(Data,0,Rows,2,Cols).Val;
+   fMin:= MinPosNan(Data,0,Rows,0,Cols).Val;
 Result := fMin;
 end;
 
@@ -296,28 +316,29 @@ var Row,
 begin
 fCentre := 0.0;
 Row := (Rows - 1) div 2;
-Col := (Cols - 3) div 2;
+Col := (Cols - 1) div 2;
 if odd(Rows) then
    begin
    if odd(Cols) then
-      fCentre := Data[Row,Col + 2]
+      fCentre := Data[Row,Col]
      else
-      fCentre := (Data[Row,Col + 2] + Data[Row,Col + 3])/2
+      fCentre := (Data[Row,Col] + Data[Row,Col + 1])/2
    end
   else
    begin
      if odd(Cols) then
-        fCentre := (Data[Row,Col + 2] + Data[Row + 1,Col + 2])/2
+        fCentre := (Data[Row,Col] + Data[Row + 1,Col])/2
        else
-        fCentre := (Data[Row,Col + 2] + Data[Row,Col + 3] +
-           Data[Row + 1,Col + 2] + Data[Row + 1,Col + 3])/4
+        fCentre := (Data[Row,Col] + Data[Row,Col + 1] +
+           Data[Row + 1,Col] + Data[Row + 1,Col + 1])/4
    end;
 Result := fCentre
 end;
 
 
 function TBasicBeam.GetCoM:TProfilePoint;
-{Returns the indices of the unweighted centre of mass of the distribution}
+{Returns the indices of the unweighted centre of mass of the distribution in
+the form (row,col)}
 var I,J,K      :integer;
     Value      :double = 0.5;
 begin
@@ -333,8 +354,8 @@ if (fCoM.X = 0) and (fCoM.Y = 0) then
    fCoM.Y := 0.0;
    K := 0;
    for I:=0 to Rows - 1 do
-      for J:=0 to Cols - 3 do
-         if Data[I,J+2] >= Value then
+      for J:=0 to Cols - 1 do
+         if Data[I,J] >= Value then
             begin
             fCoM.X := fCom.X + I;
             fCoM.Y := fCom.Y + J;
@@ -381,6 +402,7 @@ procedure TBeam.ResetParams;
 begin
 inherited ResetParams;
 fIFA.ResetParams;
+SetLength(fIFA.Data,0);
 end;
 
 
@@ -400,7 +422,7 @@ if (Rows>0) and (Cols>0) then
    IntFImage := MBitmap.CreateIntfImage;
    aIFA := IFA.Data;
    for I:=0 to Rows - 1 do
-     for J:=0 to Cols - 3 do
+     for J:=0 to Cols - 1 do
         if not IsNaN(aIFA[I,J]) then
            begin
            Red := IntFImage.Colors[J,I].Red;
@@ -415,6 +437,53 @@ if (Rows>0) and (Cols>0) then
 end;
 
 
+procedure TBeam.CentreData;
+{Moves the CoM to the centre of the array. Warning! Resamples the data using
+bi-linear interpolation}
+var I,J,
+    NI,NJ,                     {new x and y coords}
+    MaxI,MaxJ  :integer;
+    ShiftData  :TBeamData;
+    SX,SY,
+    NX,NY,
+    RemX,
+    RemY:double;
+
+begin
+MaxI := Cols - 1;
+MaxJ := Rows - 1;
+SX := CoM.Y - MaxI/2;
+SY := Com.X - MaxJ/2;
+SetLength(ShiftData,Rows);
+
+for J:= 0 to MaxJ do
+   begin
+   SetLength(ShiftData[J],Cols);
+   ShiftData[J,0] := Data[J,0];
+   ShiftData[J,1] := Data[J,1];
+   NY := J + SY;
+   NJ := Trunc(NY);
+   RemY := NY - NJ;
+   if NJ < 0 then NJ := 0
+     else
+      if NJ > MaxJ - 1 then NJ := MaxJ - 1;
+   for I:=0 to MaxI do
+      begin
+      NX := I + SX;
+      NI := Trunc(NX);
+      RemX := NX - NI;
+      if NI < 0 then NI := 0
+         else
+         if NI > MaxI - 1 then NI := MaxI - 1;
+      ShiftData[J,I] := Data[NJ,NI]*(1-RemX)*(1-RemY) + Data[NJ,NI+1]*RemX*(1-RemY)
+         + Data[NJ+1,NI]*(1-RemX)*RemY + Data[NJ+1,NI+1]*RemX*RemY;
+      end;
+   end;
+Data := ShiftData;
+ResetParams;
+end;
+
+
 function TBeam.GetInFieldArea:TBasicBeam;
 {Returns the array elements within the In Field Area (IFA) as defined by the
 protocol.}
@@ -426,12 +495,12 @@ if Length(fIFA.Data) = 0 then
    begin
    case IFAType of
       proportional:begin
-         BeamMask := TBeamMask.CreateFromArray(Data,0,Rows,2,Cols, Max/2);
+         BeamMask := TBeamMask.CreateFromArray(Data,0,Rows,0,Cols, Max/2);
          BeamMask.ShrinkMask(CoM.X,CoM.Y,IFAFactor);
          end;
       circular: begin
          BeamMask := TBeamMask.CreateCircle(round(CoM.X),round(CoM.Y),
-            Rows,Cols-2,IFAFactor/XRes);
+            Rows,Cols,IFAFactor/XRes);
          end;
       square: begin end;
       end; {of case}
@@ -441,10 +510,10 @@ if Length(fIFA.Data) = 0 then
       SetLength(fIFA.Data,Rows);
       for I:=0 to Rows - 1 do
          begin
-         SetLength(fIFA.Data[I], Cols - 2);
-         for J:=0 to Cols - 3 do
+         SetLength(fIFA.Data[I], Cols);
+         for J:=0 to Cols - 1 do
             if BeamMask.Mask[I,J] then
-               fIFA.Data[I,J] := Data[I,J+2]
+               fIFA.Data[I,J] := Data[I,J]
               else
                fIFA.Data[I,J] := NaN;
          end;
@@ -454,7 +523,7 @@ if Length(fIFA.Data) = 0 then
       {if the mask doesn't exist take all the data}
       fIFA.Data := Data;
    fIFA.Rows := Rows;
-   fIFA.Cols := Cols - 2;
+   fIFA.Cols := Cols;
    fIFA.Norm := Norm;
    end;
 Result := fIFA;
@@ -636,8 +705,11 @@ if Length(fIFA) = 0 then
       end;
    LE := round(LeftEdge.Pos + Delta);
    RE := round(RightEdge.Pos - Delta);
-   SetLength(fIFA,RE - LE + 1);
-   fIFA := copy(PArrY,LE,RE - LE);
+   if RE > LE then
+     begin
+     SetLength(fIFA,RE - LE + 1);
+     fIFA := copy(PArrY,LE,RE - LE);
+     end;
    end;
 Result := fIFA;
 end;

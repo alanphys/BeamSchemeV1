@@ -41,6 +41,8 @@ type
       procedure TestCoM;
       procedure TestMin;
       procedure TestMax;
+      procedure TestInvert;
+      procedure TestCentre;
    end;
 
    {profile taken from TestFiles/2-Sep-2011-A.txt X direction position 0}
@@ -205,7 +207,7 @@ end;
 
 procedure TestBeam.TestCentre_RowOddCollEven;
 begin
-fBeam.Cols := 54;
+fBeam.Cols := 52;
 AssertEquals('Test centre value, row odd, col odd',94.495596,fBeam.Centre);
 end;
 
@@ -220,7 +222,7 @@ end;
 procedure TestBeam.TestCentre_RowEvenCollEven;
 begin
 fBeam.Rows := 64;
-fBeam.Cols := 54;
+fBeam.Cols := 52;
 AssertEquals('Test centre value, row odd, col odd',94.482744,fBeam.Centre);
 end;
 
@@ -231,6 +233,23 @@ AssertEquals('Test CoM X row value',31.5244,fBeam.CoM.X);
 AssertEquals('Test CoM Y row value',26.5238,fBeam.CoM.Y);
 end;
 
+
+procedure TestBeam.TestInvert;
+begin
+fBeam.Invert;
+AssertEquals('Inverted CAX',5.5348,fBeam.Centre);
+AssertEquals('Inverted top left',100,fBeam.Data[0,0]);
+AssertEquals('Inverted top right',100,fBeam.Data[0,52]);
+AssertEquals('Inverted bottom left',100,fBeam.Data[64,0]);
+AssertEquals('Inverted bottom right',100,fBeam.Data[64,52]);
+end;
+
+
+procedure TestBeam.TestCentre;
+begin
+fbeam.CentreData;
+AssertEquals('Centered CAX',94.4355,fBeam.Centre);
+end;
 
 initialization
    RegisterTest(TestSingleProfile);
