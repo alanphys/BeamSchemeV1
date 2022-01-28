@@ -144,7 +144,12 @@ unit bsunit;
             move Centre to TBeam and create test
             fix invert and centre crash with no file open
  24/1/2022  show full file name in cImage hint
-            fix display file name correctly on image maximise}
+            fix display file name correctly on image maximise
+ 27/1/2022  set profile angle limits to corners of image
+            create TSingleProfile.ToSeries and refactor
+ 28/1/2022  shift Limit and LimitL to mathsfuncs
+            split calcprofile into drawing and calculation routines
+            shift to bstypes and refactor, delete drawfuncs}
 
 
 {$mode objfpc}{$H+}
@@ -350,7 +355,7 @@ var
 implementation
 
 uses math, StrUtils, helpintfs, aboutunit, importunit, settingsunit,
-     LazFileUtils, form2pdf, drawfuncs, param1dfuncs, param2Dfuncs;
+     LazFileUtils, form2pdf, param1Dfuncs, param2Dfuncs;
 
 { TBSForm }
 
@@ -825,8 +830,8 @@ if Safe then
    begin
    DTrackBar.Invalidate;
    Beam.Display(iBeam.Picture.BitMap,DTrackBar.PositionU,DTrackBar.PositionL);
-   ShowProfile(iBeam.Picture.Bitmap,XPArr);
-   ShowProfile(iBeam.Picture.Bitmap,YPArr);
+   XPArr.Show(iBeam.Picture.Bitmap);
+   YPArr.Show(iBeam.Picture.Bitmap);
    end;
 end;
 
@@ -933,8 +938,8 @@ if OpenDialog.Execute then
       begin
       if Beam.XRes = 0 then Beam.XRes := DefaultRes;
       if Beam.YRes = 0 then Beam.YRes := DefaultRes;
-      seXAngle.MaxValue := 45;
-      seXAngle.MinValue := -44;
+      seXAngle.MaxValue := round(arctan(Beam.Rows/Beam.Cols)*180/pi);
+      seXAngle.MinValue := -seXAngle.MaxValue;
       seXAngle.Value := 0;
       seXOffset.MaxValue := Beam.Rows div 2;
       if odd(Beam.Rows) then
@@ -944,8 +949,8 @@ if OpenDialog.Execute then
       seXOffset.Value := 0;
       seXWidth.MaxValue := (Beam.Rows);
       seXWidth.Value := 1;
-      seYAngle.MaxValue := 135;
-      seYAngle.MinValue := 46;
+      seYAngle.MaxValue := 180 - seXAngle.MaxValue;
+      seYAngle.MinValue := seXAngle.MaxValue + 1;
       seYAngle.Value := 90;
       if odd(Beam.Cols) then
          seYOffset.MaxValue := (Beam.Cols) div 2
@@ -1315,26 +1320,18 @@ end;
 
 
 procedure TBSForm.seYAngleChange(Sender: TObject);
-var Angle,
-    Offset,
-    Wdth       :double;
-    MBitmap    :TBitmap;
-
 begin
 if Safe then
    begin
    Safe := false;
    ClearStatus;
-   Angle := seYAngle.Value;
-   Offset := -seYOffset.Value;
-   Wdth := seYWidth.Value;
    YPArr.sProt := cbProtocol.Text;
    if (iBeam.Picture.Bitmap <> nil) and (length(Beam.Data) <> 0) then
       begin
-      MBitmap := iBeam.Picture.Bitmap;
-      DrawProfile(MBitmap,Beam,Angle,Offset,Wdth,YProfile,YPArr,
-         DTrackBar.PositionU,DTrackBar.PositionL,Normalisation);
-      iBeam.Picture.Bitmap := MBitmap;
+      YPArr.SetParams(seYAngle.Value,-seYOffset.Value,seYWidth.Value);
+      YPArr.Draw(iBeam.Picture.Bitmap);
+      Beam.CreateProfile(YPArr,DTrackBar.PositionU,DTrackBar.PositionL,Normalisation);
+      YPArr.ToSeries(YProfile);
       Show1DResults(YPArr,3);
       end;
    Safe := true;
@@ -1343,11 +1340,7 @@ end;
 
 
 procedure TBSForm.seXAngleChange(Sender: TObject);
-var Angle,
-    Offset,
-    Wdth       :double;
-    MBitmap    :TBitmap;
-    StartTime,
+var StartTime,
     EndTime    :integer;
 
 begin
@@ -1355,20 +1348,17 @@ if Safe then
    begin
    Safe := false;
    ClearStatus;
-   Angle := seXAngle.Value;
-   Offset := -seXOffset.Value;
-   Wdth := seXWidth.Value;
    XPArr.sProt := cbProtocol.Text;
    if (iBeam.Picture.Bitmap <> nil) and (length(Beam.Data) <> 0) then
       begin
-      MBitmap := iBeam.Picture.Bitmap;
       StartTime := GetTickCount64;
-      DrawProfile(MBitmap,Beam,Angle,Offset,Wdth,XProfile,XPArr,
-         DTrackBar.PositionU,DTrackBar.PositionL,Normalisation);
-      iBeam.Picture.Bitmap := MBitmap;
+      XPArr.SetParams(seXAngle.Value,-seXOffset.Value,seXWidth.Value);
+      XPArr.Draw(iBeam.Picture.Bitmap);
+      Beam.CreateProfile(XPArr,DTrackBar.PositionU,DTrackBar.PositionL,Normalisation);
+      XPArr.ToSeries(XProfile);
       Show1DResults(XPArr,2);
       EndTime := GetTickCount64 - StartTime;
-      BSMessage('Parameters calculated in ' + IntToStr(EndTime) + ' ms.');
+      StatusBar.SimpleText := 'Parameters calculated in ' + IntToStr(EndTime) + ' ms.';
       end;
    Safe := true;
    end;

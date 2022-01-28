@@ -5,7 +5,7 @@ unit bstypes;
 interface
 
 uses
-   Classes, Graphics, sysutils;
+   Classes, Graphics, sysutils, TASeries;
 
 type
   TNorm = (no_norm, norm_cax, norm_max);
@@ -52,7 +52,10 @@ type
      TopLeft,                  {top left corner of wide profile}
      BottomRight,              {bottom right corner of wide profile}
      BottomLeft:TPoint;        {bottom left corner of wide profile}
-     PrevW,                    {width of wide profile}
+     Angle,                    {Angle of profile}
+     Offset,                   {offset from centre of image}
+     Width,                    {width of wide profile}
+     PrevW,                    {previous width of wide profile}
      Len       :integer;       {number of elements in profile}
      Norm      :TNorm;         {profile normalisation (none, max or cax)}
      sProt,                    {analysis protocol name}
@@ -62,7 +65,9 @@ type
      constructor Create;
      destructor Destroy; override;
      procedure ResetAll;       {reset all parameters and zero array}
+     procedure ResetParams;    {reset calculated parameters}
      procedure ResetCoords;    {set profile coordinates back to 0}
+     procedure SetParams(aAngle,aOffset,aWidth:integer); {set parameters from GUI}
      function GetCentre:TValuePos;{get centre of profile}
      function GetPos(Value:double; D:Integer):TValuePos;
      function GetLeftE:TValuePos; {get left edge of profile}
@@ -70,6 +75,9 @@ type
      function GetMin:TValuePos;   {get minimum value and postion}
      function GetMax:TValuePos;   {get maximum value and position}
      function GetInFieldArea:TPArr;
+     procedure ToSeries(ProfileSeries:TLineSeries);
+     procedure Show(TheBitMap:Tbitmap);
+     procedure Draw(TheBitmap:TBitmap);
      property Centre:TValuePos read GetCentre;
      property LeftEdge:TValuePos read GetLeftE;
      property RightEdge:TValuePos read GetRightE;
@@ -123,6 +131,7 @@ type
      procedure DisplayIFA(MBitMap:TBitMap);
      procedure CentreData;
      function GetInFieldArea:TBasicBeam;
+     procedure CreateProfile(ProfileArr:TSingleProfile; DTBPU,DTBPL:longint; Normalisation:TNorm);
      property IFA:TBasicBeam read GetInFieldArea;
      end;
 
@@ -529,6 +538,165 @@ if Length(fIFA.Data) = 0 then
 Result := fIFA;
 end;
 
+
+procedure TBeam.CreateProfile(ProfileArr:TSingleProfile; DTBPU,DTBPL:longint; Normalisation:TNorm);
+{Given the profile coords calculate the profile from the beam data.
+
+Parameters
+----------
+Beam           Image data to extract profile from
+ProfileArr     Class to store profile
+DTBPL          Upper bound for profile windowing
+DTBPU          Lower bound for profile windowing
+Normalisation  Normalisation mode of profile (none, cax_norm, max_norm)
+}
+var I,J,K,L,                   {loop iterators}
+    LimX,
+    LimY,
+    OLP,OLN   :longint;
+    WNX,
+    WNY,
+    WPX,
+    WPY,
+    X,Y,
+    MidX,
+    MidY,
+    XInc,
+    YInc,
+    MidP,
+    PLen,
+    TanA,
+    Phi,
+    rAngle,
+    Z          :double;
+    Start,
+    Stop:      TPoint;
+    DLine:     TRect;
+    OverLimit: Boolean;
+
+function AddPoint(var P:double; X,Y:double; LimX,LimY,DTBPL,DTBPU:longint; var OL:longint):boolean;
+var I,J        :longint;
+    Z          :double;
+begin
+Result := false;
+I := round(Y);
+J := round(X);
+if (J >= 0) and (J < LimX) and (I >= 0) and (I < LimY) then
+   begin
+   Z := Data[I,J];
+   if Z < DTBPL then Z := DTBPL;
+   if Z > DTBPU then Z := DTBPU;
+   P := P + Z;
+   inc(OL);
+   end
+  else
+   Result := true;
+end;
+
+begin
+{clear previous profile if it exists}
+
+{Set limits}
+rAngle := ProfileArr.Angle*2*pi/360;       {convert angle to radians}
+TanA := arctan(Rows/Cols);                 {get limit of corners}
+Phi := rAngle + pi/2;                      {add 90 degrees to get perpendicular}
+LimX := Cols;
+LimY := Rows;
+MidX := LimX/2 - 0.5;
+MidY := LimY/2 - 0.5;
+ProfileArr.ResetParams;
+ProfileArr.PrevW := ProfileArr.Width div 2;
+
+{Add points to profile array}
+DLine := LimitL(rAngle,Phi,TanA,ProfileArr.Offset,MidX,MidY,0,0,LimX,LimY);
+Start := DLine.TopLeft;
+Stop := DLine.BottomRight;
+Plen := sqrt(sqr(Stop.X - Start.X)+ sqr(Stop.Y - Start.Y));
+ProfileArr.Len := Round(PLen) + 1;
+Setlength(ProfileArr.PArrX,ProfileArr.Len);
+Setlength(ProfileArr.PArrY,ProfileArr.Len);
+X := Start.X;
+Y := Start.Y;
+I := Start.Y;
+J := Start.X;
+XInc := (Stop.X - Start.X)/PLen;
+YInc := (Stop.Y - Start.Y)/PLen;
+K:= 0;
+MidP := sqrt(sqr((Stop.X - Start.X)*Beam.XRes) + sqr((Stop.Y - Start.Y)*Beam.YRes))/2;
+
+{Add first point}
+OverLimit := false;
+ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*XRes) + sqr((Y - Start.Y)*YRes)) - MidP;
+Z := Data[I,J];
+if Z < DTBPL then Z := DTBPL;
+if Z > DTBPU then Z := DTBPU;
+ProfileArr.PArrY[K] := Z;
+
+{add wide profile}
+if ProfileArr.PrevW > 0 then
+   begin
+   WNX := X;
+   WNY := Y;
+   WPX := X;
+   WPY := Y;
+   OLP := 0;
+   OLN := 0;
+   for L:=1 to round(ProfileArr.PrevW) do
+      begin
+      WNX := WNX + YInc;     {increments are inverted because slope is}
+      WNY := WNY - XInc;     {perpendicular to profile}
+      WPX := WPX - YInc;
+      WPY := WPY + XInc;
+      {add negative profile}
+      OverLimit := AddPoint(ProfileArr.PArrY[K],WNX,WNY,LimX,LimY,DTBPL,DTBPU,OLN);
+
+      {add positive profile}
+      OverLimit := AddPoint(ProfileArr.PArrY[K],WPX,WPY,LimX,LimY,DTBPL,DTBPU,OLP);
+      end;
+   if OverLimit then ProfileArr.PArrY[K] := ProfileArr.PArrY[K]*ProfileArr.Width/(OLN+1+OLP);
+   end;
+
+{add rest of points}
+repeat
+   X := X + XInc;
+   Y := Y + YInc;
+   I := Round(Y);
+   J := Round(X);
+   Inc(K);
+   OverLimit := false;
+   ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*Beam.XRes) + sqr((Y - Start.Y)*Beam.YRes)) - MidP;
+   Z := Beam.Data[I,J];
+   if Z < DTBPL then Z := DTBPL;
+   if Z > DTBPU then Z := DTBPU;
+   ProfileArr.PArrY[K] := Z;
+
+   {add wide profiles}
+   if ProfileArr.PrevW > 0 then
+      begin
+      WNX := X;
+      WNY := Y;
+      WPX := X;
+      WPY := Y;
+      OLP := 0;
+      OLN := 0;
+      for L:=1 to round(ProfileArr.PrevW) do
+         begin
+         WNX := WNX + YInc;     {increments are inverted because slope is}
+         WNY := WNY - XInc;     {perpendicular to profile}
+         WPX := WPX - YInc;
+         WPY := WPY + XInc;
+         {add negative profile}
+         OverLimit := AddPoint(ProfileArr.PArrY[K],WNX,WNY,LimX,LimY,DTBPL,DTBPU,OLN);
+         {add positive profile}
+         OverLimit := AddPoint(ProfileArr.PArrY[K],WPX,WPY,LimX,LimY,DTBPL,DTBPU,OLP);
+         end;
+      if OverLimit then ProfileArr.PArrY[K] := ProfileArr.PArrY[K]*ProfileArr.Width/(OLN+1+OLP);
+      end;
+   until (I = Stop.Y) and (J = Stop.X);
+ProfileArr.Norm := Norm;
+end;
+
+
 {-------------------------------------------------------------------------------
 TSingleProfile
 -------------------------------------------------------------------------------}
@@ -556,6 +724,9 @@ SetLength(fIFA,0);
 PArrX := nil;
 PArrY := nil;
 Len := 0;
+Angle := 0;
+Offset := 0;
+Width := 1;
 PrevW := 1;
 fMin.ValueY := MaxDouble;
 fMin.ValueX := 0.0;
@@ -578,6 +749,35 @@ sExpr := '';
 end;
 
 
+procedure TSingleProfile.ResetParams;
+{set all calculated profile values back to default}
+begin
+SetLength(PArrX,0);
+SetLength(PArrY,0);
+SetLength(fIFA,0);
+PArrX := nil;
+PArrY := nil;
+Len := 0;
+fMin.ValueY := MaxDouble;
+fMin.ValueX := 0.0;
+fMin.Pos := 0;
+fMax.ValueY := 0.0;
+fMax.ValueX := 0.0;
+fMax.Pos := 0;
+fCentre.ValueY := 0.0;
+fCentre.ValueX := 0.0;
+fCentre.Pos := 0;
+fLeftEdge.ValueY := 0.0;
+fLeftEdge.ValueX := 0.0;
+fLeftEdge.Pos := 0;
+fRightEdge.ValueY := 0.0;
+fRightEdge.ValueX := 0.0;
+fRightEdge.Pos := 0;
+sProt := '';
+sExpr := '';
+end;
+
+
 procedure TSingleProfile.ResetCoords;
 {zero coordinates only}
 begin
@@ -585,6 +785,14 @@ TopLeft := Point(0,0);
 TopRight := Point(0,0);
 BottomLeft := Point(0,0);
 BottomRight := Point(0,0);
+end;
+
+
+procedure TSingleProfile.SetParams(aAngle,aOffset,aWidth:integer);
+begin
+Angle := aAngle;
+Offset := aOffset;
+Width := aWidth;
 end;
 
 
@@ -713,6 +921,84 @@ if Length(fIFA) = 0 then
    end;
 Result := fIFA;
 end;
+
+
+procedure TSingleProfile.ToSeries(ProfileSeries:TLineSeries);
+var K          :integer;
+    X,Y        :double;
+begin
+{write normalised array to chart}
+ProfileSeries.Clear;
+for K := 0 to Len - 1 do
+   begin
+   X := PArrX[K];
+   case Norm of
+      no_norm : Y := PArrY[K];
+      norm_cax: Y := (PArrY[K] - Min.ValueY)*100/(Centre.ValueY - Min.ValueY);
+      norm_max: Y := (PArrY[K] - Min.ValueY)
+         *100/(Max.ValueY - Min.ValueY);
+      end; {of case}
+   if (X <> 0) or (Y <> 0) then
+      ProfileSeries.AddXY(X,Y,'',clRed);
+   end;
+end;
+
+
+procedure TSingleProfile.Show(TheBitMap:Tbitmap);
+{Draw the profile on the bitmap.}
+begin
+TheBitmap.Canvas.Pen.Color := clRed xor clWhite;
+TheBitmap.Canvas.Pen.Mode := pmXor;
+if PrevW > 0 then
+   TheBitmap.Canvas.Polygon([TopLeft,TopRight,BottomRight,BottomLeft])
+  else
+   TheBitmap.Canvas.Line(TopLeft,BottomRight);
+end;
+
+
+procedure TSingleProfile.Draw(TheBitmap:TBitmap);
+{Returns a bitmap with the profile drawn on it}
+var MidX,                      {X centre of image}
+    MidY,                      {Y centre of image}
+    rAngle,                    {angle in radians}
+    Phi,                       {perpendicular angle to rAngle}
+    TanA       :double;        {image corner limits}
+
+begin
+{clear previous profile if it exists}
+if (TopLeft.x or TopRight.x or BottomLeft.x or BottomRight.x or
+   TopLeft.y or TopRight.y or BottomLeft.y or BottomRight.y <> 0) then
+   Show(TheBitMap);
+ResetCoords;
+
+{Draw new profile}
+rAngle := Angle*2*pi/360;              {convert angle to radians}
+TanA := arctan(TheBitMap.Height/TheBitmap.Width); {get limit of corners}
+Phi := rAngle + pi/2;                             {add 90 degrees to get perpendicular}
+MidX := TheBitmap.Width/2 - 0.5;
+MidY := TheBitmap.Height/2 - 0.5;
+PrevW := Width div 2;
+
+{get coords of wide profile}
+if (rAngle > -TanA) and (rAngle <= TanA) then {Profile is X profile}
+   begin
+   TopLeft := Limit(1,0,-MidX,Phi,Offset + PrevW,MidX,MidY);
+   TopRight := Limit(1,0,MidX,Phi,Offset + PrevW,MidX,MidY);
+   BottomRight := Limit(1,0,MidX,Phi,Offset - PrevW,MidX,MidY);
+   BottomLeft := Limit(1,0,-MidX,Phi,Offset - PrevW,MidX,MidY);
+   end
+  else {Profile is Y profile}
+   begin
+   TopLeft := Limit(0,1,-MidY,Phi,Offset + PrevW,MidX,MidY);
+   TopRight := Limit(0,1,MidY,Phi,Offset + PrevW,MidX,MidY);
+   BottomRight := Limit(0,1,MidY,Phi,Offset - PrevW,MidX,MidY);
+   BottomLeft := Limit(0,1,-MidY,Phi,Offset - PrevW,MidX,MidY);
+   end;
+
+{Draw profile on array}
+Show(TheBitMap);
+end;
+
 
 {-------------------------------------------------------------------------------
 TBeamMask
