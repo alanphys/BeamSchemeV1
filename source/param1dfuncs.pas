@@ -126,16 +126,12 @@ end;
 function MinIFA1D(ProfileArr:TSingleProfile):string;
 {Returns the minimum value of the IFA. For norm_max and norm_cax the profile
 is grounded}
-var MinIFA     :double;
 begin
-MinIFA := 0;
-if ProfileArr.IFA <> nil then
-   MinIFA := MinPosNan(ProfileArr.IFA,0,ProfileArr.Len).Val;
 with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(MinIFA,ffFixed,4,1);
-   norm_cax: Result := FloatToStrF((MinIFA - Min.ValueY)
+   no_norm: Result := FloatToStrF(IFA.Min.ValueY,ffFixed,4,1);
+   norm_cax: Result := FloatToStrF((IFA.Min.ValueY - Min.ValueY)
       *100/(Centre.ValueY - Min.ValueY),ffFixed,4,1) + '%';
-   norm_max: Result := FloatToStrF((MinIFA - Min.ValueY)
+   norm_max: Result := FloatToStrF((IFA.Min.ValueY - Min.ValueY)
       *100/(Max.ValueY - Min.ValueY),ffFixed,4,1) + '%';
    end; {of case}
 end;

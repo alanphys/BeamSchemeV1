@@ -33,13 +33,30 @@ type
      Pos       :integer;
      end;
 
-  TSingleProfile = class
+  TBasicProfile = class
      private
-     fLeftEdge,                {value, position and index of field left edge}
-     fRightEdge,               {value, position and index of field right edge}
      fMin,                     {profile minimum Y value}
      fMax,                     {profile maximum Y value}
      fCentre   :TProfilePos;   {centre Y value and X position}
+     public
+     Len       :integer;       {number of elements in profile}
+     PArrY     :TPArr;         {1D array containing profile Y points}
+     PArrX     :TPArr;         {1D array containing profile X points}
+     constructor Create;
+     destructor Destroy; override;
+     procedure ResetAll;       {reset all parameters and zero array}
+     function GetCentre:TProfilePos;{get centre of profile}
+     function GetMin:TProfilePos;   {get minimum value and postion}
+     function GetMax:TProfilePos;   {get maximum value and position}
+     property Centre:TProfilePos read GetCentre;
+     property Min:TProfilePos read GetMin;
+     property Max:TProfilePos read GetMax;
+     end;
+
+  TSingleProfile = class(TBasicProfile)
+     private
+     fLeftEdge,                {value, position and index of field left edge}
+     fRightEdge:TProfilePos;   {value, position and index of field right edge}
      public
      TopRight,                 {top right corner of wide profile}
      TopLeft,                  {top left corner of wide profile}
@@ -48,37 +65,26 @@ type
      Angle,                    {Angle of profile}
      Offset,                   {offset from centre of image}
      Width,                    {width of wide profile}
-     PrevW,                    {previous width of wide profile}
-     Len       :integer;       {number of elements in profile}
+     PrevW     :integer;       {previous width of wide profile}
      Norm      :TNorm;         {profile normalisation (none, max or cax)}
      sProt,                    {analysis protocol name}
      sExpr     :string;        {name of parameter being evaluated}
-     PArrX     :TPArr;         {1D array containing profile X points}
-     PArrY     :TPArr;         {1D array containing profile Y points}
-     IFA       :TPArr;         {array holding in field values}
+     IFA       :TBasicProfile; {array holding in field values}
      constructor Create;
      destructor Destroy; override;
      procedure ResetAll;       {reset all parameters and zero array}
      procedure ResetParams;    {reset calculated parameters}
      procedure ResetCoords;    {set profile coordinates back to 0}
      procedure SetParams(aAngle,aOffset,aWidth:integer); {set parameters from GUI}
-     function GetCentre:TProfilePos;{get centre of profile}
+     procedure Show(TheBitMap:Tbitmap);
+     procedure Draw(TheBitmap:TBitmap);
      function GetPos(Value:double; D:Integer):TProfilePos;
      function GetLeftE:TProfilePos; {get left edge of profile}
      function GetRightE:TProfilePos;{get right edge of profile}
-     function GetMin:TProfilePos;   {get minimum value and postion}
-     function GetMax:TProfilePos;   {get maximum value and position}
-     function GetInFieldArea:TPArr;
      procedure ToSeries(ProfileSeries:TLineSeries);
-     function ToString:string;
-     procedure Show(TheBitMap:Tbitmap);
-     procedure Draw(TheBitmap:TBitmap);
-     property Centre:TProfilePos read GetCentre;
+     function  ToText:string;
      property LeftEdge:TProfilePos read GetLeftE;
      property RightEdge:TProfilePos read GetRightE;
-     property Min:TProfilePos read GetMin;
-     property Max:TProfilePos read GetMax;
-     property InFieldArea:TPArr read GetInFieldArea;
      end;
 
   TBasicBeam = class
@@ -120,7 +126,7 @@ type
      XRes,                     {detector resolution in X direction}
      YRes      :double;        {detector resolution in Y direction}
      constructor Create;
-     destructor Destroy;
+     destructor Destroy;override;
      procedure Reset;
      procedure ResetParams;
      procedure DisplayIFA(MBitMap:TBitMap);
@@ -138,7 +144,8 @@ type
      constructor Create;       {create empty mask}
      constructor Create(aRows,aCols:integer);
      constructor CreateFromArray(Arr:TBeamData; LRow,Urow,LCol,UCol:integer; Threshold:double);
-     constructor CreateCircle(CRow,CCol,URow,UCol:integer; Radius:double);
+     constructor CreateCircle(CRow,CCol,Radius:double; URow,UCol:integer);
+     constructor CreateSquare(CRow,CCol,Side:double; URow,UCol:integer);
      destructor Destroy; override;
      procedure ShrinkMask(CRow,CCol,Factor:double);
      end;
@@ -171,7 +178,7 @@ var Beam         :TBeam;
 
 implementation
 
-uses math, mathsfuncs, uVecUtils, IntfGraphics, FPImage, Graphtype;
+uses math, mathsfuncs, IntfGraphics, FPImage, Graphtype;
 
 {-------------------------------------------------------------------------------
 EBSError
@@ -503,10 +510,11 @@ if Length(fIFA.Data) = 0 then
          BeamMask.ShrinkMask(CoM.X,CoM.Y,IFAFactor);
          end;
       circular: begin
-         BeamMask := TBeamMask.CreateCircle(round(CoM.X),round(CoM.Y),
-            Rows,Cols,IFAFactor/XRes);
+         BeamMask := TBeamMask.CreateCircle(CoM.X,CoM.Y,IFAFactor/XRes,Rows,Cols);
          end;
-      square: begin end;
+      square: begin
+         BeamMask := TBeamMask.CreateSquare(CoM.X,CoM.Y,IFAFactor/XRes,Rows,Cols);
+         end;
       end; {of case}
 
    if BeamMask <> nil then
@@ -628,9 +636,10 @@ Start := DLine.TopLeft;
 Stop := DLine.BottomRight;
 Plen := round(sqrt(sqr(Stop.X - Start.X)+ sqr(Stop.Y - Start.Y)));
 ProfileArr.Len := PLen + 1;
+ProfileArr.IFA.Len := ProfileArr.Len;
 Setlength(ProfileArr.PArrX,ProfileArr.Len);
 Setlength(ProfileArr.PArrY,ProfileArr.Len);
-SetLength(ProfileArr.IFA,ProfileArr.Len);
+SetLength(ProfileArr.IFA.PArrY,ProfileArr.Len);
 X := Start.X;
 Y := Start.Y;
 I := Start.Y;
@@ -642,11 +651,11 @@ K:= 0;
 
 {Add first point}
 ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*XRes) + sqr((Y - Start.Y)*YRes)) - MidP;
-AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA[K],X,Y,LimX,LimY,DTBPL,DTBPU);
+AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],X,Y,LimX,LimY,DTBPL,DTBPU);
 
 {add wide profile}
 if ProfileArr.PrevW > 0 then
-   AddWideProfile(ProfileArr.ParrY[K],ProfileArr.IFA[K],X,Y,XInc,YInc,ProfileArr.PrevW);
+   AddWideProfile(ProfileArr.ParrY[K],ProfileArr.IFA.PArrY[K],X,Y,XInc,YInc,ProfileArr.PrevW);
 
 {add rest of points}
 repeat
@@ -656,13 +665,100 @@ repeat
    J := Round(X);
    Inc(K);
    ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*XRes) + sqr((Y - Start.Y)*YRes)) - MidP;
-   AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA[K],X,Y,LimX,LimY,DTBPL,DTBPU);
+   AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],X,Y,LimX,LimY,DTBPL,DTBPU);
 
    {add wide profiles}
    if ProfileArr.PrevW > 0 then
-      AddWideProfile(ProfileArr.ParrY[K],ProfileArr.IFA[K],X,Y,XInc,YInc,ProfileArr.PrevW);
+      AddWideProfile(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],X,Y,XInc,YInc,ProfileArr.PrevW);
    until (I = Stop.Y) and (J = Stop.X);
 ProfileArr.Norm := Norm;
+ProfileArr.IFA.PArrX := ProfileArr.PArrX;
+end;
+
+
+{-------------------------------------------------------------------------------
+TBasicProfile
+-------------------------------------------------------------------------------}
+
+constructor TBasicProfile.Create;
+begin
+ResetAll;
+end;
+
+
+destructor TBasicProfile.Destroy;
+begin
+SetLength(PArrY,0);
+SetLength(PArrX,0);
+inherited;
+end;
+
+
+procedure TBasicProfile.ResetAll;
+{set all profile values back to default}
+begin
+SetLength(PArrY,0);
+PArrY := nil;
+SetLength(PArrX,0);
+PArrX := nil;
+Len := 0;
+fMin.ValueY := MaxDouble;
+fMin.ValueX := 0.0;
+fMin.Pos := 0;
+fMax.ValueY := 0.0;
+fMax.ValueX := 0.0;
+fMax.Pos := 0;
+fCentre.ValueY := 0.0;
+fCentre.ValueX := 0.0;
+fCentre.Pos := 0;
+end;
+
+
+function TBasicProfile.GetCentre:TProfilePos;
+{Return the centre value, position and index of the profile. If the number of
+points in the profile are even the average of the two centre values is returned}
+begin
+{for performance only calculate if not previously calculated}
+if fCentre.ValueY = 0 then
+   begin
+   if odd (Len) then
+      begin
+      fCentre.Pos := (Len - 1) div 2;
+      fCentre.ValueX := PArrX[fCentre.Pos];
+      fCentre.ValueY := PArrY[fCentre.Pos];
+      end
+     else
+      begin
+      fCentre.Pos := (Len - 1) div 2;
+      fCentre.ValueX := (PArrX[fCentre.Pos] + PArrX[fCentre.Pos + 1])/2;
+      fCentre.ValueY := (PArrY[fCentre.Pos] + PArrY[fCentre.Pos + 1])/2;
+      end;
+   end;
+Result := fCentre
+end;
+
+
+function TBasicProfile.GetMax:TProfilePos;
+begin
+if fMax.ValueY = 0 then
+   begin
+   fMax.Pos:= MaxPosNaN(PArrY,0,Len).Pos;
+   fMax.ValueX := PArrX[fMax.Pos];
+   fMax.ValueY := PArrY[fMax.Pos];
+   end;
+Result := fMax;
+end;
+
+
+function TBasicProfile.GetMin:TProfilePos;
+begin
+if SameValue(fMin.ValueY,MaxDouble) then
+   begin
+   fMin.Pos:= MinPosNaN(PArrY,0,Len).Pos;
+   fMin.ValueX := PArrX[fMin.Pos];
+   fMin.ValueY := PArrY[fMin.Pos];
+   end;
+Result := fMin;
 end;
 
 
@@ -672,14 +768,14 @@ TSingleProfile
 
 constructor TSingleProfile.Create;
 begin
+IFA := TBasicProfile.Create;
 ResetAll;
 end;
 
 
 destructor TSingleProfile.Destroy;
 begin
-SetLength(PArrX,0);
-SetLength(PArrY,0);
+IFA.Free;
 inherited;
 end;
 
@@ -687,26 +783,12 @@ end;
 procedure TSingleProfile.ResetAll;
 {set all profile values back to default}
 begin
-SetLength(PArrX,0);
-SetLength(PArrY,0);
-SetLength(IFA,0);
-PArrX := nil;
-PArrY := nil;
-IFA := nil;
-Len := 0;
+inherited;
+IFA.ResetAll;
 Angle := 0;
 Offset := 0;
 Width := 1;
 PrevW := 1;
-fMin.ValueY := MaxDouble;
-fMin.ValueX := 0.0;
-fMin.Pos := 0;
-fMax.ValueY := 0.0;
-fMax.ValueX := 0.0;
-fMax.Pos := 0;
-fCentre.ValueY := 0.0;
-fCentre.ValueX := 0.0;
-fCentre.Pos := 0;
 fLeftEdge.ValueY := 0.0;
 fLeftEdge.ValueX := 0.0;
 fLeftEdge.Pos := 0;
@@ -716,28 +798,15 @@ fRightEdge.Pos := 0;
 ResetCoords;
 sProt := '';
 sExpr := '';
+Norm := no_norm;
 end;
 
 
 procedure TSingleProfile.ResetParams;
 {set all calculated profile values back to default}
 begin
-SetLength(PArrX,0);
-SetLength(PArrY,0);
-SetLength(IFA,0);
-PArrX := nil;
-PArrY := nil;
-IFA := nil;
-Len := 0;
-fMin.ValueY := MaxDouble;
-fMin.ValueX := 0.0;
-fMin.Pos := 0;
-fMax.ValueY := 0.0;
-fMax.ValueX := 0.0;
-fMax.Pos := 0;
-fCentre.ValueY := 0.0;
-fCentre.ValueX := 0.0;
-fCentre.Pos := 0;
+inherited ResetAll;
+IFA.ResetAll;
 fLeftEdge.ValueY := 0.0;
 fLeftEdge.ValueX := 0.0;
 fLeftEdge.Pos := 0;
@@ -764,30 +833,6 @@ begin
 Angle := aAngle;
 Offset := aOffset;
 Width := aWidth;
-end;
-
-
-function TSingleProfile.GetCentre:TProfilePos;
-{Return the centre value, position and index of the profile. If the number of
-points in the profile are even the average of the two centre values is returned}
-begin
-{for performance only calculate if not previously calculated}
-if fCentre.ValueY = 0 then
-   begin
-   if odd (Len) then
-      begin
-      fCentre.Pos := (Len - 1) div 2;
-      fCentre.ValueX := PArrX[fCentre.Pos];
-      fCentre.ValueY := PArrY[fCentre.Pos];
-      end
-     else
-      begin
-      fCentre.Pos := (Len - 1) div 2;
-      fCentre.ValueX := (PArrX[fCentre.Pos] + PArrX[fCentre.Pos + 1])/2;
-      fCentre.ValueY := (PArrY[fCentre.Pos] + PArrY[fCentre.Pos + 1])/2;
-      end;
-   end;
-Result := fCentre
 end;
 
 
@@ -842,58 +887,6 @@ Result := fRightEdge;
 end;
 
 
-function TSingleProfile.GetMax:TProfilePos;
-begin
-if fMax.ValueY = 0 then
-   begin
-   fMax.Pos:= MaxPosNaN(PArrY,0,Len).Pos;
-   fMax.ValueX := PArrX[fMax.Pos];
-   fMax.ValueY := PArrY[fMax.Pos];
-   end;
-Result := fMax;
-end;
-
-
-function TSingleProfile.GetMin:TProfilePos;
-begin
-if SameValue(fMin.ValueY,MaxDouble) then
-   begin
-   fMin.Pos:= MinPosNaN(PArrY,0,Len).Pos;
-   fMin.ValueX := PArrX[fMin.Pos];
-   fMin.ValueY := PArrY[fMin.Pos];
-   end;
-Result := fMin;
-end;
-
-
-function TSingleProfile.GetInFieldArea:TPArr;
-{Returns the array elements within the In Field Area (IFA) as defined by the
-IFA type.}
-var LE,                        {index left edge}
-    RE         :integer;       {index right edge}
-    Delta      :double;        {inc/decrement for IFA}
-begin
-if Length(IFA) = 0 then
-   begin
-   case IFAType of
-      proportional: begin
-         Delta := (1 - IFAFactor)*(RightEdge.Pos - LeftEdge.Pos)/2.0;
-         end;
-      circular: begin end;
-      square: begin end;
-      end;
-   LE := round(LeftEdge.Pos + Delta);
-   RE := round(RightEdge.Pos - Delta);
-   if RE > LE then
-     begin
-     SetLength(IFA,RE - LE + 1);
-     IFA := copy(PArrY,LE,RE - LE);
-     end;
-   end;
-Result := IFA;
-end;
-
-
 procedure TSingleProfile.ToSeries(ProfileSeries:TLineSeries);
 var K          :integer;
     X,Y        :double;
@@ -914,7 +907,8 @@ for K := 0 to Len - 1 do
 end;
 
 
-function TSingleProfile.ToString:string;
+function TSingleProfile.ToText:string;
+{writes the array data out to a string}
 var K          :integer;
     X,Y        :double;
 begin
@@ -928,7 +922,8 @@ for K := 0 to Len - 1 do
       norm_max: Y := (PArrY[K] - Min.ValueY)*100/(Max.ValueY - Min.ValueY);
       end; {of case}
    Result := Result + FloatToStrF(X,ffFixed,5,2) + ', ' + FloatToStrF(Y,ffFixed,5,2);
-   if ShowParams and not IsNaN(IFA[K]) then Result := Result + ', ' + FloatToStrF(IFA[K],ffFixed,5,2);
+   if ShowParams and not IsNaN(IFA.PArrY[K]) then Result := Result + ', ' +
+      FloatToStrF(IFA.PArrY[K],ffFixed,5,2);
    Result := Result + LineEnding;
    end;
 end;
@@ -1048,14 +1043,14 @@ for I:= LRow to URow - 1 do
 end;
 
 
-constructor TBeamMask.CreateCircle(CRow,CCol,URow,UCol:integer; Radius:double);
+constructor TBeamMask.CreateCircle(CRow,CCol,Radius:double; URow,UCol:integer);
 {Creates a circular mask centered on CRow and CCol with radius Radius
 Parameters:
    CRow: centre row
    CCol: centre column
+   Radius: half width of the circle in pixels
    URow: number of rows
-   UCol: number of columns
-   Radius: half width of the circle in pixels}
+   UCol: number of columns}
 var I,J        :integer;
 begin
 Rows := URow;
@@ -1067,6 +1062,34 @@ for I:= 0 to URow - 1 do
    for J:=0 to UCol - 1 do
       begin
       if sqr(I - CRow) + sqr(J - CCol) < sqr(Radius) then
+         Mask[I,J] := True
+        else
+         Mask[I,J] := False;
+      end;
+   end;
+end;
+
+
+constructor TBeamMask.CreateSquare(CRow,CCol,Side:double; URow,UCol:integer);
+{Creates a square mask centered on CRow and CCol with side Radius
+Parameters:
+   CRow: centre row
+   CCol: centre column
+   Radius: half width of the circle in pixels
+   URow: number of rows
+   UCol: number of columns}
+var I,J        :integer;
+begin
+Rows := URow;
+Cols := UCol;
+Side := Side/2;
+SetLength(Mask,Rows);
+for I:= 0 to URow - 1 do
+   begin
+   SetLength(Mask[I],Cols);
+   for J:=0 to UCol - 1 do
+      begin
+      if (abs(I - CRow) <= Side) and (abs(J - CCol) <= Side) then
          Mask[I,J] := True
         else
          Mask[I,J] := False;

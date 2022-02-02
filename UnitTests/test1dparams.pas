@@ -60,8 +60,10 @@ begin
 fProfile := TSingleProfile.Create;
 fProfile.PArrX := ProfileArrX;
 fProfile.PArrY := ProfileArrY;
-fprofile.IFA := ProfileIFA;
+fprofile.IFA.PArrY := ProfileIFA;
+fProfile.IFA.PArrX := fProfile.PArrX;
 fProfile.Len := 53;
+fProfile.IFA.Len := fProfile.Len;
 end;
 
 

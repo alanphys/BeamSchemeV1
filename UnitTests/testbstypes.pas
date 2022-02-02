@@ -24,7 +24,6 @@ type
       procedure TestRightEdge_Limits;
       procedure TestMin;
       procedure TestMax;
-      procedure TestIFA;
    end;
 
    TestBeam= class(TTestCase)
@@ -251,12 +250,6 @@ AssertEquals('Test maximum index',13,fProfile.Max.Pos);
 end;
 
 
-procedure TestSingleProfile.TestIFA;
-begin
-AssertEquals('Test IFA start index',98.38,fProfile.InFieldArea[0]);
-AssertEquals('Test IFA end index',98.33,fProfile.InFieldArea[Length(fProfile.InFieldArea)-1]);
-end;
-
 {-------------------------------------------------------------------------------
 TBeam
 -------------------------------------------------------------------------------}
@@ -350,8 +343,8 @@ for I:=0 to Prof.Len - 1 do
    begin
    AssertEquals('Horizontal Profile X value ' + IntToStr(I),ProfileArrX[I],Prof.PArrX[I]);
    AssertEquals('Horizontal Profile Y value ' + IntToStr(I),ProfileArrY[I],Prof.PArrY[I],0.01);
-   if not IsNaN(ProfileIFA[I]) or not IsNaN(Prof.IFA[I]) then
-      AssertEquals('Horizontal Profile IFA value ' + IntToStr(I),ProfileIFA[I],Prof.IFA[I],0.01);
+   if not IsNaN(ProfileIFA[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
+      AssertEquals('Horizontal Profile IFA value ' + IntToStr(I),ProfileIFA[I],Prof.IFA.PArrY[I],0.01);
    end;
 Prof.Free;
 end;
@@ -368,8 +361,8 @@ for I:=0 to Prof.Len - 1 do
    begin
    AssertEquals('Vertical Profile X value ' + IntToStr(I),ProfileArrX3[I],Prof.PArrX[I]);
    AssertEquals('Vertical Profile Y value ' + IntToStr(I),ProfileArrY3[I],Prof.PArrY[I],0.01);
-   if not IsNaN(ProfileIFA3[I]) or not IsNaN(Prof.IFA[I]) then
-      AssertEquals('Vertical Profile IFA value ' + IntToStr(I),ProfileIFA3[I],Prof.IFA[I],0.01);
+   if not IsNaN(ProfileIFA3[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
+      AssertEquals('Vertical Profile IFA value ' + IntToStr(I),ProfileIFA3[I],Prof.IFA.PArrY[I],0.01);
    end;
 Prof.Free;
 end;
@@ -386,7 +379,7 @@ for I:=0 to Prof.Len - 1 do
    begin
    AssertEquals('Offset Profile X value ' + IntToStr(I),ProfileArrX4[I],Prof.PArrX[I]);
    AssertEquals('Offset Profile Y value ' + IntToStr(I),ProfileArrY4[I],Prof.PArrY[I],0.01);
-   AssertTrue(IsNaN(Prof.IFA[I]));          {profile lies outside in field area}
+   AssertTrue(IsNaN(Prof.IFA.PArrY[I]));          {profile lies outside in field area}
    end;
 Prof.Free;
 end;
@@ -403,8 +396,8 @@ for I:=0 to Prof.Len - 1 do
    begin
    AssertEquals('Diagonal Profile X value ' + IntToStr(I),ProfileArrX5[I],Prof.PArrX[I],0.01);
    AssertEquals('Diagonal Profile Y value ' + IntToStr(I),ProfileArrY5[I],Prof.PArrY[I],0.01);
-   if not IsNaN(ProfileIFA5[I]) or not IsNaN(Prof.IFA[I]) then
-      AssertEquals('Diagonal Profile IFA value ' + IntToStr(I),ProfileIFA5[I],Prof.IFA[I],0.01);
+   if not IsNaN(ProfileIFA5[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
+      AssertEquals('Diagonal Profile IFA value ' + IntToStr(I),ProfileIFA5[I],Prof.IFA.PArrY[I],0.01);
    end;
 Prof.Free;
 end;
@@ -432,8 +425,8 @@ for I:=0 to Prof.Len - 1 do
    begin
    AssertEquals('Diagonal Profile X value ' + IntToStr(I),ProfileArrX6[I],Prof.PArrX[I],0.01);
    AssertEquals('Diagonal Profile Y value ' + IntToStr(I),ProfileArrY6[I],Prof.PArrY[I],0.01);
-   if not IsNaN(ProfileIFA6[I]) or not IsNaN(Prof.IFA[I]) then
-      AssertEquals('Diagonal Profile IFA value ' + IntToStr(I),ProfileIFA6[I],Prof.IFA[I],0.01);
+   if not IsNaN(ProfileIFA6[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
+      AssertEquals('Diagonal Profile IFA value ' + IntToStr(I),ProfileIFA6[I],Prof.IFA.PArrY[I],0.01);
    end;
 Prof.Free;
 end;

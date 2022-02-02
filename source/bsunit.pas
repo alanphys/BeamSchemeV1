@@ -153,7 +153,8 @@ unit bsunit;
  31/1/2022  remove overlimit compensation in CreateProfile
  1/2/2022   fix profile grounding bug in param1Dfuncs
             add TSingleProfile.ToString and refactor
- 2/2/2022   fix rounding error on profile increment}
+ 2/2/2022   fix rounding error on profile increment
+            create TBasicProfile, derive TSingleProfile and define IFA as TBasicProfile}
 
 
 {$mode objfpc}{$H+}
@@ -444,7 +445,7 @@ if ProfileArr <> nil then
       begin
       AssignFile(Outfile,SaveDialog.FileName);
       Rewrite(Outfile);
-      write(Outfile,ProfileArr.ToString);
+      write(Outfile,ProfileArr.ToText);
       CloseFile(Outfile);
       end;
 end;
@@ -467,14 +468,14 @@ end;
 procedure TBSForm.miXClipBClick(Sender: TObject);
 {put the array in a comma delimited string on the clipboard}
 begin
-if XPArr <> nil then Clipboard.AsText := XPArr.ToString;
+if XPArr <> nil then Clipboard.AsText := XPArr.ToText;
 end;
 
 
 procedure TBSForm.miYClipBClick(Sender: TObject);
 {put the array in a comma delimited string on the clipboard}
 begin
-if YPArr <> nil then Clipboard.AsText := YPArr.ToString;
+if YPArr <> nil then Clipboard.AsText := YPArr.ToText;
 end;
 
 
