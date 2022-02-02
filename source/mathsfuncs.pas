@@ -8,10 +8,27 @@ interface
 uses
    Classes, SysUtils, bstypes;
 
+type
+
+T1DValuePos = record
+   Pos         :integer;
+   Val         :double;
+   end;
+
+T2DValuePos = record
+   Row,
+   Col         :integer;
+   Val         :double;
+   end;
+
+
+
 function LReg(X1,X2,Y1,Y2,X:double):double;
 function ILReg(X1,X2,Y1,Y2,Y:double):double;
-function MaxPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):TArrayPos;
-function MinPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):TArrayPos;
+function MaxPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
+function MaxPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):T2DValuePos;
+function MinPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
+function MinPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):T2DValuePos;
 function Limit(A,B,C,Phi0,R0,MidX,MidY:double):TPoint;
 function LimitL(Angle,Phi,TanA,Offset,MidX,MidY:double; LowerX,LowerY,UpperX,UpperY:integer):TRect;
 
@@ -41,33 +58,65 @@ if m <> 0 then ILReg := (Y - c)/m else ILREG := 1E6;
 end;
 
 
-function MaxPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):TArrayPos;
+function MaxPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
+{find the maximum and its location ignoring Nans. Limits are from and including
+LRow, LCol up to but not including URow and UCol.}
+var I          :integer;
+begin
+Result.Val := 0;
+Result.Pos := 0;
+for I:=LRow to URow - 1 do
+   if not IsNan(BeamArr[I]) and (BeamArr[I] > Result.Val) then
+   begin
+   Result.Val := BeamArr[I];
+   Result.Pos := I;
+   end;
+end;
+
+
+function MaxPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):T2DValuePos;
 {find the maximum and its location ignoring Nans. Limits are from and including
 LRow, LCol up to but not including URow and UCol.}
 var I,J        :integer;
 begin
 Result.Val := 0;
 Result.Row := 0;
-Result.col := 0;
+Result.Col := 0;
 for I:=LRow to URow - 1 do
    for J:=LCol to UCol - 1 do
       if not IsNan(BeamArr[I,J]) and (BeamArr[I,J] > Result.Val) then
       begin
       Result.Val := BeamArr[I,J];
       Result.Row := I;
-      Result.col := J;
+      Result.Col := J;
       end;
 end;
 
 
-function MinPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):TArrayPos;
+function MinPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
+{find the minimum and its location ignoring Nans. Limits are from and including
+LRow, up to but not including URow.}
+var I          :integer;
+begin
+Result.Val := MaxDouble;
+Result.Pos := 0;
+for I:=LRow to URow - 1 do
+   if not IsNan(BeamArr[I]) and (BeamArr[I] < Result.Val) then
+   begin
+   Result.Val := BeamArr[I];
+   Result.Pos := I;
+   end;
+end;
+
+
+function MinPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):T2DValuePos;
 {find the minimum and its location ignoring Nans. Limits are from and including
 LRow, LCol up to but not including URow and UCol.}
 var I,J        :integer;
 begin
 Result.Val := MaxDouble;
 Result.Row := 0;
-Result.col := 0;
+Result.Col := 0;
 for I:=LRow to URow - 1 do
    for J:=LCol to UCol - 1 do
       if not IsNan(BeamArr[I,J]) and (BeamArr[I,J] < Result.Val) then

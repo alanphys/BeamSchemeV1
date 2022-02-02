@@ -79,7 +79,7 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
 
 implementation
 
-uses uVecUtils;
+uses mathsfuncs;
 
 {-------------------------------------------------------------------------------
  Parameter calculation functions
@@ -89,10 +89,11 @@ function CAXVal1D(ProfileArr:TSingleProfile):string;
 {Returns the value of the centre of the profile. If the profile is normalised
 to CAX this is by definition 100%.}
 begin
-case ProfileArr.Norm of
-   no_norm: Result := FloatToStrF(ProfileArr.Centre.ValueY,ffFixed,4,1);
+with ProfileArr do case Norm of
+   no_norm: Result := FloatToStrF(Centre.ValueY,ffFixed,4,1);
    norm_cax: Result := '100.0%';
-   norm_max: Result := FloatToStrF(ProfileArr.Centre.ValueY*100/ProfileArr.Max.ValueY,ffFixed,4,1) + '%';
+   norm_max: Result := FloatToStrF((Centre.ValueY - Min.ValueY)
+      *100/(Max.ValueY - Min.ValueY),ffFixed,4,1) + '%';
    end {of case}
 end;
 
@@ -101,9 +102,10 @@ function MaxVal1D(ProfileArr:TSingleProfile):string;
 {Returns the maximum value of the profile. If the profile is normalised to Max
 this is by definition 100%}
 begin
-case ProfileArr.Norm of
-   no_norm: Result := FloatToStrF(ProfileArr.Max.ValueY,ffFixed,4,1);
-   norm_cax: Result := FloatToStrF(ProfileArr.Max.ValueY*100/ProfileArr.Centre.ValueY,ffFixed,4,1) + '%';
+with ProfileArr do case Norm of
+   no_norm: Result := FloatToStrF(Max.ValueY,ffFixed,4,1);
+   norm_cax: Result := FloatToStrF((Max.ValueY - Min.ValueY)
+      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,1) + '%';
    norm_max: Result := '100.0%';
    end {of case}
 end;
@@ -113,8 +115,8 @@ function MinVal1D(ProfileArr:TSingleProfile):string;
 {Returns the minimum value of the profile. For norm_max and norm_cax the profile
 is grounded and the min value is 0.}
 begin
-case ProfileArr.Norm of
-   no_norm: Result := FloatToStrF(ProfileArr.Min.ValueY,ffFixed,4,1);
+with ProfileArr do case Norm of
+   no_norm: Result := FloatToStrF(Min.ValueY,ffFixed,4,1);
    norm_cax: Result := '0.00';
    norm_max: Result := '0.00';
    end; {of case}
@@ -124,20 +126,17 @@ end;
 function MinIFA1D(ProfileArr:TSingleProfile):string;
 {Returns the minimum value of the IFA. For norm_max and norm_cax the profile
 is grounded}
-var MinIndex   :integer;
-    MinIFA     :double;
-    PArrIFA    :TPArr;
+var MinIFA     :double;
 begin
 MinIFA := 0;
-if ProfileArr.InFieldArea <> nil then
-   begin
-   MinIndex := MinLoc(ProfileArr.InFieldArea,0,Length(ProfileArr.InFieldArea));
-   MinIFA := ProfileArr.InFieldArea[MinIndex];
-   end;
-case ProfileArr.Norm of
+if ProfileArr.IFA <> nil then
+   MinIFA := MinPosNan(ProfileArr.IFA,0,ProfileArr.Len).Val;
+with ProfileArr do case Norm of
    no_norm: Result := FloatToStrF(MinIFA,ffFixed,4,1);
-   norm_cax: Result := FloatToStrF(MinIFA*100/ProfileArr.Centre.ValueY,ffFixed,4,1) + '%';
-   norm_max: Result := FloatToStrF(MinIFA*100/ProfileArr.Max.ValueY,ffFixed,4,1) + '%';
+   norm_cax: Result := FloatToStrF((MinIFA - Min.ValueY)
+      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,1) + '%';
+   norm_max: Result := FloatToStrF((MinIFA - Min.ValueY)
+      *100/(Max.ValueY - Min.ValueY),ffFixed,4,1) + '%';
    end; {of case}
 end;
 

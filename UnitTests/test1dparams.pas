@@ -5,7 +5,7 @@ unit test1Dparams;
 interface
 
 uses
-   Classes, SysUtils, fpcunit, testutils, testregistry, bstypes, param1Dfuncs;
+   Classes, SysUtils, fpcunit, testutils, testregistry, bstypes, param1Dfuncs, math;
 
 type
 
@@ -46,6 +46,12 @@ var ProfileArrX: array of double = (-13, -12.5, -12, -11.5, -11, -10.5, -10,
    94.57, 94.7, 95.18, 95.51, 96.51, 97.32, 97.82, 97.95, 97.99, 97.98, 98.2,
    98.33, 98.31, 98.33, 98.1, 97.7, 95.9, 92.2, 36.68, 12.18, 8.02, 4.92, 3.97,
    3.01);
+   ProfileIFA: array of double = (NaN, NaN, NaN, NaN, NaN, NaN, NaN,
+   NaN, NaN, NaN, 98.38, 98.78, 98.86, 99, 98.89, 98.98, 98.8, 98.95,
+   98.9, 98.52, 98.05, 97.31, 96.26, 95.38, 94.59, 94.53, 94.47, 94.46, 94.49,
+   94.57, 94.7, 95.18, 95.51, 96.51, 97.32, 97.82, 97.95, 97.99, 97.98, 98.2,
+   98.33, 98.31, 98.33, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN,
+   NaN);
 
 implementation
 
@@ -54,6 +60,7 @@ begin
 fProfile := TSingleProfile.Create;
 fProfile.PArrX := ProfileArrX;
 fProfile.PArrY := ProfileArrY;
+fprofile.IFA := ProfileIFA;
 fProfile.Len := 53;
 end;
 
@@ -83,7 +90,7 @@ end;
 procedure Test1DParamFuncs.TestCAXVal1D_norm_Max;
 begin
 fProfile.Norm := norm_max;
-AssertEquals('Test CAX value, normlisation to Max','95.4%',CAXVal1D(fProfile));
+AssertEquals('Test CAX value, normlisation to Max','95.3%',CAXVal1D(fProfile));
 end;
 
 
@@ -96,7 +103,7 @@ end;
 procedure Test1DParamFuncs.TestMaxVal1D_norm_cax;
 begin
 fProfile.Norm := norm_cax;
-AssertEquals('Test Max value, normalisation to Cax','104.8%',MaxVal1D(fProfile));
+AssertEquals('Test Max value, normalisation to Cax','104.9%',MaxVal1D(fProfile));
 end;
 
 
@@ -143,7 +150,7 @@ end;
 procedure Test1DParamFuncs.TestMinIFA1D_norm_max;
 begin
 fProfile.Norm := norm_max;
-AssertEquals('Test Min IFA, normlisation to Max','95.4%',MinIFA1D(fProfile));
+AssertEquals('Test Min IFA, normalisation to Max','95.3%',MinIFA1D(fProfile));
 end;
 
 {-------------------------------------------------------------------------------

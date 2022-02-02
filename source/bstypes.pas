@@ -20,12 +20,6 @@ type
 
   TMaskArr = array of array of boolean;
 
-  TArrayPos = record
-     Row,
-     Col       :integer;
-     Val       :double;
-     end;
-
   TProfilePoint = record
      X:        double;
      Y:        double;
@@ -33,7 +27,7 @@ type
 
   TPArr = array of double;
 
-  TValuePos = record
+  TProfilePos = record
      ValueY,
      ValueX    :double;
      Pos       :integer;
@@ -45,8 +39,7 @@ type
      fRightEdge,               {value, position and index of field right edge}
      fMin,                     {profile minimum Y value}
      fMax,                     {profile maximum Y value}
-     fCentre   :TValuePos;     {centre Y value and X position}
-     fIFA      :TPArr;         {array holding in field values}
+     fCentre   :TProfilePos;   {centre Y value and X position}
      public
      TopRight,                 {top right corner of wide profile}
      TopLeft,                  {top left corner of wide profile}
@@ -62,27 +55,29 @@ type
      sExpr     :string;        {name of parameter being evaluated}
      PArrX     :TPArr;         {1D array containing profile X points}
      PArrY     :TPArr;         {1D array containing profile Y points}
+     IFA       :TPArr;         {array holding in field values}
      constructor Create;
      destructor Destroy; override;
      procedure ResetAll;       {reset all parameters and zero array}
      procedure ResetParams;    {reset calculated parameters}
      procedure ResetCoords;    {set profile coordinates back to 0}
      procedure SetParams(aAngle,aOffset,aWidth:integer); {set parameters from GUI}
-     function GetCentre:TValuePos;{get centre of profile}
-     function GetPos(Value:double; D:Integer):TValuePos;
-     function GetLeftE:TValuePos; {get left edge of profile}
-     function GetRightE:TValuePos;{get right edge of profile}
-     function GetMin:TValuePos;   {get minimum value and postion}
-     function GetMax:TValuePos;   {get maximum value and position}
+     function GetCentre:TProfilePos;{get centre of profile}
+     function GetPos(Value:double; D:Integer):TProfilePos;
+     function GetLeftE:TProfilePos; {get left edge of profile}
+     function GetRightE:TProfilePos;{get right edge of profile}
+     function GetMin:TProfilePos;   {get minimum value and postion}
+     function GetMax:TProfilePos;   {get maximum value and position}
      function GetInFieldArea:TPArr;
      procedure ToSeries(ProfileSeries:TLineSeries);
+     function ToString:string;
      procedure Show(TheBitMap:Tbitmap);
      procedure Draw(TheBitmap:TBitmap);
-     property Centre:TValuePos read GetCentre;
-     property LeftEdge:TValuePos read GetLeftE;
-     property RightEdge:TValuePos read GetRightE;
-     property Min:TValuePos read GetMin;
-     property Max:TValuePos read GetMax;
+     property Centre:TProfilePos read GetCentre;
+     property LeftEdge:TProfilePos read GetLeftE;
+     property RightEdge:TProfilePos read GetRightE;
+     property Min:TProfilePos read GetMin;
+     property Max:TProfilePos read GetMax;
      property InFieldArea:TPArr read GetInFieldArea;
      end;
 
@@ -131,7 +126,7 @@ type
      procedure DisplayIFA(MBitMap:TBitMap);
      procedure CentreData;
      function GetInFieldArea:TBasicBeam;
-     procedure CreateProfile(ProfileArr:TSingleProfile; DTBPU,DTBPL:longint; Normalisation:TNorm);
+     procedure CreateProfile(ProfileArr:TSingleProfile; DTBPU,DTBPL:longint);
      property IFA:TBasicBeam read GetInFieldArea;
      end;
 
@@ -539,46 +534,38 @@ Result := fIFA;
 end;
 
 
-procedure TBeam.CreateProfile(ProfileArr:TSingleProfile; DTBPU,DTBPL:longint; Normalisation:TNorm);
+procedure TBeam.CreateProfile(ProfileArr:TSingleProfile; DTBPU,DTBPL:longint);
 {Given the profile coords calculate the profile from the beam data.
 
 Parameters
 ----------
 Beam           Image data to extract profile from
 ProfileArr     Class to store profile
-DTBPL          Upper bound for profile windowing
-DTBPU          Lower bound for profile windowing
+DTBPU          Upper bound for profile windowing
+DTBPL          Lower bound for profile windowing
 Normalisation  Normalisation mode of profile (none, cax_norm, max_norm)
 }
-var I,J,K,L,                   {loop iterators}
+var I,J,K,                     {loop iterators}
+    PLen,
     LimX,
-    LimY,
-    OLP,OLN   :longint;
-    WNX,
-    WNY,
-    WPX,
-    WPY,
+    LimY       :longint;
     X,Y,
     MidX,
     MidY,
     XInc,
     YInc,
     MidP,
-    PLen,
     TanA,
     Phi,
-    rAngle,
-    Z          :double;
+    rAngle     :double;
     Start,
-    Stop:      TPoint;
-    DLine:     TRect;
-    OverLimit: Boolean;
+    Stop       :TPoint;
+    DLine      :TRect;
 
-function AddPoint(var P:double; X,Y:double; LimX,LimY,DTBPL,DTBPU:longint; var OL:longint):boolean;
+procedure AddPoint(var P,pIFA:double; X,Y:double; LimX,LimY,DTBPL,DTBPU:longint);
 var I,J        :longint;
     Z          :double;
 begin
-Result := false;
 I := round(Y);
 J := round(X);
 if (J >= 0) and (J < LimX) and (I >= 0) and (I < LimY) then
@@ -587,74 +574,79 @@ if (J >= 0) and (J < LimX) and (I >= 0) and (I < LimY) then
    if Z < DTBPL then Z := DTBPL;
    if Z > DTBPU then Z := DTBPU;
    P := P + Z;
-   inc(OL);
-   end
-  else
-   Result := true;
+   if not IsNaN(IFA.Data[I,J]) then
+      begin
+      if IsNaN(pIFA) then pIFA := Z
+         else pIFA := pIFA + Z;
+      end
+     else
+      if pIFA = 0 then pIFA := NaN;
+   end;
+ end;
+
+procedure AddWideProfile(var ProfY,pIFA:double; aX,aY,aXInc,aYInc:double; pWidth:integer);
+var L          :longint;
+    WNX,
+    WNY,
+    WPX,
+    WPY        :double;
+
+begin
+WNX := aX;
+WNY := aY;
+WPX := aX;
+WPY := aY;
+for L:=1 to pWidth do
+   begin
+   WNX := WNX + aYInc;     {increments are inverted because slope is}
+   WNY := WNY - aXInc;     {perpendicular to profile}
+   WPX := WPX - aYInc;
+   WPY := WPY + aXInc;
+   {add negative profile}
+   AddPoint(ProfY,pIFA,WNX,WNY,LimX,LimY,DTBPL,DTBPU);
+
+   {add positive profile}
+   AddPoint(ProfY,pIFA,WPX,WPY,LimX,LimY,DTBPL,DTBPU);
+   end;
 end;
 
 begin
-{clear previous profile if it exists}
-
 {Set limits}
 rAngle := ProfileArr.Angle*2*pi/360;       {convert angle to radians}
 TanA := arctan(Rows/Cols);                 {get limit of corners}
 Phi := rAngle + pi/2;                      {add 90 degrees to get perpendicular}
 LimX := Cols;
 LimY := Rows;
-MidX := LimX/2 - 0.5;
-MidY := LimY/2 - 0.5;
+MidX := (LimX - 1)/2;
+MidY := (LimY - 1)/2;
 ProfileArr.ResetParams;
 ProfileArr.PrevW := ProfileArr.Width div 2;
 
-{Add points to profile array}
+{Set up limits and increments}
 DLine := LimitL(rAngle,Phi,TanA,ProfileArr.Offset,MidX,MidY,0,0,LimX,LimY);
 Start := DLine.TopLeft;
 Stop := DLine.BottomRight;
-Plen := sqrt(sqr(Stop.X - Start.X)+ sqr(Stop.Y - Start.Y));
-ProfileArr.Len := Round(PLen) + 1;
+Plen := round(sqrt(sqr(Stop.X - Start.X)+ sqr(Stop.Y - Start.Y)));
+ProfileArr.Len := PLen + 1;
 Setlength(ProfileArr.PArrX,ProfileArr.Len);
 Setlength(ProfileArr.PArrY,ProfileArr.Len);
+SetLength(ProfileArr.IFA,ProfileArr.Len);
 X := Start.X;
 Y := Start.Y;
 I := Start.Y;
 J := Start.X;
 XInc := (Stop.X - Start.X)/PLen;
 YInc := (Stop.Y - Start.Y)/PLen;
+MidP := sqrt(sqr((Stop.X - Start.X)*XRes) + sqr((Stop.Y - Start.Y)*YRes))/2;
 K:= 0;
-MidP := sqrt(sqr((Stop.X - Start.X)*Beam.XRes) + sqr((Stop.Y - Start.Y)*Beam.YRes))/2;
 
 {Add first point}
-OverLimit := false;
 ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*XRes) + sqr((Y - Start.Y)*YRes)) - MidP;
-Z := Data[I,J];
-if Z < DTBPL then Z := DTBPL;
-if Z > DTBPU then Z := DTBPU;
-ProfileArr.PArrY[K] := Z;
+AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA[K],X,Y,LimX,LimY,DTBPL,DTBPU);
 
 {add wide profile}
 if ProfileArr.PrevW > 0 then
-   begin
-   WNX := X;
-   WNY := Y;
-   WPX := X;
-   WPY := Y;
-   OLP := 0;
-   OLN := 0;
-   for L:=1 to round(ProfileArr.PrevW) do
-      begin
-      WNX := WNX + YInc;     {increments are inverted because slope is}
-      WNY := WNY - XInc;     {perpendicular to profile}
-      WPX := WPX - YInc;
-      WPY := WPY + XInc;
-      {add negative profile}
-      OverLimit := AddPoint(ProfileArr.PArrY[K],WNX,WNY,LimX,LimY,DTBPL,DTBPU,OLN);
-
-      {add positive profile}
-      OverLimit := AddPoint(ProfileArr.PArrY[K],WPX,WPY,LimX,LimY,DTBPL,DTBPU,OLP);
-      end;
-   if OverLimit then ProfileArr.PArrY[K] := ProfileArr.PArrY[K]*ProfileArr.Width/(OLN+1+OLP);
-   end;
+   AddWideProfile(ProfileArr.ParrY[K],ProfileArr.IFA[K],X,Y,XInc,YInc,ProfileArr.PrevW);
 
 {add rest of points}
 repeat
@@ -663,35 +655,12 @@ repeat
    I := Round(Y);
    J := Round(X);
    Inc(K);
-   OverLimit := false;
-   ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*Beam.XRes) + sqr((Y - Start.Y)*Beam.YRes)) - MidP;
-   Z := Beam.Data[I,J];
-   if Z < DTBPL then Z := DTBPL;
-   if Z > DTBPU then Z := DTBPU;
-   ProfileArr.PArrY[K] := Z;
+   ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*XRes) + sqr((Y - Start.Y)*YRes)) - MidP;
+   AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA[K],X,Y,LimX,LimY,DTBPL,DTBPU);
 
    {add wide profiles}
    if ProfileArr.PrevW > 0 then
-      begin
-      WNX := X;
-      WNY := Y;
-      WPX := X;
-      WPY := Y;
-      OLP := 0;
-      OLN := 0;
-      for L:=1 to round(ProfileArr.PrevW) do
-         begin
-         WNX := WNX + YInc;     {increments are inverted because slope is}
-         WNY := WNY - XInc;     {perpendicular to profile}
-         WPX := WPX - YInc;
-         WPY := WPY + XInc;
-         {add negative profile}
-         OverLimit := AddPoint(ProfileArr.PArrY[K],WNX,WNY,LimX,LimY,DTBPL,DTBPU,OLN);
-         {add positive profile}
-         OverLimit := AddPoint(ProfileArr.PArrY[K],WPX,WPY,LimX,LimY,DTBPL,DTBPU,OLP);
-         end;
-      if OverLimit then ProfileArr.PArrY[K] := ProfileArr.PArrY[K]*ProfileArr.Width/(OLN+1+OLP);
-      end;
+      AddWideProfile(ProfileArr.ParrY[K],ProfileArr.IFA[K],X,Y,XInc,YInc,ProfileArr.PrevW);
    until (I = Stop.Y) and (J = Stop.X);
 ProfileArr.Norm := Norm;
 end;
@@ -720,9 +689,10 @@ procedure TSingleProfile.ResetAll;
 begin
 SetLength(PArrX,0);
 SetLength(PArrY,0);
-SetLength(fIFA,0);
+SetLength(IFA,0);
 PArrX := nil;
 PArrY := nil;
+IFA := nil;
 Len := 0;
 Angle := 0;
 Offset := 0;
@@ -754,9 +724,10 @@ procedure TSingleProfile.ResetParams;
 begin
 SetLength(PArrX,0);
 SetLength(PArrY,0);
-SetLength(fIFA,0);
+SetLength(IFA,0);
 PArrX := nil;
 PArrY := nil;
+IFA := nil;
 Len := 0;
 fMin.ValueY := MaxDouble;
 fMin.ValueX := 0.0;
@@ -796,7 +767,7 @@ Width := aWidth;
 end;
 
 
-function TSingleProfile.GetCentre:TValuePos;
+function TSingleProfile.GetCentre:TProfilePos;
 {Return the centre value, position and index of the profile. If the number of
 points in the profile are even the average of the two centre values is returned}
 begin
@@ -820,7 +791,7 @@ Result := fCentre
 end;
 
 
-function TSingleProfile.GetPos(Value:double; D:Integer):TValuePos;
+function TSingleProfile.GetPos(Value:double; D:Integer):TProfilePos;
 {Return the first point from the centre where the profile becomes less than
 Max or Cax times Value. D gives direction Up (increment) or Down (decrement)}
 var I          :integer;
@@ -849,7 +820,7 @@ if (I >= 0) and (I < Len) then
 end;
 
 
-function TSingleProfile.GetLeftE:TValuePos;
+function TSingleProfile.GetLeftE:TProfilePos;
 {Return the value, position and index of the field left edge. The index is the
 first integer index after the field edge.}
 begin
@@ -860,7 +831,7 @@ Result := fLeftEdge;
 end;
 
 
-function TSingleProfile.GetRightE:TValuePos;
+function TSingleProfile.GetRightE:TProfilePos;
 {Return the value, position and index of the field right edge. The index is the
 first integer index after the field edge.}
 begin
@@ -871,11 +842,11 @@ Result := fRightEdge;
 end;
 
 
-function TSingleProfile.GetMax:TValuePos;
+function TSingleProfile.GetMax:TProfilePos;
 begin
 if fMax.ValueY = 0 then
    begin
-   fMax.Pos:= MaxLoc(PArrY,0,Len);
+   fMax.Pos:= MaxPosNaN(PArrY,0,Len).Pos;
    fMax.ValueX := PArrX[fMax.Pos];
    fMax.ValueY := PArrY[fMax.Pos];
    end;
@@ -883,11 +854,11 @@ Result := fMax;
 end;
 
 
-function TSingleProfile.GetMin:TValuePos;
+function TSingleProfile.GetMin:TProfilePos;
 begin
 if SameValue(fMin.ValueY,MaxDouble) then
    begin
-   fMin.Pos:= MinLoc(PArrY,0,Len);
+   fMin.Pos:= MinPosNaN(PArrY,0,Len).Pos;
    fMin.ValueX := PArrX[fMin.Pos];
    fMin.ValueY := PArrY[fMin.Pos];
    end;
@@ -902,7 +873,7 @@ var LE,                        {index left edge}
     RE         :integer;       {index right edge}
     Delta      :double;        {inc/decrement for IFA}
 begin
-if Length(fIFA) = 0 then
+if Length(IFA) = 0 then
    begin
    case IFAType of
       proportional: begin
@@ -915,11 +886,11 @@ if Length(fIFA) = 0 then
    RE := round(RightEdge.Pos - Delta);
    if RE > LE then
      begin
-     SetLength(fIFA,RE - LE + 1);
-     fIFA := copy(PArrY,LE,RE - LE);
+     SetLength(IFA,RE - LE + 1);
+     IFA := copy(PArrY,LE,RE - LE);
      end;
    end;
-Result := fIFA;
+Result := IFA;
 end;
 
 
@@ -935,11 +906,30 @@ for K := 0 to Len - 1 do
    case Norm of
       no_norm : Y := PArrY[K];
       norm_cax: Y := (PArrY[K] - Min.ValueY)*100/(Centre.ValueY - Min.ValueY);
-      norm_max: Y := (PArrY[K] - Min.ValueY)
-         *100/(Max.ValueY - Min.ValueY);
+      norm_max: Y := (PArrY[K] - Min.ValueY)*100/(Max.ValueY - Min.ValueY);
       end; {of case}
    if (X <> 0) or (Y <> 0) then
       ProfileSeries.AddXY(X,Y,'',clRed);
+   end;
+end;
+
+
+function TSingleProfile.ToString:string;
+var K          :integer;
+    X,Y        :double;
+begin
+Result :='';
+for K := 0 to Len - 1 do
+   begin
+   X := PArrX[K];
+   case Norm of
+      no_norm : Y := PArrY[K];
+      norm_cax: Y := (PArrY[K] - Min.ValueY)*100/(Centre.ValueY - Min.ValueY);
+      norm_max: Y := (PArrY[K] - Min.ValueY)*100/(Max.ValueY - Min.ValueY);
+      end; {of case}
+   Result := Result + FloatToStrF(X,ffFixed,5,2) + ', ' + FloatToStrF(Y,ffFixed,5,2);
+   if ShowParams and not IsNaN(IFA[K]) then Result := Result + ', ' + FloatToStrF(IFA[K],ffFixed,5,2);
+   Result := Result + LineEnding;
    end;
 end;
 

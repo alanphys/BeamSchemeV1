@@ -149,7 +149,11 @@ unit bsunit;
             create TSingleProfile.ToSeries and refactor
  28/1/2022  shift Limit and LimitL to mathsfuncs
             split calcprofile into drawing and calculation routines
-            shift to bstypes and refactor, delete drawfuncs}
+            shift to bstypes and refactor, delete drawfuncs
+ 31/1/2022  remove overlimit compensation in CreateProfile
+ 1/2/2022   fix profile grounding bug in param1Dfuncs
+            add TSingleProfile.ToString and refactor
+ 2/2/2022   fix rounding error on profile increment}
 
 
 {$mode objfpc}{$H+}
@@ -316,6 +320,7 @@ type
    procedure miExportYClick(Sender: TObject);
    procedure miXClipBClick(Sender: TObject);
    procedure miYClipBClick(Sender: TObject);
+   procedure SaveAs(Sender:TObject; ProfileArr:TSingleProfile);
    procedure miOpenClick(Sender: TObject);
    procedure miRestoreClick(Sender: TObject);
    procedure miAboutClick(Sender: TObject);
@@ -421,10 +426,9 @@ Close;
 end;
 
 
-procedure TBSForm.miExportXClick(Sender: TObject);
+procedure TBSForm.SaveAs(Sender:TObject; ProfileArr:TSingleProfile);
+{Saves the profile data as a comma delimited text file}
 var Outfile:   textfile;
-    I:         integer;
-
 begin
 SaveDialog.Title := 'Export profile as';
 {$ifdef WINDOWS}
@@ -435,75 +439,42 @@ SaveDialog.Filter := 'Text files|*.txt|All files|*';
 SaveDialog.InitialDir := OpenDialog.InitialDir;
 SaveDialog.DefaultExt := '.txt';
 SaveDialog.FileName := ExtractFileNameOnly(OpenDialog.FileName);
-if XPArr <> nil then
+if ProfileArr <> nil then
    if SaveDialog.Execute then
       begin
       AssignFile(Outfile,SaveDialog.FileName);
       Rewrite(Outfile);
-      for I := 0 to length(XPArr.PArrY) - 1 do
-         writeln(Outfile,XPArr.PArrX[I]:5:2,',',XPArr.PArrY[I]:5:1);
-         {writeln(Outfile,XPArr.PArr[I].X,',',XPArr.PArr[I].Y);}
+      write(Outfile,ProfileArr.ToString);
       CloseFile(Outfile);
       end;
 end;
 
 
-procedure TBSForm.miExportYClick(Sender: TObject);
-var Outfile:   textfile;
-    I:         integer;
-
+procedure TBSForm.miExportXClick(Sender: TObject);
+{Saves the file as a comma delimited string}
 begin
-SaveDialog.Title := 'Export profile as';
-{$ifdef WINDOWS}
-SaveDialog.Filter := 'Text files|*.txt|All files|*.*';
-{$else}
-SaveDialog.Filter := 'Text files|*.txt|All files|*';
-{$endif}
-SaveDialog.InitialDir := OpenDialog.InitialDir;
-SaveDialog.DefaultExt := '.txt';
-SaveDialog.FileName := ExtractFileNameOnly(OpenDialog.FileName);
-if YPArr <> nil then
-   if SaveDialog.Execute then
-      begin
-      AssignFile(Outfile,SaveDialog.FileName);
-      Rewrite(Outfile);
-      for I := 0 to length(YPArr.PArrY) - 1 do
-         writeln(Outfile,YPArr.PArrX[I]:5:2,',',YPArr.PArrY[I]:5:1);
-         {writeln(Outfile,YPArr.PArr[I].X,',',YPArr.PArr[I].Y);}
-      CloseFile(Outfile);
-      end;
+SaveAs(Sender,XPArr);
+end;
+
+
+procedure TBSForm.miExportYClick(Sender: TObject);
+{Saves the file as a comma delimited string}
+begin
+SaveAs(Sender,YPArr);
 end;
 
 
 procedure TBSForm.miXClipBClick(Sender: TObject);
 {put the array in a comma delimited string on the clipboard}
-var I          :integer;
-    sClip      :string;
 begin
-if XPArr <> nil then
-   begin
-   sClip := '';
-   for I := 0 to length(XPArr.PArrY) - 1 do
-       sClip := sClip + FloatToStrF(XPArr.PArrX[I],ffFixed,5,2) + ',' +
-          FloatToStrF(XPArr.PArrY[I],ffFixed,5,2) + LineEnding;
-   end;
-Clipboard.AsText := sClip;
+if XPArr <> nil then Clipboard.AsText := XPArr.ToString;
 end;
 
 
 procedure TBSForm.miYClipBClick(Sender: TObject);
 {put the array in a comma delimited string on the clipboard}
-var I          :integer;
-    sClip      :string;
 begin
-if YPArr <> nil then
-   begin
-   sClip := '';
-   for I := 0 to length(YPArr.PArrY) - 1 do
-       sClip := sClip + FloatToStrF(YPArr.PArrX[I],ffFixed,5,2) + ',' +
-          FloatToStrF(YPArr.PArrY[I],ffFixed,5,2) + LineEnding;
-   end;
-Clipboard.AsText := sClip;
+if YPArr <> nil then Clipboard.AsText := YPArr.ToString;
 end;
 
 
@@ -1330,7 +1301,7 @@ if Safe then
       begin
       YPArr.SetParams(seYAngle.Value,-seYOffset.Value,seYWidth.Value);
       YPArr.Draw(iBeam.Picture.Bitmap);
-      Beam.CreateProfile(YPArr,DTrackBar.PositionU,DTrackBar.PositionL,Normalisation);
+      Beam.CreateProfile(YPArr,DTrackBar.PositionU,DTrackBar.PositionL);
       YPArr.ToSeries(YProfile);
       Show1DResults(YPArr,3);
       end;
@@ -1354,7 +1325,7 @@ if Safe then
       StartTime := GetTickCount64;
       XPArr.SetParams(seXAngle.Value,-seXOffset.Value,seXWidth.Value);
       XPArr.Draw(iBeam.Picture.Bitmap);
-      Beam.CreateProfile(XPArr,DTrackBar.PositionU,DTrackBar.PositionL,Normalisation);
+      Beam.CreateProfile(XPArr,DTrackBar.PositionU,DTrackBar.PositionL);
       XPArr.ToSeries(XProfile);
       Show1DResults(XPArr,2);
       EndTime := GetTickCount64 - StartTime;
