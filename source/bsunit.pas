@@ -1341,21 +1341,22 @@ procedure TBSForm.Show1DResults(ProfileArr:TSingleProfile; Col:integer);
 var I          :integer;
 begin
 {calc values and write to string grid}
-for I:=1 to sgResults.RowCount-1 do
-   begin
-   ProfileArr.sExpr := sgResults.Cells[1,I];
-   if ProfileArr.sExpr <> '' then
+if ProfileArr <> nil then
+   for I:=1 to sgResults.RowCount-1 do
       begin
-      if Leftstr(ProfileArr.sExpr,2) = '1D' then
-         try
-         sgResults.Cells[Col,I] := Calc1DParam(ProfileArr)
-         except
-         on E:Exception do BSErrorMsg('Could not evaluate expression, ' + ProfileArr.sExpr);
-         end;
-      end
-     else sgResults.Cells[Col,I] := '';
+      ProfileArr.sExpr := sgResults.Cells[1,I];
+      if ProfileArr.sExpr <> '' then
+         begin
+         if Leftstr(ProfileArr.sExpr,2) = '1D' then
+            try
+            sgResults.Cells[Col,I] := Calc1DParam(ProfileArr)
+            except
+            on E:Exception do BSErrorMsg('Could not evaluate expression, ' + ProfileArr.sExpr);
+            end;
+         end
+        else sgResults.Cells[Col,I] := '';
+      end;
    end;
-end;
 
 
 procedure TBSForm.Show2DResults(BeamArr:TBeam);
@@ -1364,20 +1365,21 @@ var I          :integer;
 
 begin
 {calc values and write to string grid}
-for I:=1 to sgResults.RowCount-1 do
-   begin
-   sExpr := sgResults.Cells[1,I];
-   if sExpr <> '' then
+if Length(BeamArr.Data) > 0 then
+   for I:=1 to sgResults.RowCount-1 do
       begin
-      if Leftstr(sExpr,2) = '2D' then
-         try
-         sgResults.Cells[2,I] := Calc2DParam(BeamArr,sExpr)
-         except
-         on E:Exception do BSErrorMsg('Could not evaluate expression, ' + sExpr);
-         end;
-      end
-     else sgResults.Cells[2,I] := '';
-   end;
+      sExpr := sgResults.Cells[1,I];
+      if sExpr <> '' then
+         begin
+         if Leftstr(sExpr,2) = '2D' then
+            try
+            sgResults.Cells[2,I] := Calc2DParam(BeamArr,sExpr)
+            except
+            on E:Exception do BSErrorMsg('Could not evaluate expression, ' + sExpr);
+            end;
+         end
+        else sgResults.Cells[2,I] := '';
+      end;
 end;
 
 

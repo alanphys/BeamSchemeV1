@@ -32,6 +32,16 @@ type
       procedure TestFieldEdgeRight501D;
       procedure TestFieldCentre501D;
       procedure TestFieldSize501D;
+      procedure TestPenumbra8020Left1D;
+      procedure TestPenumbra8020Right1D;
+      procedure TestPenumbra9010Left1D;
+      procedure TestPenumbra9010Right1D;
+      procedure TestFlatnessAve1D;
+      procedure TestFlatnessDiff1D;
+      procedure TestFlatnessRatio1D;
+      procedure TestFlatnessCAX1D;
+      procedure TestSymmetryRatio1D;
+      procedure TestSymmetryDiff1D;
       procedure TestNoFunc1D;
    end;
 
@@ -74,7 +84,7 @@ end;
 
 
 {-------------------------------------------------------------------------------
- Field statistic
+ Field statistics
 -------------------------------------------------------------------------------}
 procedure Test1DParamFuncs.TestCAXVal1D_no_norm;
 begin
@@ -181,6 +191,78 @@ begin
 AssertEquals('Test field size 50%','20.08 cm',FieldSize501D(fProfile));
 end;
 
+
+procedure Test1DParamFuncs.TestPenumbra8020Left1D;
+begin
+AssertEquals('Test penumbra left 80-20%','0.65 cm',Penumbra8020Left1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestPenumbra8020Right1D;
+begin
+AssertEquals('Test penumbra right 80-20%','0.71 cm',Penumbra8020Right1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestPenumbra9010Left1D;
+begin
+AssertEquals('Test penumbra left 90-10%','1.32 cm',Penumbra9010Left1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestPenumbra9010Right1D;
+begin
+AssertEquals('Test penumbra right 90-10%','1.26 cm',Penumbra9010Right1D(fProfile));
+end;
+
+
+{-------------------------------------------------------------------------------
+ Flatness and uniformity parameters
+-------------------------------------------------------------------------------}
+
+procedure Test1DParamFuncs.TestFlatnessAve1D;
+begin
+AssertEquals('Test flatness average of min max','102.4%',FlatnessAve1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFlatnessDiff1D;
+begin
+AssertEquals('Test flatness difference','2.3%',FlatnessDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFlatnessRatio1D;
+begin
+AssertEquals('Test flatness ratio','104.8%',FlatnessRatio1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFlatnessCAX1D;
+begin
+AssertEquals('Test flatness CAX','2.4%',FlatnessCAX1D(fProfile));
+end;
+
+
+{-------------------------------------------------------------------------------
+ Symmetry parameters
+-------------------------------------------------------------------------------}
+
+procedure Test1DParamFuncs.TestSymmetryRatio1D;
+begin
+AssertEquals('Test symmetry ratio','102.7%',SymmetryRatio1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestSymmetryDiff1D;
+begin
+AssertEquals('Test symmetry difference','2.7%',SymmetryDiff1D(fProfile));
+end;
+
+
+{-------------------------------------------------------------------------------
+ Miscellaneous parameters
+-------------------------------------------------------------------------------}
 
 procedure Test1DParamFuncs.TestNoFunc1D;
 begin

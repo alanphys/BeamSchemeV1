@@ -36,14 +36,24 @@ type
 T1DParamFunc = function(ProfileArr:TSingleProfile):string;
 
 T1DParams = (field_edge_left_50_1D,
-           field_edge_right_50_1D,
-           field_centre_50_1D,
-           field_size_50_1D,
-           cax_val_1D,
-           max_val_1D,
-           min_val_1D,
-           min_ifa_1D,
-           no_func_1D);
+             field_edge_right_50_1D,
+             field_centre_50_1D,
+             field_size_50_1D,
+             pen_8020_left_1D,
+             pen_8020_right_1D,
+             pen_9010_left_1D,
+             pen_9010_right_1D,
+             cax_val_1D,
+             max_val_1D,
+             min_val_1D,
+             min_ifa_1D,
+             flat_ave_1D,
+             flat_diff_1D,
+             flat_ratio_1D,
+             flat_cax_1D,
+             sym_ratio_1D,
+             sym_diff_1D,
+             no_func_1D);
 
 T1DParamFuncs = record
    Name      :string;
@@ -57,12 +67,25 @@ function FieldEdgeLeft501D(ProfileArr:TSingleProfile):string;
 function FieldEdgeRight501D(ProfileArr:TSingleProfile):string;
 function FieldCentre501D(ProfileArr:TSingleProfile):string;
 function FieldSize501D(ProfileArr:TSingleProfile):string;
-function NoFunc1D(ProfileArr:TSingleProfile):string;
+function Penumbra8020Left1D(ProfileArr:TSingleProfile):string;
+function Penumbra8020Right1D(ProfileArr:TSingleProfile):string;
+function Penumbra9010Left1D(ProfileArr:TSingleProfile):string;
+function Penumbra9010Right1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
 function MinVal1D(ProfileArr:TSingleProfile):string;
 function MinIFA1D(ProfileArr:TSingleProfile):string;
+{flatness and uniformity}
+function FlatnessAve1D(ProfileArr:TSingleProfile):string;
+function FlatnessDiff1D(ProfileArr:TSingleProfile):string;
+function FlatnessRatio1D(ProfileArr:TSingleProfile):string;
+function FlatnessCAX1D(ProfileArr:TSingleProfile):string;
+{symmetry}
+function SymmetryRatio1D(ProfileArr:TSingleProfile):string;
+function SymmetryDiff1D(ProfileArr:TSingleProfile):string;
+{miscellaneous}
+function NoFunc1D(ProfileArr:TSingleProfile):string;
 
 
 const
@@ -71,20 +94,30 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Field Edge Right 50'; Func:@FieldEdgeRight501D),
    (Name:'1D Field Centre 50'; Func:@FieldCentre501D),
    (Name:'1D Field Size 50'; Func:@FieldSize501D),
+   (Name:'1D Penumbra 8020 Left'; Func:@Penumbra8020Left1D),
+   (Name:'1D Penumbra 8020 Right'; Func:@Penumbra8020Right1D),
+   (Name:'1D Penumbra 9010 Left'; Func:@Penumbra9010Left1D),
+   (Name:'1D Penumbra 9010 Right'; Func:@Penumbra9010Right1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
    (Name:'1D Min IFA'; Func:@MinIFA1D),
+   (Name:'1D Flatness Ave'; Func:@FlatnessAve1D),
+   (Name:'1D Flatness Diff'; Func:@FlatnessDiff1D),
+   (Name:'1D Flatness Ratio'; Func:@FlatnessRatio1D),
+   (Name:'1D Flatness CAX'; Func:@FlatnessCAX1D),
+   (Name:'1D Symmetry Ratio'; Func:@SymmetryRatio1D),
+   (Name:'1D Symmetry Diff'; Func:@SymmetryDiff1D),
    (Name:'1D No Function'; Func:@NoFunc1D));
 
 implementation
 
-uses mathsfuncs;
+uses math, mathsfuncs;
 
 {-------------------------------------------------------------------------------
- Parameter calculation functions
+ Field statistics
 -------------------------------------------------------------------------------}
-{field statistics}
+
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 {Returns the value of the centre of the profile. If the profile is normalised
 to CAX this is by definition 100%.}
@@ -137,7 +170,10 @@ with ProfileArr do case Norm of
 end;
 
 
-{interpolated parameters}
+{-------------------------------------------------------------------------------
+ Interpolated parameters
+-------------------------------------------------------------------------------}
+
 function FieldEdgeLeft501D(ProfileArr:TSingleProfile):string;
 {Returns the position of the left field edge at 50% of max or cax value.}
 begin
@@ -184,6 +220,116 @@ if (ProfileArr.LeftEdge.ValueY > 0) and (ProfileArr.RightEdge.ValueY > 0) then
   else
    Result := 'No edge';
 end;
+
+
+function Penumbra8020Left1D(ProfileArr:TSingleProfile):string;
+var Penumbra   :double;
+begin
+with ProfileArr do
+   Penumbra := abs(GetPos(0.2,-1).ValueX - GetPos(0.8,-1).ValueX);
+Result := FloatToStrF(Penumbra,ffFixed,4,2) + ' cm'
+end;
+
+
+function Penumbra8020Right1D(ProfileArr:TSingleProfile):string;
+var Penumbra   :double;
+begin
+with ProfileArr do
+   Penumbra := abs(GetPos(0.2,1).ValueX - GetPos(0.8,1).ValueX);
+Result := FloatToStrF(Penumbra,ffFixed,4,2) + ' cm'
+end;
+
+
+function Penumbra9010Left1D(ProfileArr:TSingleProfile):string;
+var Penumbra   :double;
+begin
+with ProfileArr do
+   Penumbra := abs(GetPos(0.1,-1).ValueX - GetPos(0.9,-1).ValueX);
+Result := FloatToStrF(Penumbra,ffFixed,4,2) + ' cm'
+end;
+
+
+function Penumbra9010Right1D(ProfileArr:TSingleProfile):string;
+var Penumbra   :double;
+begin
+with ProfileArr do
+   Penumbra := abs(GetPos(0.1,1).ValueX - GetPos(0.9,1).ValueX);
+Result := FloatToStrF(Penumbra,ffFixed,4,2) + ' cm'
+end;
+
+
+{-------------------------------------------------------------------------------
+ Flatness and uniformity parameters
+-------------------------------------------------------------------------------}
+
+function FlatnessAve1D(ProfileArr:TSingleProfile):string;
+begin
+with ProfileArr do
+Result := FloatToStrF(100*(IFA.Max.ValueY + IFA.Min.ValueY)/(2*Centre.ValueY),ffFixed,4,1) + '%';
+end;
+
+
+function FlatnessDiff1D(ProfileArr:TSingleProfile):string;
+begin
+with ProfileArr do
+Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
+   (IFA.Max.ValueY + IFA.Min.ValueY),ffFixed,4,1) + '%';
+end;
+
+
+function FlatnessRatio1D(ProfileArr:TSingleProfile):string;
+begin
+with ProfileArr do
+Result := FloatToStrF(100*IFA.Max.ValueY/IFA.Min.ValueY,ffFixed,4,1) + '%';
+end;
+
+
+function FlatnessCAX1D(ProfileArr:TSingleProfile):string;
+begin
+with ProfileArr do
+Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/(2*Centre.ValueY),ffFixed,4,1) + '%';
+end;
+
+
+{-------------------------------------------------------------------------------
+ Symmetry parameters
+-------------------------------------------------------------------------------}
+
+function SymmetryRatio1D(ProfileArr:TSingleProfile):string;
+{max symmetric difference over IFA}
+var I          :integer;
+    Ratio,
+    MaxRatio   :double;
+begin
+MaxRatio := 0;
+with ProfileArr do
+   for I:= 0 to Len - 1 do
+      if (not IsNaN(IFA.PArrY[I])) and (not IsNaN(IFA.PArrY[Len - I - 1])) then
+         begin
+         Ratio := IFA.PArrY[I]/IFA.PArrY[Len - I - 1];
+         if Ratio > MaxRatio then MaxRatio := Ratio;
+         end;
+Result := FloatToStrF(100*MaxRatio,ffFixed,4,1) + '%';
+end;
+
+
+function SymmetryDiff1D(ProfileArr:TSingleProfile):string;
+{max symmetric difference over IFA}
+var I          :integer;
+    Diff,
+    MaxDiff   :double;
+begin
+MaxDiff := 0;
+with ProfileArr do
+   for I:= 0 to Len - 1 do
+      if (not IsNan(IFA.PArrY[I])) and (not IsNaN(IFA.PArrY[Len - I - 1])) then
+         begin
+         Diff := abs(IFA.PArrY[I] - IFA.PArrY[Len - I - 1]);
+         if Diff > MaxDiff then MaxDiff := Diff;
+         end;
+Result := FloatToStrF(100*MaxDiff/ProfileArr.Centre.ValueY,ffFixed,4,1) + '%';
+end;
+
 
 
 function NoFunc1D(ProfileArr:TSingleProfile):string;

@@ -845,7 +845,7 @@ begin
 I := Centre.Pos;
 case Norm of
    no_norm : Value := Centre.ValueY*Value;
-   norm_cax: Value := (Centre.ValueY - Min.ValueY)*Value + Min.ValueY;  //fix! potentially uninitialised
+   norm_cax: Value := (Centre.ValueY - Min.ValueY)*Value + Min.ValueY;
    norm_max: Value := (Max.ValueY - Min.ValueY)*Value + Min.ValueY;
    end; {of case}
 
