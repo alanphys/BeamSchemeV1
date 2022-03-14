@@ -1463,6 +1463,10 @@ object BSForm: TBSForm
     OnPopup = pmContextPopup
     Left = 24
     Top = 248
+    object pmiShowPoints: TMenuItem
+      Caption = 'Show Points'
+      OnClick = pmiShowPointsClick
+    end
     object pmiCopyClip: TMenuItem
       Caption = 'Copy to Clipboard'
       OnClick = pmiCopyClipClick

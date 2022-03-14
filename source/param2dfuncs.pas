@@ -90,9 +90,9 @@ function CaxVal2D(BeamArr:TBeam):string;
 points in the beam are even the average of the two or four centre values is returned}
 begin
 case BeamArr.Norm of
-   no_norm: Result := FloatToStrF(BeamArr.Centre,ffFixed,4,2);
+   no_norm: Result := FloatToStrF(BeamArr.Centre,ffFixed,4,Precision);
    norm_cax: Result := '100.0%';
-   norm_max: Result := FloatToStrF(BeamArr.Centre*100/BeamArr.Max,ffFixed,4,2) + '%';
+   norm_max: Result := FloatToStrF(BeamArr.Centre*100/BeamArr.Max,ffFixed,4,Precision) + '%';
    end;
 end;
 
@@ -101,8 +101,8 @@ function MaxVal2D(BeamArr:TBeam):string;
 {Returns the maximum of the array}
 begin
 case BeamArr.Norm of
-   no_norm: Result := FloatToStrF(BeamArr.Max,ffFixed,4,1);
-   norm_cax: Result := FloatToStrF(BeamArr.Max*100/BeamArr.Centre,ffFixed,4,1) + '%';
+   no_norm: Result := FloatToStrF(BeamArr.Max,ffFixed,4,Precision);
+   norm_cax: Result := FloatToStrF(BeamArr.Max*100/BeamArr.Centre,ffFixed,4,Precision) + '%';
    norm_max: Result := '100.0%';
    end {of case}
 end;
@@ -112,7 +112,7 @@ function MinVal2D(BeamArr:TBeam):string;
 {Returns the minimum of the array}
 begin
 case BeamArr.Norm of
-   no_norm: Result := FloatToStrF(BeamArr.Min,ffFixed,4,1);
+   no_norm: Result := FloatToStrF(BeamArr.Min,ffFixed,4,Precision);
    norm_cax: Result := '0.00';
    norm_max: Result := '0.00';
    end; {of case}
@@ -122,15 +122,15 @@ end;
 function MinIFA2D(BeamArr:TBeam):string;
 {Returns the min value in the in field area}
 begin
-Result := FloatToStrF(BeamArr.IFA.Min,ffFixed,4,2);
+Result := FloatToStrF(BeamArr.IFA.Min,ffFixed,4,Precision);
 end;
 
 
 function CoMVal2D(BeamArr:Tbeam):string;
 {Returns the row,col coordinates of the Centre of Mass}
 begin
-Result := '(' + FloatToStrF(BeamArr.CoM.X,ffFixed,4,1) + ',' +
-   FloatToStrF(BeamArr.CoM.Y,ffFixed,4,1) + ')';
+Result := '(' + FloatToStrF(BeamArr.CoM.X,ffFixed,4,Precision) + ',' +
+   FloatToStrF(BeamArr.CoM.Y,ffFixed,4,Precision) + ')';
 end;
 
 
@@ -145,7 +145,7 @@ begin
 BMax := BeamArr.IFA.Max;
 BMin := BeamArr.IFA.Min;
 CAX := BeamArr.Centre;
-Result := FloatToStrF(max(abs(BMax-CAX),abs(BMin-CAX))*100/CAX,ffFixed,4,1) + '%';
+Result := FloatToStrF(max(abs(BMax-CAX),abs(BMin-CAX))*100/CAX,ffFixed,4,Precision) + '%';
 end;
 
 
@@ -160,7 +160,7 @@ begin
 BMax := BeamArr.IFA.Max;
 BMin := BeamArr.IFA.Min;
 Ave := BeamArr.IFA.Ave;
-Result := FloatToStrF((BMax - BMin)*100/Ave,ffFixed,4,1) + '%';
+Result := FloatToStrF((BMax - BMin)*100/Ave,ffFixed,4,Precision) + '%';
 end;
 
 
@@ -188,7 +188,7 @@ for I:=0 to EndRow do
          Diff := abs(aIFA[I,J] - aIFA[EndRow - I, EndCol - J]);
          if Diff > MaxDiff then MaxDiff := Diff;
          end;
-Result := FloatToStrF(MaxDiff*100/BeamArr.IFA.Ave,ffFixed,4,1) + '%';
+Result := FloatToStrF(MaxDiff*100/BeamArr.IFA.Ave,ffFixed,4,Precision) + '%';
 end;
 
 

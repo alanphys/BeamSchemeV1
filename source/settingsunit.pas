@@ -62,6 +62,7 @@ if FileExists(FileName) then
    for IFAVal in TIFAType do
       if IFAData[IFAVal].Name = sTemp then IFAType := IFAVAl;
    IFAFactor := cfg.GetExtendedValue('IFAFactor',0.8);
+   Precision := cfg.GetValue('Precision',Precision);
    Result := true;
    finally
    cfg.Free;
@@ -85,6 +86,7 @@ FileName := AppendPathDelim(CfgPath) + FileName + '.xml';
    cfg.SetValue('DefaultResolution',round(2.54/DefaultRes));
    cfg.SetValue('IFAType',IFAData[IFAType].Name);
    cfg.SetExtendedValue('IFAFactor',IFAFactor);
+   cfg.SetValue('Precision',Precision);
    Result := true;
    finally
    cfg.Free;
@@ -98,7 +100,6 @@ procedure TSettingsForm.tbExitClick(Sender: TObject);
 begin
 close;
 end;
-
 
 procedure TSettingsForm.tbAddClick(Sender: TObject);
 var OK         :boolean;
@@ -146,6 +147,16 @@ if OK and (vleSettings.FindRow('IFA Factor',ARow)) then
   else
    OK := false;
 
+if vleSettings.FindRow('Precision',ARow) then
+   begin
+   Precision := StrToInt(vleSettings.Values['Precision']);
+   StatusBar.SimpleText := 'Key ' + vleSettings.Keys[ARow] + ' changed to '
+      + vleSettings.Strings.ValueFromIndex[ARow-1];
+   vleSettings.Modified := false;
+   end
+  else
+   OK := false;
+
 if not OK then StatusBar.SimpleText := 'Error, could not set key ' + vleSettings.Keys[ARow];
 end;
 
@@ -163,19 +174,25 @@ if vleSettings.FindRow('IFA Type',ARow) then
   else
    vleSettings.InsertRow('IFA Type',IFAData[IFAType].Name,True);
 with vleSettings.ItemProps['IFA Type'] do
-begin
-  KeyDesc := 'IFA Type: PickList';  //optional description
-  EditStyle := esPickList;
-  ReadOnly := True;  //user cannot add options to dropdownlist
-  PickList.Add('Proportional');
-  PickList.Add('Circular');
-  PickList.Add('Square');
-end;
+   begin
+   KeyDesc := 'IFA Type: PickList';  //optional description
+   EditStyle := esPickList;
+   ReadOnly := True;  //user cannot add options to dropdownlist
+   PickList.Add('Proportional');
+   PickList.Add('Circular');
+   PickList.Add('Square');
+   end;
 
 if vleSettings.FindRow('IFA Factor',ARow) then
    vleSettings.Values[vleSettings.Keys[Arow]] := FloatToStr(IFAFactor)
   else
    vleSettings.InsertRow('IFA Factor',FloatToStr(IFAFactor),True);
+
+if vleSettings.FindRow('Precision',ARow) then
+   vleSettings.Values[vleSettings.Keys[Arow]] := IntToStr(Precision)
+  else
+   vleSettings.InsertRow('Precision',IntToStr(Precision),True);
+
 vleSettings.Modified := false;
 StatusBar.SimpleText := 'Keys will not be changed until <Save Settings> is clicked';
 end;

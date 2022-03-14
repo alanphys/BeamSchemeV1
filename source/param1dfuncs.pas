@@ -43,6 +43,8 @@ T1DParams = (field_edge_left_50_1D,
              pen_8020_right_1D,
              pen_9010_left_1D,
              pen_9010_right_1D,
+             pen_9050_left_1D,
+             pen_9050_right_1D,
              cax_val_1D,
              max_val_1D,
              min_val_1D,
@@ -53,6 +55,10 @@ T1DParams = (field_edge_left_50_1D,
              flat_cax_1D,
              sym_ratio_1D,
              sym_diff_1D,
+             sym_area_1D,
+             dev_ratio_1D,
+             dev_diff_1D,
+             dev_cax_1D,
              no_func_1D);
 
 T1DParamFuncs = record
@@ -71,6 +77,8 @@ function Penumbra8020Left1D(ProfileArr:TSingleProfile):string;
 function Penumbra8020Right1D(ProfileArr:TSingleProfile):string;
 function Penumbra9010Left1D(ProfileArr:TSingleProfile):string;
 function Penumbra9010Right1D(ProfileArr:TSingleProfile):string;
+function Penumbra9050Left1D(ProfileArr:TSingleProfile):string;
+function Penumbra9050Right1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
@@ -84,6 +92,11 @@ function FlatnessCAX1D(ProfileArr:TSingleProfile):string;
 {symmetry}
 function SymmetryRatio1D(ProfileArr:TSingleProfile):string;
 function SymmetryDiff1D(ProfileArr:TSingleProfile):string;
+function SymmetryArea1D(ProfileArr:TSingleProfile):string;
+{deviation}
+function DeviationRatio1D(ProfileArr:TSingleProfile):string;
+function DeviationDiff1D(ProfileArr:TSingleProfile):string;
+function DeviationCAX1D(ProfileArr:TSingleProfile):string;
 {miscellaneous}
 function NoFunc1D(ProfileArr:TSingleProfile):string;
 
@@ -98,6 +111,8 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Penumbra 8020 Right'; Func:@Penumbra8020Right1D),
    (Name:'1D Penumbra 9010 Left'; Func:@Penumbra9010Left1D),
    (Name:'1D Penumbra 9010 Right'; Func:@Penumbra9010Right1D),
+   (Name:'1D Penumbra 9050 Left'; Func:@Penumbra9050Left1D),
+   (Name:'1D Penumbra 9050 Right'; Func:@Penumbra9050Right1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
@@ -108,6 +123,10 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Flatness CAX'; Func:@FlatnessCAX1D),
    (Name:'1D Symmetry Ratio'; Func:@SymmetryRatio1D),
    (Name:'1D Symmetry Diff'; Func:@SymmetryDiff1D),
+   (Name:'1D Symmetry Area'; Func:@SymmetryArea1D),
+   (Name:'1D Deviation Ratio'; Func:@DeviationRatio1D),
+   (Name:'1D Deviation Diff'; Func:@DeviationDiff1D),
+   (Name:'1D Deviation CAX'; Func:@DeviationCAX1D),
    (Name:'1D No Function'; Func:@NoFunc1D));
 
 implementation
@@ -123,10 +142,10 @@ function CAXVal1D(ProfileArr:TSingleProfile):string;
 to CAX this is by definition 100%.}
 begin
 with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(Centre.ValueY,ffFixed,4,1);
+   no_norm: Result := FloatToStrF(Centre.ValueY,ffFixed,4,Precision);
    norm_cax: Result := '100.0%';
    norm_max: Result := FloatToStrF((Centre.ValueY - Min.ValueY)
-      *100/(Max.ValueY - Min.ValueY),ffFixed,4,1) + '%';
+      *100/(Max.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
    end {of case}
 end;
 
@@ -136,10 +155,10 @@ function MaxVal1D(ProfileArr:TSingleProfile):string;
 this is by definition 100%}
 begin
 with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(Max.ValueY,ffFixed,4,1);
+   no_norm: Result := FloatToStrF(Max.ValueY,ffFixed,4,Precision);
    norm_cax: Result := FloatToStrF((Max.ValueY - Min.ValueY)
-      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,1) + '%';
-   norm_max: Result := '100.0%';
+      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
+   norm_max: Result := '100.00%';
    end {of case}
 end;
 
@@ -149,7 +168,7 @@ function MinVal1D(ProfileArr:TSingleProfile):string;
 is grounded and the min value is 0.}
 begin
 with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(Min.ValueY,ffFixed,4,1);
+   no_norm: Result := FloatToStrF(Min.ValueY,ffFixed,4,Precision);
    norm_cax: Result := '0.00';
    norm_max: Result := '0.00';
    end; {of case}
@@ -161,11 +180,11 @@ function MinIFA1D(ProfileArr:TSingleProfile):string;
 is grounded}
 begin
 with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(IFA.Min.ValueY,ffFixed,4,1);
+   no_norm: Result := FloatToStrF(IFA.Min.ValueY,ffFixed,4,Precision);
    norm_cax: Result := FloatToStrF((IFA.Min.ValueY - Min.ValueY)
-      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,1) + '%';
+      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
    norm_max: Result := FloatToStrF((IFA.Min.ValueY - Min.ValueY)
-      *100/(Max.ValueY - Min.ValueY),ffFixed,4,1) + '%';
+      *100/(Max.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
    end; {of case}
 end;
 
@@ -178,7 +197,7 @@ function FieldEdgeLeft501D(ProfileArr:TSingleProfile):string;
 {Returns the position of the left field edge at 50% of max or cax value.}
 begin
 if ProfileArr.LeftEdge.ValueY > 0 then
-   Result := FloatToStrF(ProfileArr.LeftEdge.ValueX,ffFixed,4,2) + ' cm'
+   Result := FloatToStrF(ProfileArr.LeftEdge.ValueX,ffFixed,4,Precision) + ' cm'
   else
    Result := 'No edge';
 end;
@@ -188,7 +207,7 @@ function FieldEdgeRight501D(ProfileArr:TSingleProfile):string;
 {Returns the position of the right field edge at 50% of max or cax value.}
 begin
 if ProfileArr.RightEdge.ValueY > 0 then
-   Result := FloatToStrF(ProfileArr.RightEdge.ValueX,ffFixed,4,2) + ' cm'
+   Result := FloatToStrF(ProfileArr.RightEdge.ValueX,ffFixed,4,Precision) + ' cm'
   else
    Result := 'No edge';
 end;
@@ -196,12 +215,10 @@ end;
 
 function FieldCentre501D(ProfileArr:TSingleProfile):string;
 {Returns the field centre as given by the 50% field edges}
-var FieldCentre:double;
 begin
 if (ProfileArr.LeftEdge.ValueY > 0) and (ProfileArr.RightEdge.ValueY > 0) then
    begin
-   FieldCentre := (ProfileArr.RightEdge.ValueX + ProfileArr.LeftEdge.ValueX)/2;
-   Result := FloatToStrF(FieldCentre,ffFixed,4,2) + ' cm'
+   Result := FloatToStrF(ProfileArr.Peak.ValueX,ffFixed,4,Precision) + ' cm'
    end
   else
    Result := 'No edge';
@@ -215,7 +232,7 @@ begin
 if (ProfileArr.LeftEdge.ValueY > 0) and (ProfileArr.RightEdge.ValueY > 0) then
    begin
    FieldSize := abs(ProfileArr.RightEdge.ValueX - ProfileArr.LeftEdge.ValueX);
-   Result := FloatToStrF(FieldSize,ffFixed,4,2) + ' cm'
+   Result := FloatToStrF(FieldSize,ffFixed,4,Precision) + ' cm'
    end
   else
    Result := 'No edge';
@@ -227,7 +244,7 @@ var Penumbra   :double;
 begin
 with ProfileArr do
    Penumbra := abs(GetPos(0.2,-1).ValueX - GetPos(0.8,-1).ValueX);
-Result := FloatToStrF(Penumbra,ffFixed,4,2) + ' cm'
+Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
 
@@ -236,7 +253,7 @@ var Penumbra   :double;
 begin
 with ProfileArr do
    Penumbra := abs(GetPos(0.2,1).ValueX - GetPos(0.8,1).ValueX);
-Result := FloatToStrF(Penumbra,ffFixed,4,2) + ' cm'
+Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
 
@@ -245,7 +262,7 @@ var Penumbra   :double;
 begin
 with ProfileArr do
    Penumbra := abs(GetPos(0.1,-1).ValueX - GetPos(0.9,-1).ValueX);
-Result := FloatToStrF(Penumbra,ffFixed,4,2) + ' cm'
+Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
 
@@ -254,7 +271,25 @@ var Penumbra   :double;
 begin
 with ProfileArr do
    Penumbra := abs(GetPos(0.1,1).ValueX - GetPos(0.9,1).ValueX);
-Result := FloatToStrF(Penumbra,ffFixed,4,2) + ' cm'
+Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
+end;
+
+
+function Penumbra9050Left1D(ProfileArr:TSingleProfile):string;
+var Penumbra   :double;
+begin
+with ProfileArr do
+   Penumbra := abs(LeftEdge.ValueX - GetPos(0.9,-1).ValueX);
+Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
+end;
+
+
+function Penumbra9050Right1D(ProfileArr:TSingleProfile):string;
+var Penumbra   :double;
+begin
+with ProfileArr do
+   Penumbra := abs(RightEdge.ValueX - GetPos(0.9,1).ValueX);
+Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
 
@@ -265,7 +300,8 @@ end;
 function FlatnessAve1D(ProfileArr:TSingleProfile):string;
 begin
 with ProfileArr do
-Result := FloatToStrF(100*(IFA.Max.ValueY + IFA.Min.ValueY)/(2*Centre.ValueY),ffFixed,4,1) + '%';
+Result := FloatToStrF(100*(IFA.Max.ValueY + IFA.Min.ValueY)/
+   (2*Centre.ValueY),ffFixed,4,Precision) + '%';
 end;
 
 
@@ -273,21 +309,22 @@ function FlatnessDiff1D(ProfileArr:TSingleProfile):string;
 begin
 with ProfileArr do
 Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
-   (IFA.Max.ValueY + IFA.Min.ValueY),ffFixed,4,1) + '%';
+   (IFA.Max.ValueY + IFA.Min.ValueY),ffFixed,4,Precision) + '%';
 end;
 
 
 function FlatnessRatio1D(ProfileArr:TSingleProfile):string;
 begin
 with ProfileArr do
-Result := FloatToStrF(100*IFA.Max.ValueY/IFA.Min.ValueY,ffFixed,4,1) + '%';
+Result := FloatToStrF(100*IFA.Max.ValueY/IFA.Min.ValueY,ffFixed,4,Precision) + '%';
 end;
 
 
 function FlatnessCAX1D(ProfileArr:TSingleProfile):string;
 begin
 with ProfileArr do
-Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/(2*Centre.ValueY),ffFixed,4,1) + '%';
+Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
+   (2*Centre.ValueY),ffFixed,4,Precision) + '%';
 end;
 
 
@@ -309,7 +346,7 @@ with ProfileArr do
          Ratio := IFA.PArrY[I]/IFA.PArrY[Len - I - 1];
          if Ratio > MaxRatio then MaxRatio := Ratio;
          end;
-Result := FloatToStrF(100*MaxRatio,ffFixed,4,1) + '%';
+Result := FloatToStrF(100*MaxRatio,ffFixed,4,Precision) + '%';
 end;
 
 
@@ -327,10 +364,84 @@ with ProfileArr do
          Diff := abs(IFA.PArrY[I] - IFA.PArrY[Len - I - 1]);
          if Diff > MaxDiff then MaxDiff := Diff;
          end;
-Result := FloatToStrF(100*MaxDiff/ProfileArr.Centre.ValueY,ffFixed,4,1) + '%';
+Result := FloatToStrF(100*MaxDiff/ProfileArr.Centre.ValueY,ffFixed,4,Precision) + '%';
 end;
 
 
+function SymmetryArea1D(ProfileArr:TSingleProfile):string;
+{calculates the difference of the areas from the centre of the peak to the
+field edge. A correction is made for offcentre peaks.}
+var AreaL,
+    AreaR,
+    AreaM      :double;
+    Region,
+    HalfR      :integer;
+begin
+with ProfileArr do
+   if (LeftEdge.Pos > 0) and (RightEdge.Pos < Len) then
+      begin
+         begin
+         Region := (RightEdge.Pos - LeftEdge.Pos);
+         HalfR := Region div 2;
+         AreaM := Peak.ValueY*Peak.ValueX;
+         AreaL := GetArea(LeftEdge.Pos,LeftEdge.Pos + HalfR);
+         {correct for area between last index and edge}
+         AreaL := AreaL + PArrY[LeftEdge.Pos - 1]*abs(LeftEdge.ValueX - PArrX[LeftEdge.Pos]);
+         {correct for offcentre peak}
+         if odd(Region) then               {if number of points are odd left and right regions overlap}
+            AreaL := AreaL + AreaM
+           else
+            AreaL := AreaL + AreaM - 0.5*AreaM;
+
+         AreaR := GetArea(RightEdge.Pos - HalfR, RightEdge.Pos);
+         {correct for area between last index and edge}
+         AreaR := AreaR + PArrY[RightEdge.Pos + 1]*abs(PArrX[RightEdge.Pos] - RightEdge.ValueX);
+         {correct for offcentre peak}
+         if odd(REgion) then
+            AreaR := AreaR - AreaM
+           else
+            AreaR := AreaR - AreaM  - 0.5*AreaM;
+         end;
+      Result := FloatToStrF(100*abs(AreaL - AreaR)/(AreaL + AreaR),ffFixed,4,Precision) + '%';
+      end
+     else
+      Result := 'No edge';
+end;
+
+
+{-------------------------------------------------------------------------------
+ Deviation parameters
+-------------------------------------------------------------------------------}
+
+function DeviationRatio1D(ProfileArr:TSingleProfile):string;
+begin
+with ProfileArr do
+Result := FloatToStrF(100*IFA.Max.ValueY/Centre.ValueY,ffFixed,4,Precision) + '%';
+end;
+
+
+function DeviationDiff1D(ProfileArr:TSingleProfile):string;
+var Dev        :double;
+begin
+with ProfileArr do
+   begin
+   Dev := math.max(abs(IFA.Min.ValueY - Centre.ValueY),abs(IFA.Max.ValueY - Centre.ValueY));
+   Result := FloatToStrF(100*Dev/Centre.ValueY,ffFixed,4,Precision) + '%';
+   end;
+end;
+
+
+function DeviationCAX1D(ProfileArr:TSingleProfile):string;
+begin
+with ProfileArr do
+Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
+   Centre.ValueY,ffFixed,4,Precision) + '%';
+end;
+
+
+{-------------------------------------------------------------------------------
+ Miscellaneous parameters
+-------------------------------------------------------------------------------}
 
 function NoFunc1D(ProfileArr:TSingleProfile):string;
 {Returns error. Executed if no other function found.}

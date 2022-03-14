@@ -69,14 +69,14 @@ end;
 
 procedure Test2DParamFuncs.TestMaxVal2D_no_norm;
 begin
-AssertEquals('Test max value, no normalisation','100.0',MaxVal2D(fBeam));
+AssertEquals('Test max value, no normalisation','100.00',MaxVal2D(fBeam));
 end;
 
 
 procedure Test2DParamFuncs.TestMaxVal2D_norm_cax;
 begin
 fBeam.Norm := norm_cax;
-AssertEquals('Test max value, normalisation to CAX','105.9%',MaxVal2D(fBeam));
+AssertEquals('Test max value, normalisation to CAX','105.86%',MaxVal2D(fBeam));
 end;
 
 
@@ -89,7 +89,7 @@ end;
 
 procedure Test2DParamFuncs.TestMinVal2D_no_norm;
 begin
-AssertEquals('Test min value, no normalisation','0.0',MinVal2D(fBeam));
+AssertEquals('Test min value, no normalisation','0.00',MinVal2D(fBeam));
 end;
 
 
@@ -115,13 +115,13 @@ end;
 
 procedure Test2DParamFuncs.TestUniformityCAX2D;
 begin
-AssertEquals('Test uniformity NCS-70','5.9%',UniformityCAX2D(fBeam));
+AssertEquals('Test uniformity NCS-70','5.86%',UniformityCAX2D(fBeam));
 end;
 
 
 procedure Test2DParamFuncs.TestSymmetryAve2D; //validate this
 begin
-AssertEquals('Test uniformity NCS-70','2.6%',SymmetryAve2D(fBeam));
+AssertEquals('Test symmetry NCS-70','2.59%',SymmetryAve2D(fBeam));
 end;
 
 

@@ -24,6 +24,7 @@ type
       procedure TestRightEdge_Limits;
       procedure TestMin;
       procedure TestMax;
+      procedure TestArea;
    end;
 
    TestBeam= class(TTestCase)
@@ -198,7 +199,7 @@ procedure TestSingleProfile.TestLeftEdge;
 begin
 AssertEquals('Test left edge value',47.235,fProfile.LeftEdge.ValueY);
 AssertEquals('Test left edge position',-9.6708,fProfile.LeftEdge.ValueX);
-AssertEquals('Test left edge index',6,fProfile.LeftEdge.Pos);
+AssertEquals('Test left edge index',7,fProfile.LeftEdge.Pos);
 end;
 
 
@@ -206,7 +207,7 @@ procedure TestSingleProfile.TestRightEdge;
 begin
 AssertEquals('Test right edge value',47.235,fProfile.RightEdge.ValueY);
 AssertEquals('Test right edge position',10.4049,fProfile.RightEdge.ValueX);
-AssertEquals('Test right edge index',47,fProfile.RightEdge.Pos);
+AssertEquals('Test right edge index',46,fProfile.RightEdge.Pos);
 end;
 
 
@@ -218,7 +219,7 @@ fProfile.PArrY := ProfileArrY2;
 fProfile.Len := 45;
 AssertEquals('Test extreme left edge value',43.205,fProfile.LeftEdge.ValueY);
 AssertEquals('Test extreme left edge position',-10.6185,fProfile.LeftEdge.ValueX);
-AssertEquals('Test extreme left edge index',0,fProfile.LeftEdge.Pos);
+AssertEquals('Test extreme left edge index',1,fProfile.LeftEdge.Pos);
 end;
 
 
@@ -230,7 +231,7 @@ fProfile.PArrY := ProfileArrY2;
 fProfile.Len := 45;
 AssertEquals('Test extreme right edge value',43.205,fProfile.RightEdge.ValueY);
 AssertEquals('Test extreme right edge position',10.6289,fProfile.RightEdge.ValueX);
-AssertEquals('Test extreme right edge index',44,fProfile.RightEdge.Pos);
+AssertEquals('Test extreme right edge index',43,fProfile.RightEdge.Pos);
 end;
 
 
@@ -249,6 +250,11 @@ AssertEquals('Test maximum position',-6.5,fProfile.Max.ValueX);
 AssertEquals('Test maximum index',13,fProfile.Max.Pos);
 end;
 
+
+procedure TestSingleProfile.TestArea;
+begin
+AssertEquals('Test area value',77231.8,fProfile.GetArea(6,46));
+end;
 
 {-------------------------------------------------------------------------------
 TBeam

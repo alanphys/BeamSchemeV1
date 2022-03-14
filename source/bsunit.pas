@@ -154,7 +154,11 @@ unit bsunit;
  1/2/2022   fix profile grounding bug in param1Dfuncs
             add TSingleProfile.ToString and refactor
  2/2/2022   fix rounding error on profile increment
-            create TBasicProfile, derive TSingleProfile and define IFA as TBasicProfile}
+            create TBasicProfile, derive TSingleProfile and define IFA as TBasicProfile
+ 14/2/2022  add definable precision
+ 9/3/2022   add show/hide profile points
+            add peak params to TSingleProfile, refactor
+ 14/3/2022  fix window limit on normalise to centre}
 
 
 {$mode objfpc}{$H+}
@@ -183,6 +187,7 @@ type
    HelpServer: TLHTTPServerComponent;
    ImageList: TImageList;
    Label7: TLabel;
+   pmiShowPoints: TMenuItem;
    miView: TMenuItem;
    miShowP: TMenuItem;
    miInvert: TMenuItem;
@@ -290,6 +295,7 @@ type
    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
    procedure miInvertClick(Sender: TObject);
    procedure miResClipClick(Sender: TObject);
+   procedure pmiShowPointsClick(Sender: TObject);
    procedure pmContextPopup(Sender: TObject);
    procedure pmiCopyClipClick(Sender: TObject);
    procedure pmiCopytoFileClick(Sender: TObject);
@@ -484,16 +490,29 @@ begin
 sgResults.CopyToClipboard(false);
 end;
 
+procedure TBSForm.pmiShowPointsClick(Sender: TObject);
+begin
+ShowPoints := not ShowPoints;
+XProfile.ShowPoints := ShowPoints;
+YProfile.ShowPoints := ShowPoints;
+if ShowPoints then pmiShowPoints.Caption := 'Hide Points'
+  else pmiShowPoints.Caption := 'Show Points';
+end;
+
 
 procedure TBSForm.pmContextPopup(Sender: TObject);
 begin
 if pmContext.PopupComponent = pResults then
    begin
+   pmiShowPoints.Enabled := false;
+   pmishowPoints.Visible := false;
    pmiCopyToFile.Enabled := false;
    pmicopyToFile.Visible := false;
    end
   else
    begin
+   pmiShowPoints.Enabled := true;
+   pmishowPoints.Visible := true;
    pmiCopyToFile.Enabled := true;
    pmicopyToFile.Visible := true;
    end;
@@ -776,6 +795,8 @@ FileHandler.RegisterHandler(PHPCGIHandler);
 
 BuildProtocolList;
 LoadProtocol;
+XProfile.ShowPoints := ShowPoints;
+YProfile.ShowPoints := ShowPoints;
 
 if not HelpServer.Listen(3880) then
    begin
@@ -821,16 +842,16 @@ procedure TBSForm.ChartToolsetXDataPointHintToolHint(ATool: TDataPointHintTool;
    const APoint: TPoint; var AHint: String);
 begin
 AHint := '(' +
-   FloatToStrF(TLineSeries(ATool.Series).Source.Item[ATool.PointIndex]^.X,ffFixed,7,1) + ',' +
-   FloatToStrF(TLineSeries(ATool.Series).Source.Item[ATool.PointIndex]^.Y,ffFixed,7,1) + ')';
+   FloatToStrF(TLineSeries(ATool.Series).Source.Item[ATool.PointIndex]^.X,ffFixed,7,Precision) + ',' +
+   FloatToStrF(TLineSeries(ATool.Series).Source.Item[ATool.PointIndex]^.Y,ffFixed,7,Precision) + ')';
 end;
 
 procedure TBSForm.ChartToolsetYDataPointHintToolHint(ATool: TDataPointHintTool;
    const APoint: TPoint; var AHint: String);
 begin
 AHint := '(' +
-   FloatToStrF(TLineSeries(ATool.Series).Source.Item[ATool.PointIndex]^.X,ffFixed,7,1) + ',' +
-   FloatToStrF(TLineSeries(ATool.Series).Source.Item[ATool.PointIndex]^.Y,ffFixed,7,1) + ')';
+   FloatToStrF(TLineSeries(ATool.Series).Source.Item[ATool.PointIndex]^.X,ffFixed,7,Precision) + ',' +
+   FloatToStrF(TLineSeries(ATool.Series).Source.Item[ATool.PointIndex]^.Y,ffFixed,7,Precision) + ')';
 end;
 
 
@@ -1080,17 +1101,11 @@ begin
 XPArr.ResetCoords;
 YPArr.ResetCoords;
 if tbNormCax.Down then
-   begin
-   Normalisation := norm_cax;
-   DTrackBar.Max := round(Beam.Centre);
-   DTrackBar.PositionU := round(Beam.Centre);
-   end
+   Normalisation := norm_cax
   else
-   begin
    Normalisation := no_norm;
-   DTrackBar.Max := round(Beam.Max);
-   DTrackBar.PositionU := round(Beam.Max);
-   end;
+DTrackBar.Max := round(Beam.Max);
+DTrackBar.PositionU := round(Beam.Max);
 Beam.Norm := Normalisation;
 Display(DTrackBar.PositionU,DTrackBar.PositionL);
 end;
@@ -1101,17 +1116,11 @@ begin
 XPArr.ResetCoords;
 YPArr.ResetCoords;
 if tbNormMax.Down then
-   begin
-   Normalisation := norm_max;
-   DTrackBar.Max := round(Beam.Max);
-   DTrackBar.PositionU := round(Beam.Max);
-   end
-else
-   begin
+   Normalisation := norm_max
+  else
    Normalisation := no_norm;
-   DTrackBar.Max := round(Beam.Max);
-   DTrackBar.PositionU := round(Beam.Max);
-   end;
+DTrackBar.Max := round(Beam.Max);
+DTrackBar.PositionU := round(Beam.Max);
 Beam.Norm := Normalisation;
 Display(DTrackBar.PositionU,DTrackBar.PositionL);
 end;

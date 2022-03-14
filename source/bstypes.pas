@@ -55,6 +55,7 @@ type
 
   TSingleProfile = class(TBasicProfile)
      private
+     fPeak,                    {value, position and index of peak centre}
      fLeftEdge,                {value, position and index of field left edge}
      fRightEdge:TProfilePos;   {value, position and index of field right edge}
      public
@@ -81,10 +82,13 @@ type
      function GetPos(Value:double; D:Integer):TProfilePos;
      function GetLeftE:TProfilePos; {get left edge of profile}
      function GetRightE:TProfilePos;{get right edge of profile}
+     function GetPeakPos:TProfilePos;{get centre of profile peak}
      procedure ToSeries(ProfileSeries:TLineSeries);
      function  ToText:string;
+     function GetArea(Start,Stop:integer):double;
      property LeftEdge:TProfilePos read GetLeftE;
      property RightEdge:TProfilePos read GetRightE;
+     property Peak:TProfilePos read GetPeakPos;
      end;
 
   TBasicBeam = class
@@ -172,9 +176,11 @@ var Beam         :TBeam;
     XPArr,
     YPArr        :TSingleProfile;
     DefaultRes   :double = 2.54/75; {default to 75dpi for Gafchromic}
+    ShowPoints   :boolean = False;
     ShowParams   :boolean = False;
     IFAType      :TIFAType;
     IFAFactor    :double;
+    Precision    :integer = 2;
 
 implementation
 
@@ -350,8 +356,9 @@ end;
 function TBasicBeam.GetCoM:TProfilePoint;
 {Returns the indices of the unweighted centre of mass of the distribution in
 the form (row,col)}
-var I,J,K      :integer;
+var I,J        :integer;
     Value      :double = 0.5;
+    Sum        :integer;
 begin
 case Norm of
    no_norm : Value := Centre*Value;
@@ -363,17 +370,17 @@ if (fCoM.X = 0) and (fCoM.Y = 0) then
    begin
    fCoM.X := 0.0;
    fCoM.Y := 0.0;
-   K := 0;
+   Sum := 0;
    for I:=0 to Rows - 1 do
       for J:=0 to Cols - 1 do
          if Data[I,J] >= Value then
             begin
             fCoM.X := fCom.X + I;
             fCoM.Y := fCom.Y + J;
-            inc(K);
+            Inc(Sum);
             end;
-   fCom.X := fCom.X/K;
-   fCom.Y := fCom.Y/K;
+   fCom.X := fCom.X/Sum;
+   fCom.Y := fCom.Y/Sum;
    end;
 Result := fCoM;
 end;
@@ -795,6 +802,9 @@ fLeftEdge.Pos := 0;
 fRightEdge.ValueY := 0.0;
 fRightEdge.ValueX := 0.0;
 fRightEdge.Pos := 0;
+fPeak.ValueY := 0.0;
+fPeak.ValueX := 0.0;
+fPeak.Pos := 0;
 ResetCoords;
 sProt := '';
 sExpr := '';
@@ -813,6 +823,9 @@ fLeftEdge.Pos := 0;
 fRightEdge.ValueY := 0.0;
 fRightEdge.ValueX := 0.0;
 fRightEdge.Pos := 0;
+fPeak.ValueY := 0.0;
+fPeak.ValueX := 0.0;
+fPeak.Pos := 0;
 sProt := '';
 sExpr := '';
 end;
@@ -854,7 +867,7 @@ if (I >= 0) and (I < Len) then
    begin
    Result.ValueY := Value;
    Result.ValueX := ILReg(PArrX[I],PArrX[I-D],PArrY[I],PArrY[I-D],Value);
-   Result.Pos := I;
+   Result.Pos := I - D;
    end
   else
    begin
@@ -884,6 +897,19 @@ begin
 if fRightEdge.ValueY = 0 then
    fRightEdge := GetPos(0.5,1);
 Result := fRightEdge;
+end;
+
+
+function TSingleProfile.GetPeakPos:TProfilePos;
+{Returns the centre of the profile peak}
+begin
+if fPeak.ValueY = 0 then
+   begin
+   fPeak.ValueX := (RightEdge.ValueX + LeftEdge.ValueX)/2;
+   fPeak.Pos := (RightEdge.Pos + LeftEdge.Pos) div 2;
+   fPeak.ValueY := PArrY[fPeak.Pos];
+   end;
+Result := fPeak;
 end;
 
 
@@ -921,9 +947,9 @@ for K := 0 to Len - 1 do
       norm_cax: Y := (PArrY[K] - Min.ValueY)*100/(Centre.ValueY - Min.ValueY);
       norm_max: Y := (PArrY[K] - Min.ValueY)*100/(Max.ValueY - Min.ValueY);
       end; {of case}
-   Result := Result + FloatToStrF(X,ffFixed,5,2) + ', ' + FloatToStrF(Y,ffFixed,5,2);
+   Result := Result + FloatToStrF(X,ffFixed,5,Precision) + ', ' + FloatToStrF(Y,ffFixed,5,Precision);
    if ShowParams and not IsNaN(IFA.PArrY[K]) then Result := Result + ', ' +
-      FloatToStrF(IFA.PArrY[K],ffFixed,5,2);
+      FloatToStrF(IFA.PArrY[K],ffFixed,5,Precision);
    Result := Result + LineEnding;
    end;
 end;
@@ -984,6 +1010,16 @@ if (rAngle > -TanA) and (rAngle <= TanA) then {Profile is X profile}
 Show(TheBitMap);
 end;
 
+
+function TSingleProfile.GetArea(Start,Stop:integer):double;
+{Return the area between start and stop indices}
+var I          :integer;
+begin
+Result := 0;
+for I := Start to Stop do
+   Result := Result + PArrY[I];
+Result := Result*abs(PArrX[Stop] - PArrX[Start]);
+end;
 
 {-------------------------------------------------------------------------------
 TBeamMask

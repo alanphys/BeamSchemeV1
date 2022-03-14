@@ -4,7 +4,7 @@ program TestBeamScheme;
 
 uses
   Interfaces, Forms, GuiTestRunner, tachartlazaruspkg, test1Dparams,
-  testbstypes, testimport, test2dparams;
+  testbstypes, testimport, test2dparams, testprotocols;
 
 {$R *.res}
 

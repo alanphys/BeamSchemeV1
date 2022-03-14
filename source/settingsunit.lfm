@@ -49,13 +49,14 @@ object SettingsForm: TSettingsForm
     Align = alBottom
     DefaultColWidth = 200
     FixedCols = 0
-    RowCount = 4
+    RowCount = 5
     TabOrder = 2
     KeyOptions = [keyEdit, keyUnique]
     Strings.Strings = (
       'Default Resolution=75'
       'IFA Type=Proportional'
       'IFA Factor=0.8'
+      'Precision=2'
     )
     ColWidths = (
       200

@@ -36,12 +36,19 @@ type
       procedure TestPenumbra8020Right1D;
       procedure TestPenumbra9010Left1D;
       procedure TestPenumbra9010Right1D;
+      procedure TestPenumbra9050Left1D;
+      procedure TestPenumbra9050Right1D;
       procedure TestFlatnessAve1D;
       procedure TestFlatnessDiff1D;
       procedure TestFlatnessRatio1D;
       procedure TestFlatnessCAX1D;
       procedure TestSymmetryRatio1D;
       procedure TestSymmetryDiff1D;
+      procedure TestSymmetryArea1D_Odd;
+      procedure TestSymmetryArea1D_Even;
+      procedure TestDeviationRatio1D;
+      procedure TestDeviationDiff1D;
+      procedure TestDeviationCAX1D;
       procedure TestNoFunc1D;
    end;
 
@@ -88,7 +95,7 @@ end;
 -------------------------------------------------------------------------------}
 procedure Test1DParamFuncs.TestCAXVal1D_no_norm;
 begin
-AssertEquals('Test CAX value, no normalisation','94.5',CAXVal1D(fProfile));
+AssertEquals('Test CAX value, no normalisation','94.47',CAXVal1D(fProfile));
 end;
 
 
@@ -102,33 +109,33 @@ end;
 procedure Test1DParamFuncs.TestCAXVal1D_norm_Max;
 begin
 fProfile.Norm := norm_max;
-AssertEquals('Test CAX value, normlisation to Max','95.3%',CAXVal1D(fProfile));
+AssertEquals('Test CAX value, normlisation to Max','95.32%',CAXVal1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestMaxVal1D_no_norm;
 begin
-AssertEquals('Test Max value, no normalisation','99.0',MaxVal1D(fProfile));
+AssertEquals('Test Max value, no normalisation','99.00',MaxVal1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestMaxVal1D_norm_cax;
 begin
 fProfile.Norm := norm_cax;
-AssertEquals('Test Max value, normalisation to Cax','104.9%',MaxVal1D(fProfile));
+AssertEquals('Test Max value, normalisation to Cax','104.91%',MaxVal1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestMaxVal1D_norm_max;
 begin
 fProfile.Norm := norm_Max;
-AssertEquals('Test Max value, normlisation to Max','100.0%',MaxVal1D(fProfile));
+AssertEquals('Test Max value, normlisation to Max','100.00%',MaxVal1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestMinVal1D_no_norm;
 begin
-AssertEquals('Test Min value, no normalisation','2.2',MinVal1D(fProfile));
+AssertEquals('Test Min value, no normalisation','2.18',MinVal1D(fProfile));
 end;
 
 
@@ -148,21 +155,21 @@ end;
 
 procedure Test1DParamFuncs.TestMinIFA1D_no_norm;
 begin
-AssertEquals('Test Min IFA','94.5',MinIFA1D(fProfile));
+AssertEquals('Test Min IFA','94.46',MinIFA1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestMinIFA1D_norm_cax;
 begin
 fProfile.Norm := norm_cax;
-AssertEquals('Test Min IFA, normalisation to Cax','100.0%',MinIFA1D(fProfile));
+AssertEquals('Test Min IFA, normalisation to Cax','99.99%',MinIFA1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestMinIFA1D_norm_max;
 begin
 fProfile.Norm := norm_max;
-AssertEquals('Test Min IFA, normalisation to Max','95.3%',MinIFA1D(fProfile));
+AssertEquals('Test Min IFA, normalisation to Max','95.31%',MinIFA1D(fProfile));
 end;
 
 {-------------------------------------------------------------------------------
@@ -216,31 +223,43 @@ AssertEquals('Test penumbra right 90-10%','1.26 cm',Penumbra9010Right1D(fProfile
 end;
 
 
+procedure Test1DParamFuncs.TestPenumbra9050Left1D;
+begin
+AssertEquals('Test penumbra left 90-10%','0.51 cm',Penumbra9050Left1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestPenumbra9050Right1D;
+begin
+AssertEquals('Test penumbra right 90-10%','0.34 cm',Penumbra9050Right1D(fProfile));
+end;
+
+
 {-------------------------------------------------------------------------------
  Flatness and uniformity parameters
 -------------------------------------------------------------------------------}
 
 procedure Test1DParamFuncs.TestFlatnessAve1D;
 begin
-AssertEquals('Test flatness average of min max','102.4%',FlatnessAve1D(fProfile));
+AssertEquals('Test flatness average of min max','102.39%',FlatnessAve1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestFlatnessDiff1D;
 begin
-AssertEquals('Test flatness difference','2.3%',FlatnessDiff1D(fProfile));
+AssertEquals('Test flatness difference','2.35%',FlatnessDiff1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestFlatnessRatio1D;
 begin
-AssertEquals('Test flatness ratio','104.8%',FlatnessRatio1D(fProfile));
+AssertEquals('Test flatness ratio','104.81%',FlatnessRatio1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestFlatnessCAX1D;
 begin
-AssertEquals('Test flatness CAX','2.4%',FlatnessCAX1D(fProfile));
+AssertEquals('Test flatness CAX','2.40%',FlatnessCAX1D(fProfile));
 end;
 
 
@@ -250,13 +269,48 @@ end;
 
 procedure Test1DParamFuncs.TestSymmetryRatio1D;
 begin
-AssertEquals('Test symmetry ratio','102.7%',SymmetryRatio1D(fProfile));
+AssertEquals('Test symmetry ratio','102.66%',SymmetryRatio1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestSymmetryDiff1D;
 begin
-AssertEquals('Test symmetry difference','2.7%',SymmetryDiff1D(fProfile));
+AssertEquals('Test symmetry difference','2.69%',SymmetryDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestSymmetryArea1D_Odd;
+begin
+AssertEquals('Test symmetry difference','0.28%',SymmetryArea1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestSymmetryArea1D_Even;
+begin
+fProfile.Len := 52;
+AssertEquals('Test symmetry difference','0.28%',SymmetryArea1D(fProfile));
+end;
+
+
+{-------------------------------------------------------------------------------
+ Deviation parameters
+-------------------------------------------------------------------------------}
+
+procedure Test1DParamFuncs.TestDeviationRatio1D;
+begin
+AssertEquals('Test deviation ratio','104.80%',DeviationRatio1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDeviationDiff1D;
+begin
+AssertEquals('Test deviation difference','4.80%',DeviationDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDeviationCAX1D;
+begin
+AssertEquals('Test deviation difference','4.81%',DeviationCAX1D(fProfile));
 end;
 
 
