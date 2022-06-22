@@ -16,6 +16,7 @@ type
       procedure SetUp; override;
       procedure TearDown; override;
    published
+      {field statistics}
       procedure TestCaxVal1D_no_norm;
       procedure TestCaxVal1D_norm_cax;
       procedure TestCaxVal1D_norm_max;
@@ -28,6 +29,10 @@ type
       procedure TestMinIFA1D_no_norm;
       procedure TestMinIFA1D_norm_cax;
       procedure TestMinIFA1D_norm_max;
+      procedure TestAveIFA1D_no_norm;
+      procedure TestAveIFA1D_norm_cax;
+      procedure TestAveIFA1D_norm_max;
+      {interpolated parameters}
       procedure TestFieldEdgeLeft501D;
       procedure TestFieldEdgeRight501D;
       procedure TestFieldCentre501D;
@@ -38,14 +43,18 @@ type
       procedure TestPenumbra9010Right1D;
       procedure TestPenumbra9050Left1D;
       procedure TestPenumbra9050Right1D;
+      {flatness and uniformity parameters}
       procedure TestFlatnessAve1D;
       procedure TestFlatnessDiff1D;
       procedure TestFlatnessRatio1D;
       procedure TestFlatnessCAX1D;
+      procedure TestUniformityAve1D;
+      {symmetry parameters}
       procedure TestSymmetryRatio1D;
       procedure TestSymmetryDiff1D;
       procedure TestSymmetryArea1D_Odd;
       procedure TestSymmetryArea1D_Even;
+      {deviation parameters}
       procedure TestDeviationRatio1D;
       procedure TestDeviationDiff1D;
       procedure TestDeviationCAX1D;
@@ -172,6 +181,25 @@ fProfile.Norm := norm_max;
 AssertEquals('Test Min IFA, normalisation to Max','95.31%',MinIFA1D(fProfile));
 end;
 
+procedure Test1DParamFuncs.TestAveIFA1D_no_norm;
+begin
+AssertEquals('Test Average IFA','97.16',AveIFA1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestAveIFA1D_norm_cax;
+begin
+fProfile.Norm := norm_cax;
+AssertEquals('Test Average IFA, normalisation to Cax','102.92%',AveIFA1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestAveIFA1D_norm_max;
+begin
+fProfile.Norm := norm_max;
+AssertEquals('Test Average IFA, normalisation to Max','98.10%',AveIFA1D(fProfile));
+end;
+
 {-------------------------------------------------------------------------------
  Interpolated parameters
 -------------------------------------------------------------------------------}
@@ -260,6 +288,12 @@ end;
 procedure Test1DParamFuncs.TestFlatnessCAX1D;
 begin
 AssertEquals('Test flatness CAX','2.40%',FlatnessCAX1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestUniformityAve1D;
+begin
+AssertEquals('Test uniformity ICRU','4.67%',UniformityAve1D(fProfile));
 end;
 
 

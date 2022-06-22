@@ -4,10 +4,12 @@ BeamScheme is compiled on Lazarus and Free Pascal. We gratefully acknowledge the
 
 We also wish to acknowledge the following:
 
-Wolfgang Krug and Chris Rorden for the DICOM import routines
+Wolfgang Krug and Chris Rorden for the DICOM import routines.
 
-Doug Gregor and Curtis Carpenter for DTrackbar
+Doug Gregor and Curtis Carpenter for DTrackbar.
 
-Lightweight Networking Library (lNet) written by Ales Katona and Micha Nelissen
+TAChart written by Luís Rodrigues, Philippe Martinole, Alexander Klenin.
+
+Lightweight Networking Library (lNet) written by Ales Katona and Micha Nelissen.
 
 LMath derived from DMath by Viatcheslav Nesterov (2020). DMath written by Jean Debord.

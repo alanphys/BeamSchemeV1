@@ -38,8 +38,16 @@ T2DParamFunc = function(BeamArr:TBeam):string;
 T2DParams = (cax_val_2D,
              max_val_2D,
              min_val_2D,
+             ave_2D,
              min_ifa_2D,
              com_val_2D,
+             com_scaled_2D,
+             x_res_2D,
+             y_res_2D,
+             x_pixels_2D,
+             y_pixels_2D,
+             x_size_2D,
+             y_size_2D,
              uniformity_ncs_2D,
              uniformity_icru_2D,
              symmetry_2D,
@@ -56,10 +64,20 @@ function Calc2DParam(BeamArr:TBeam; sParam:string):string;
 function CaxVal2D(BeamArr:TBeam):string;
 function MaxVal2D(BeamArr:TBeam):string;
 function MinVal2D(BeamArr:TBeam):string;
+function Ave2D(BeamArr:TBeam):string;
 function MinIFA2D(BeamArr:TBeam):string;
 function CoMVal2D(BeamArr:Tbeam):string;
+function CoMScaled2D(BeamArr:Tbeam):string;
+function XRes2D(BeamArr:Tbeam):string;
+function YRes2D(BeamArr:Tbeam):string;
+function XPixels2D(BeamArr:Tbeam):string;
+function YPixels2D(BeamArr:Tbeam):string;
+function XSize2D(BeamArr:Tbeam):string;
+function YSize2D(BeamArr:Tbeam):string;
+{flatness and uniformity parameters}
 function UniformityCAX2D(BeamArr:TBeam):string;
 function UniformityAve2D(BeamArr:TBeam):string;
+{symmetry parameters}
 function SymmetryAve2D(BeamArr:TBeam):string;
 function NoFunc2D(BeamArr:TBeam):string;
 
@@ -69,8 +87,16 @@ Params2D: array[cax_val_2D..no_func_2D] of T2DParamFuncs = (
    (Name:'2D CAX Value'; Func:@CaxVal2D),
    (Name:'2D Max Value'; Func:@MaxVal2D),
    (Name:'2D Min Value'; Func:@MinVal2D),
+   (Name:'2D Ave Value'; Func:@Ave2D),
    (Name:'2D Min IFA'; Func:@MinIFA2D),
    (Name:'2D CoM Value'; Func:@CoMVal2D),
+   (Name:'2D CoM Scaled'; Func:@CoMScaled2D),
+   (Name:'2D XRes'; Func:@XRes2D),
+   (Name:'2D YRes'; Func:@YRes2D),
+   (Name:'2D XPixels'; Func:@XPixels2D),
+   (Name:'2D YPixels'; Func:@YPixels2D),
+   (Name:'2D XSize'; Func:@XSize2D),
+   (Name:'2D YSize'; Func:@YSize2D),
    (Name:'2D Uniformity NCS-70'; Func:@UniformityCAX2D),
    (Name:'2D Uniformity ICRU 72'; Func:@UniformityAve2D),
    (Name:'2D Symmetry NCS-70'; Func:@SymmetryAve2D),
@@ -82,8 +108,8 @@ uses math;
 
 {-------------------------------------------------------------------------------
  Parameter calculation functions
+ Field statistics
 -------------------------------------------------------------------------------}
-{field statistics}
 
 function CaxVal2D(BeamArr:TBeam):string;
 {Return the centre value, position and index of the beam. If the number of
@@ -119,6 +145,17 @@ case BeamArr.Norm of
 end;
 
 
+function Ave2D(BeamArr:TBeam):string;
+{Returns the maximum of the array}
+begin
+case BeamArr.Norm of
+   no_norm: Result := FloatToStrF(BeamArr.Ave,ffFixed,4,Precision);
+   norm_cax: Result := FloatToStrF(BeamArr.Ave*100/BeamArr.Centre,ffFixed,4,Precision) + '%';
+   norm_max: Result := FloatToStrF(BeamArr.Ave*100/BeamArr.Max,ffFixed,4,Precision) + '%';
+   end {of case}
+end;
+
+
 function MinIFA2D(BeamArr:TBeam):string;
 {Returns the min value in the in field area}
 begin
@@ -134,6 +171,59 @@ Result := '(' + FloatToStrF(BeamArr.CoM.X,ffFixed,4,Precision) + ',' +
 end;
 
 
+function CoMScaled2D(BeamArr:Tbeam):string;
+{Returns the scaled x,y coordinates of the Centre of Mass}
+begin
+Result := '(' + FloatToStrF(BeamArr.CoM.Y*BeamArr.XRes,ffFixed,4,Precision) + ',' +
+   FloatToStrF(BeamArr.CoM.X*BeamArr.YRes,ffFixed,4,Precision) + ')';
+end;
+
+
+function XRes2D(BeamArr:Tbeam):string;
+{Returns the X resolution of the image}
+begin
+Result := FloatToStrF(2.54/BeamArr.XRes,ffFixed,4,Precision) + ' dpi';
+end;
+
+
+function YRes2D(BeamArr:Tbeam):string;
+{Returns the Y resolution of the image}
+begin
+Result := FloatToStrF(2.54/BeamArr.YRes,ffFixed,4,Precision) + ' dpi';
+end;
+
+
+function XPixels2D(BeamArr:Tbeam):string;
+{Returns the number of pixels/detectors of the image in the X direction}
+begin
+Result := IntToStr(BeamArr.Cols);
+end;
+
+
+function YPixels2D(BeamArr:Tbeam):string;
+{Returns the number of pixels/detectors of the image in the Y direction}
+begin
+Result := IntToStr(BeamArr.Rows);
+end;
+
+
+function XSize2D(BeamArr:Tbeam):string;
+{Returns the size of the image in the X direction}
+begin
+Result := FloatToStrF(BeamArr.Width,ffFixed,4,Precision) + ' cm';
+end;
+
+
+function YSize2D(BeamArr:Tbeam):string;
+{Returns the size of the image in the Y direction}
+begin
+Result := FloatToStrF(BeamArr.Height,ffFixed,4,Precision) + ' cm';
+end;
+
+
+{-------------------------------------------------------------------------------
+ Flatness and uniformity parameters
+-------------------------------------------------------------------------------}
 function UniformityCAX2D(BeamArr:TBeam):string;
 {Returns the maximum difference between the max and CAX value and the min
 and CAX value of the IFA normalised to CAX according to NCS-70 eq 3-5.
@@ -164,6 +254,9 @@ Result := FloatToStrF((BMax - BMin)*100/Ave,ffFixed,4,Precision) + '%';
 end;
 
 
+{-------------------------------------------------------------------------------
+ Symmetry parameters
+-------------------------------------------------------------------------------}
 function SymmetryAve2D(BeamArr:TBeam):string;
 {Returns the maximum difference between the IFA and the IFA rotated 180 degrees,
 normalised to the average of the IFA according to NCS-70 eq 3-6.

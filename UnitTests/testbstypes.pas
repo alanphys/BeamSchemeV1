@@ -24,6 +24,9 @@ type
       procedure TestRightEdge_Limits;
       procedure TestMin;
       procedure TestMax;
+      procedure TestAve;
+      procedure TestMaxDiff;
+      procedure TestPeak;
       procedure TestArea;
    end;
 
@@ -41,6 +44,7 @@ type
       procedure TestCoM;
       procedure TestMin;
       procedure TestMax;
+      procedure TestAve;
       procedure TestInvert;
       procedure TestCentre;
       procedure TestCreateXProfile;
@@ -251,6 +255,26 @@ AssertEquals('Test maximum index',13,fProfile.Max.Pos);
 end;
 
 
+procedure TestSingleProfile.TestAve;
+begin
+AssertEquals('Test average value',74.67566,fProfile.Ave);
+end;
+
+
+procedure TestSingleProfile.TestMaxDiff;
+begin
+AssertEquals('Test maximum difference', 76.76, fProfile.MaxDiff);
+end;
+
+
+procedure TestSingleProfile.TestPeak;
+begin
+AssertEquals('Test peak value',94.47,fProfile.Peak.ValueY);
+AssertEquals('Test peak position',0.3671,fProfile.Peak.ValueX);
+AssertEquals('Test peak index',26,fProfile.Peak.Pos);
+end;
+
+
 procedure TestSingleProfile.TestArea;
 begin
 AssertEquals('Test area value',77231.8,fProfile.GetArea(6,46));
@@ -282,6 +306,12 @@ end;
 procedure TestBeam.TestMax;
 begin
 AssertEquals('Test maximum value', 100, fBeam.Max);
+end;
+
+
+procedure TestBeam.TestAve;
+begin
+AssertEquals('Test average value', 46.9404, fBeam.Ave);
 end;
 
 

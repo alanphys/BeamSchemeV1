@@ -9,8 +9,6 @@ Parameters such as field size, field centre, penumbra, flatness and symmetry are
 
 BeamScheme is not intended to replace the commercial software available with 2D arrays, but to complement it.
 
-BeamScheme v1.0 is virtually a complete rewrite of BeamScheme. The code has been extensively modularised making it easy to add new parameters. New algorithms have been implemented with individual parameter calculation. Extensive unit testing has been implemented. The GUI has been updated.
-
 2) Licence
 Please read the file Licence.txt. This means that if as a result of using this program you fry your patients, trash your linac, nuke the cat, blow the city power in a ten block radius and generally cause global thermonuclear meltdown! Sorry, you were warned!
 
@@ -51,6 +49,9 @@ There are three normalisation modes. None, CAX or maximum. Normalisation places 
 
 8) Release notes
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
+
+Version 1.00
+BeamScheme v1.00 is virtually a complete rewrite of BeamScheme. The code has been extensively modularised making it easy to add new parameters. New algorithms have been implemented with individual parameter calculation. Extensive unit testing has been implemented. The GUI has been updated.
 
 Version 0.54
 This is a bug fix release.

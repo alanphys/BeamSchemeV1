@@ -44,6 +44,7 @@ uses bstypes, laz2_XMLCfg, LazFileUtils;
 function LoadSettings(FileName:string):boolean;
 var cfg        :TXMLConfig;
     IFAVal     :TIFAType;
+    CentreVal  :TCentre;
     CfgPath,
     sTemp      :string;
 begin
@@ -63,6 +64,9 @@ if FileExists(FileName) then
       if IFAData[IFAVal].Name = sTemp then IFAType := IFAVAl;
    IFAFactor := cfg.GetExtendedValue('IFAFactor',0.8);
    Precision := cfg.GetValue('Precision',Precision);
+   sTemp := cfg.GetValue('CentreDefinition','Peak');
+   for CentreVal in TCentre do
+      if CentreData[CentreVal].Name = sTemp then Centering := CentreVal;
    Result := true;
    finally
    cfg.Free;
@@ -87,6 +91,7 @@ FileName := AppendPathDelim(CfgPath) + FileName + '.xml';
    cfg.SetValue('IFAType',IFAData[IFAType].Name);
    cfg.SetExtendedValue('IFAFactor',IFAFactor);
    cfg.SetValue('Precision',Precision);
+   cfg.SetValue('CentreDefinition',CentreData[Centering].Name);
    Result := true;
    finally
    cfg.Free;
@@ -106,6 +111,7 @@ var OK         :boolean;
     ARow       :integer;
     sTemp      :string;
     IFAVal     :TIFAType;
+    CentreVal  :TCentre;
 
 begin
 OK := true;
@@ -157,12 +163,31 @@ if vleSettings.FindRow('Precision',ARow) then
   else
    OK := false;
 
+if OK and (vleSettings.FindRow('Centre definition',ARow)) then
+   begin
+   sTemp := vleSettings.Values['Centre definition'];
+   OK := false;
+   for CentreVal in TCentre do
+      if CentreData[CentreVal].Name = sTemp then
+         begin
+         Centering := CentreVal;
+         OK := true;
+         end;
+   StatusBar.SimpleText := 'Key ' + vleSettings.Keys[ARow] + ' changed to '
+      + vleSettings.Strings.ValueFromIndex[ARow-1];
+   vleSettings.Modified := false;
+   end
+  else
+   OK := false;
+
 if not OK then StatusBar.SimpleText := 'Error, could not set key ' + vleSettings.Keys[ARow];
 end;
 
 
 procedure TSettingsForm.FormCreate(Sender: TObject);
 var ARow       :integer;
+    IFAVal     :TIFAType;
+    CentreVal  :TCentre;
 begin
 if vleSettings.FindRow('Default Resolution',ARow) then
    vleSettings.Values[vleSettings.Keys[Arow]] := IntToStr(round(2.54/DefaultRes))
@@ -178,9 +203,8 @@ with vleSettings.ItemProps['IFA Type'] do
    KeyDesc := 'IFA Type: PickList';  //optional description
    EditStyle := esPickList;
    ReadOnly := True;  //user cannot add options to dropdownlist
-   PickList.Add('Proportional');
-   PickList.Add('Circular');
-   PickList.Add('Square');
+   for IFAVal in TIFAType do
+      PickList.Add(IFAData[IFAVal].Name);
    end;
 
 if vleSettings.FindRow('IFA Factor',ARow) then
@@ -192,6 +216,19 @@ if vleSettings.FindRow('Precision',ARow) then
    vleSettings.Values[vleSettings.Keys[Arow]] := IntToStr(Precision)
   else
    vleSettings.InsertRow('Precision',IntToStr(Precision),True);
+
+if vleSettings.FindRow('Centre definition',ARow) then
+   vleSettings.Values[vleSettings.Keys[Arow]] := CentreData[Centering].Name
+  else
+   vleSettings.InsertRow('Centre definition',CentreData[Centering].Name,True);
+with vleSettings.ItemProps['Centre definition'] do
+   begin
+   KeyDesc := 'Centre definition: PickList';  //optional description
+   EditStyle := esPickList;
+   ReadOnly := True;  //user cannot add options to dropdownlist
+   for CentreVal in TCentre do
+      PickList.Add(CentreData[CentreVal].Name);
+   end;
 
 vleSettings.Modified := false;
 StatusBar.SimpleText := 'Keys will not be changed until <Save Settings> is clicked';

@@ -70,6 +70,18 @@ TestProtocolPylinac = class(TTestCase)
    procedure TestProtocolElekta;
    end;
 
+TestProtocolImageJ = class(TTestCase)
+   private
+   fBeam    :TBeam;
+   sgExpr   :TStringGrid;
+   Prof     :TSingleProfile;
+   protected
+   procedure SetUp; override;
+   procedure TearDown; override;
+   published
+   procedure TestProtocolQSA;
+   end;
+
 implementation
 
 uses importunit, param1Dfuncs, param2Dfuncs;
@@ -101,14 +113,29 @@ procedure TestProtocolSNC.TestProtocolAll;
 var I          :integer;
 
 const Params: array of string = (
-'2D Params	',
+'2D Image Stats	',
 '     CAX value	94.47',
 '     Max value	100.00',
 '     Min value	0.00',
+'     Average	46.94',
 '     Min IFA	94.32',
-'     CoM pos	(31.52,26.52)',
+'     CoM (row,col)	(31.52,26.52)',
+'     CoM (X,Y)	(13.26,15.76)',
+'     Resolution	',
+'          X	5.08 dpi',
+'          Y	5.08 dpi',
+'     Detectors/Pixels	',
+'          X	53',
+'          Y	65',
+'     Size	',
+'          X	26.00 cm',
+'          Y	32.00 cm',
+'	',
+'2D Uniformity	',
 '     Uniformity NCS	5.86%',
 '     Uniformity ICRU	5.80%',
+'	',
+'2D Symmetry	',
 '     Symmetry	2.59%',
 '	',
 'Profile stats	',
@@ -116,6 +143,7 @@ const Params: array of string = (
 '     Max value	99.00',
 '     Min value	2.18',
 '     Min IFA	94.46',
+'     Average IFA	97.12',
 '	',
 'Interpolated params	',
 '     Left edge	-9.67 cm',
@@ -138,10 +166,12 @@ const Params: array of string = (
 '     Difference	2.35%',
 '     Ratio	104.80%',
 '     CAX	2.40%',
+'     ICRU 72	4.67%',
 '	',
 'Symmetry	',
 '     Ratio	102.66%',
 '     Difference	2.69%',
+'     NCS-70	2.61%',
 '     Area	0.28%',
 '	',
 'Deviation	',
@@ -812,10 +842,95 @@ for I:=0 to sgExpr.RowCount - 1 do
 end;
 
 
+{-------------------------------------------------------------------------------
+ ImageJ Protocol tests
+-------------------------------------------------------------------------------}
+{Validated against ImageJ macro BestWorstProfileV1.0.0.ijm, UniformityV1.0.0.ijm
+and SymmetryV1.0.0.ijm proprietary RadianceTx. ImageJ ver 1.52k}
+
+procedure TestProtocolImageJ.SetUp;
+begin
+fBeam := TBeam.Create;
+Centering := detector;
+IFAType := Circular;
+IFAFactor := 0.4;
+RAWOpen('../TestFiles/75dpi_49x49.txt',fBeam);
+sgExpr := TStringGrid.Create(nil);
+sgExpr.Visible := false;
+Prof := TSingleProfile.Create;
+Prof.SetParams(0,0,1);
+fBeam.CreateProfile(Prof,round(fBeam.Max),0);
+end;
+
+procedure TestProtocolImageJ.TearDown;
+begin
+fBeam.Free;
+sgExpr.Free;
+Prof.Free;
+end;
+
+
+procedure TestProtocolImageJ.TestProtocolQSA;
+{Verified from 75dpi_49x49.txt. ImageJ macros centre on profile length. ImageJ
+adds 1/2 pixel to CoM to give geometric centre of image. BeamScheme reports top
+left corner of pixel containing CoM}
+var I          :integer;
+
+const Params: array of string = (
+'2D Image Stats	',
+'     CAX value	609.70',
+'     Max value	758.50',
+'     Average	205.44',
+'     Min IFA	470.80',              {ImageJ reports 476.8}
+'     CoM pos	(24.35,23.51)',       {ImageJ adds 0.5 and reports (24.8,24.0)}
+'2D Uniformity	',
+'     Uniformity NCS	24.41%',
+'     Uniformity ICRU	47.28%',      {ImageJ reports 46.1%}
+'2D Symmetry	',
+'     Symmetry	40.05%',              {ImageJ reports 39.8%}
+'	',
+'Profile stats	',
+'     CAX value	609.70',
+'     Max value	734.40',
+'     Min IFA	541.60',
+'Interpolated params	',
+'     Left edge	-0.54 cm',
+'     Right edge	0.50 cm',
+'     Centre	-0.02 cm',
+'     Size	1.04 cm',
+'Flatness	',
+'     NCS-70	15.81%',
+'     ICRU 72	30.49%',
+'Symmetry	',
+'     NCS-70	28.72%',
+'	'
+);
+
+begin
+sgExpr.LoadFromCSVFile('../Protocols/Brachy.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
+
+
 initialization
    RegisterTest(TestProtocolSNC);
    RegisterTest(TestProtocolPTW);
    RegisterTest(TestProtocolIBA);
    RegisterTest(TestProtocolPylinac);
+   RegisterTest(TestProtocolImageJ);
 end.
 

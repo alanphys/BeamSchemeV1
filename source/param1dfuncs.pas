@@ -49,12 +49,15 @@ T1DParams = (field_edge_left_50_1D,
              max_val_1D,
              min_val_1D,
              min_ifa_1D,
+             ave_ifa_1D,
              flat_ave_1D,
              flat_diff_1D,
              flat_ratio_1D,
              flat_cax_1D,
+             uniformity_ave_1D,
              sym_ratio_1D,
              sym_diff_1D,
+             sym_ave_1D,
              sym_area_1D,
              dev_ratio_1D,
              dev_diff_1D,
@@ -84,14 +87,17 @@ function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
 function MinVal1D(ProfileArr:TSingleProfile):string;
 function MinIFA1D(ProfileArr:TSingleProfile):string;
+function AveIFA1D(ProfileArr:TSingleProfile):string;
 {flatness and uniformity}
 function FlatnessAve1D(ProfileArr:TSingleProfile):string;
 function FlatnessDiff1D(ProfileArr:TSingleProfile):string;
 function FlatnessRatio1D(ProfileArr:TSingleProfile):string;
 function FlatnessCAX1D(ProfileArr:TSingleProfile):string;
+function UniformityAve1D(ProfileArr:TSingleProfile):string;
 {symmetry}
 function SymmetryRatio1D(ProfileArr:TSingleProfile):string;
 function SymmetryDiff1D(ProfileArr:TSingleProfile):string;
+function SymmetryAve1D(ProfileArr:TSingleProfile):string;
 function SymmetryArea1D(ProfileArr:TSingleProfile):string;
 {deviation}
 function DeviationRatio1D(ProfileArr:TSingleProfile):string;
@@ -117,12 +123,15 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
    (Name:'1D Min IFA'; Func:@MinIFA1D),
+   (Name:'1D Average IFA'; Func:@AveIFA1D),
    (Name:'1D Flatness Ave'; Func:@FlatnessAve1D),
    (Name:'1D Flatness Diff'; Func:@FlatnessDiff1D),
    (Name:'1D Flatness Ratio'; Func:@FlatnessRatio1D),
    (Name:'1D Flatness CAX'; Func:@FlatnessCAX1D),
+   (Name:'1D Uniformity ICRU'; Func:@UniformityAve1D),
    (Name:'1D Symmetry Ratio'; Func:@SymmetryRatio1D),
    (Name:'1D Symmetry Diff'; Func:@SymmetryDiff1D),
+   (Name:'1D Symmetry Ave'; Func:@SymmetryAve1D),
    (Name:'1D Symmetry Area'; Func:@SymmetryArea1D),
    (Name:'1D Deviation Ratio'; Func:@DeviationRatio1D),
    (Name:'1D Deviation Diff'; Func:@DeviationDiff1D),
@@ -184,6 +193,20 @@ with ProfileArr do case Norm of
    norm_cax: Result := FloatToStrF((IFA.Min.ValueY - Min.ValueY)
       *100/(Centre.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
    norm_max: Result := FloatToStrF((IFA.Min.ValueY - Min.ValueY)
+      *100/(Max.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
+   end; {of case}
+end;
+
+
+function AveIFA1D(ProfileArr:TSingleProfile):string;
+{Returns the average value of the IFA. For norm_max and norm_cax the profile
+is grounded}
+begin
+with ProfileArr do case Norm of
+   no_norm: Result := FloatToStrF(IFA.Ave,ffFixed,4,Precision);
+   norm_cax: Result := FloatToStrF((IFA.Ave - Min.ValueY)
+      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
+   norm_max: Result := FloatToStrF((IFA.Ave - Min.ValueY)
       *100/(Max.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
    end; {of case}
 end;
@@ -328,6 +351,17 @@ Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
 end;
 
 
+function UniformityAve1D(ProfileArr:TSingleProfile):string;
+{Returns the maximum difference between the max and the min
+of the IFA normalised to the average of the IFA according to ICRU 72 eq 3.2.
+(Dmax - Dmin)*100/Ave}
+begin
+with ProfileArr do
+Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
+   IFA.Ave,ffFixed,4,Precision) + '%';
+end;
+
+
 {-------------------------------------------------------------------------------
  Symmetry parameters
 -------------------------------------------------------------------------------}
@@ -352,19 +386,16 @@ end;
 
 function SymmetryDiff1D(ProfileArr:TSingleProfile):string;
 {max symmetric difference over IFA}
-var I          :integer;
-    Diff,
-    MaxDiff   :double;
 begin
-MaxDiff := 0;
-with ProfileArr do
-   for I:= 0 to Len - 1 do
-      if (not IsNan(IFA.PArrY[I])) and (not IsNaN(IFA.PArrY[Len - I - 1])) then
-         begin
-         Diff := abs(IFA.PArrY[I] - IFA.PArrY[Len - I - 1]);
-         if Diff > MaxDiff then MaxDiff := Diff;
-         end;
-Result := FloatToStrF(100*MaxDiff/ProfileArr.Centre.ValueY,ffFixed,4,Precision) + '%';
+Result := FloatToStrF(100*ProfileArr.IFA.MaxDiff/ProfileArr.Centre.ValueY,ffFixed,4,Precision) + '%';
+end;
+
+
+function SymmetryAve1D(ProfileArr:TSingleProfile):string;
+{max symmetric difference over IFA according to NCS-70 eq 3-6.
+max(abs(D(x,y) - D(-x,-y)))*100/Dave}
+begin
+Result := FloatToStrF(100*ProfileArr.IFA.MaxDiff/ProfileArr.IFA.Ave,ffFixed,4,Precision) + '%';
 end;
 
 

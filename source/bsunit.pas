@@ -158,7 +158,8 @@ unit bsunit;
  14/2/2022  add definable precision
  9/3/2022   add show/hide profile points
             add peak params to TSingleProfile, refactor
- 14/3/2022  fix window limit on normalise to centre}
+ 14/3/2022  fix window limit on normalise to centre
+ 2/6/2022   add relative centering to peak and absolute to detector to IFA}
 
 
 {$mode objfpc}{$H+}
@@ -1397,7 +1398,7 @@ begin
 SettingsForm := TSettingsForm.Create(Self);
 SettingsForm.ShowModal;
 SettingsForm.Free;
-BSWarning('Reload data to apply changed settings');
+BSWarning('Reload data to apply any changed settings');
 end;
 
 

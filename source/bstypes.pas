@@ -10,6 +10,11 @@ uses
 type
   TNorm = (no_norm, norm_cax, norm_max);
 
+  TCentre = (peak,detector);
+  TCentreData = record
+     Name      :string;
+  end;
+
   TIFAType = (proportional, circular, square);
   TIFAData = record
      Name      :string;
@@ -35,6 +40,8 @@ type
 
   TBasicProfile = class
      private
+     fAve,                     {profile average}
+     fMaxDiff  :double;        {maximum profile difference symmetric across centre}
      fMin,                     {profile minimum Y value}
      fMax,                     {profile maximum Y value}
      fCentre   :TProfilePos;   {centre Y value and X position}
@@ -48,9 +55,13 @@ type
      function GetCentre:TProfilePos;{get centre of profile}
      function GetMin:TProfilePos;   {get minimum value and postion}
      function GetMax:TProfilePos;   {get maximum value and position}
+     function GetAverage:double;    {get average value}
+     function GetMaxDiff:double;    {get maximum symmetric difference}
      property Centre:TProfilePos read GetCentre;
      property Min:TProfilePos read GetMin;
      property Max:TProfilePos read GetMax;
+     property Ave:double read GetAverage;
+     property MaxDiff:double read GetMaxDiff;
      end;
 
   TSingleProfile = class(TBasicProfile)
@@ -169,8 +180,12 @@ const
 
    IFAData: array[proportional..square] of TIFAData = (
       (Name: 'Proportional'; DefVal: 0.8),
-      (Name: 'Circular'; DefVal: 0.8),
+      (Name: 'Circular'; DefVal: 0.4),
       (Name: 'Square'; DefVal: 16.0));
+
+   CentreData: array[peak..detector] of TCentreData = (
+      (Name: 'Peak'),
+      (Name: 'Detector'));
 
 var Beam         :TBeam;
     XPArr,
@@ -178,9 +193,10 @@ var Beam         :TBeam;
     DefaultRes   :double = 2.54/75; {default to 75dpi for Gafchromic}
     ShowPoints   :boolean = False;
     ShowParams   :boolean = False;
-    IFAType      :TIFAType;
+    IFAType      :TIFAType = proportional;
     IFAFactor    :double;
     Precision    :integer = 2;
+    Centering    :TCentre = detector;
 
 implementation
 
@@ -311,7 +327,7 @@ if fAve = 0 then
    begin
    Sum := 0;
    EndRow := Rows - 1;
-   EndCol := Cols - 3;
+   EndCol := Cols - 1;
    K := 0;
    for I:=0 to EndRow do
       for J:=0 to EndCol do
@@ -327,7 +343,7 @@ end;
 
 
 function TBasicBeam.GetCentre:double;
-{Returns the geometric centre of the detector}
+{Returns the geometric centre value of the detector}
 var Row,
     Col    :integer;
 begin
@@ -354,8 +370,8 @@ end;
 
 
 function TBasicBeam.GetCoM:TProfilePoint;
-{Returns the indices of the unweighted centre of mass of the distribution in
-the form (row,col)}
+{Returns the indices of the top left corner of the unweighted centre of mass of
+the distribution in the form (row,col)}
 var I,J        :integer;
     Value      :double = 0.5;
     Sum        :integer;
@@ -379,8 +395,8 @@ if (fCoM.X = 0) and (fCoM.Y = 0) then
             fCoM.Y := fCom.Y + J;
             Inc(Sum);
             end;
-   fCom.X := fCom.X/Sum;
-   fCom.Y := fCom.Y/Sum;
+   fCom.X := fCom.X/Sum;       {row centre}
+   fCom.Y := fCom.Y/Sum;       {column centre}
    end;
 Result := fCoM;
 end;
@@ -507,20 +523,32 @@ function TBeam.GetInFieldArea:TBasicBeam;
 protocol.}
 var I,J        :integer;
     BeamMask   :TBeamMask;
+    CRow,                      {row to centre IFA on}
+    CCol       :double;        {column to centre IFA on}
 begin
 BeamMask := nil;
 if Length(fIFA.Data) = 0 then
    begin
+   if Centering = peak then
+      begin
+      CRow := Com.X;
+      CCol := Com.Y;
+      end
+     else
+      begin
+      CRow := (Rows - 1)/2.0;
+      CCol := (Cols - 1)/2.0;
+      end;
    case IFAType of
       proportional:begin
          BeamMask := TBeamMask.CreateFromArray(Data,0,Rows,0,Cols, Max/2);
-         BeamMask.ShrinkMask(CoM.X,CoM.Y,IFAFactor);
+         BeamMask.ShrinkMask(CRow,CCol,IFAFactor);
          end;
       circular: begin
-         BeamMask := TBeamMask.CreateCircle(CoM.X,CoM.Y,IFAFactor/XRes,Rows,Cols);
+         BeamMask := TBeamMask.CreateCircle(CRow,CCol,IFAFactor/XRes,Rows,Cols);
          end;
       square: begin
-         BeamMask := TBeamMask.CreateSquare(CoM.X,CoM.Y,IFAFactor/XRes,Rows,Cols);
+         BeamMask := TBeamMask.CreateSquare(CRow,CCol,IFAFactor/XRes,Rows,Cols);
          end;
       end; {of case}
 
@@ -704,6 +732,8 @@ end;
 procedure TBasicProfile.ResetAll;
 {set all profile values back to default}
 begin
+fAve := 0.0;
+fMaxDiff := 0.0;
 SetLength(PArrY,0);
 PArrY := nil;
 SetLength(PArrX,0);
@@ -766,6 +796,42 @@ if SameValue(fMin.ValueY,MaxDouble) then
    fMin.ValueY := PArrY[fMin.Pos];
    end;
 Result := fMin;
+end;
+
+
+function TBasicProfile.GetAverage:double;
+var I,K        :integer;
+    Sum        :double;
+begin
+if fAve = 0 then
+   begin
+   Sum := 0;
+   K := 0;
+   for I:=0 to Len - 1 do
+      if not IsNaN(PArrY[I]) then
+         begin
+         Sum := Sum + PArrY[I];
+         Inc(K);
+         end;
+   fAve := Sum/K;
+   end;
+Result := fAve;
+end;
+
+
+function TBasicProfile.GetMaxDiff:double;
+{max symmetric difference over profile}
+var I          :integer;
+    Diff       :double;
+begin
+if fMaxDiff = 0 then
+   for I:= 0 to Len - 1 do
+      if (not IsNan(PArrY[I])) and (not IsNaN(PArrY[Len - I - 1])) then
+         begin
+         Diff := abs(PArrY[I] - PArrY[Len - I - 1]);
+         if Diff > fMaxDiff then fMaxDiff := Diff;
+         end;
+Result := fMaxDiff;
 end;
 
 
@@ -1097,7 +1163,7 @@ for I:= 0 to URow - 1 do
    SetLength(Mask[I],Cols);
    for J:=0 to UCol - 1 do
       begin
-      if sqr(I - CRow) + sqr(J - CCol) < sqr(Radius) then
+      if sqr(I - CRow) + sqr(J - CCol) <= sqr(Radius) then
          Mask[I,J] := True
         else
          Mask[I,J] := False;
@@ -1160,7 +1226,6 @@ initialization
 Beam := TBeam.Create;
 XPArr := TSingleProfile.Create;
 YPArr := TSingleProfile.Create;
-IFAType := proportional;
 IFAFactor := IFAData[IFAType].defval;
 
 finalization

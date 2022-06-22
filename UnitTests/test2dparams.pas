@@ -25,9 +25,21 @@ type
       procedure TestMinVal2D_no_norm;
       procedure TestMinVal2D_norm_cax;
       procedure TestMinVal2D_norm_max;
+      procedure TestAve2D_no_norm;
+      procedure TestAve2D_norm_cax;
+      procedure TestAve2D_norm_max;
       procedure TestMinIFA2D;
       procedure TestUniformityCAX2D;
+      procedure TestUniformityAve2D;
       procedure TestSymmetryAve2D; //validate this
+      procedure TestCoMVal2D;
+      procedure TestCoMScaled2D;
+      procedure TestXRes2D;
+      procedure TestYRes2D;
+      procedure TestXPixels2D;
+      procedure TestYPixels2D;
+      procedure TestXSize2D;
+      procedure TestYSize2D;
       end;
 
 implementation
@@ -107,6 +119,26 @@ AssertEquals('Test min value, normalisation to max','0.00',MinVal2D(fBeam));
 end;
 
 
+procedure Test2DParamFuncs.TestAve2D_no_norm;
+begin
+AssertEquals('Test average value, no normalisation','46.94',Ave2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestAve2D_norm_cax;
+begin
+fBeam.Norm := norm_cax;
+AssertEquals('Test average value, normalisation to CAX','49.69%',Ave2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestAve2D_norm_max;
+begin
+fBeam.Norm := norm_max;
+AssertEquals('Test average value, normalisation to max','46.94%',Ave2D(fBeam));
+end;
+
+
 procedure Test2DParamFuncs.TestMinIFA2D;
 begin
 AssertEquals('Test min IFA value','94.32',MinIFA2D(fBeam));
@@ -119,9 +151,63 @@ AssertEquals('Test uniformity NCS-70','5.86%',UniformityCAX2D(fBeam));
 end;
 
 
+procedure Test2DParamFuncs.TestUniformityAve2D;
+begin
+AssertEquals('Test uniformity ICRU 72','5.80%',UniformityAve2D(fBeam));
+end;
+
+
 procedure Test2DParamFuncs.TestSymmetryAve2D; //validate this
 begin
 AssertEquals('Test symmetry NCS-70','2.59%',SymmetryAve2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestCoMVal2D;
+begin
+AssertEquals('Test CoM (row,col)','(31.52,26.52)',CoMVal2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestCoMScaled2D;
+begin
+AssertEquals('Test CoM (X,Y)','(13.26,15.76)',CoMScaled2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestXRes2D;
+begin
+AssertEquals('Test X Res','5.08 dpi',XRes2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestYRes2D;
+begin
+AssertEquals('Test Y Res','5.08 dpi',YRes2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestXPixels2D;
+begin
+AssertEquals('Test number of X pixels','53',XPixels2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestYPixels2D;
+begin
+AssertEquals('Test number of Y pixels','65',YPixels2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestXSize2D;
+begin
+AssertEquals('Test X Size','26.00 cm',XSize2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestYSize2D;
+begin
+AssertEquals('Test Y Size','32.00 cm',YSize2D(fBeam));
 end;
 
 

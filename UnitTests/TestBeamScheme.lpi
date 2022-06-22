@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="11"/>
+    <Version Value="12"/>
     <General>
+      <Flags>
+        <CompatibilityMode Value="True"/>
+      </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <MainUnit Value="0"/>
       <Title Value="TestBeamScheme"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
@@ -19,7 +21,6 @@
     </PublishOptions>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes Count="0"/>
     </RunParams>
     <RequiredPackages Count="5">
       <Item1>
@@ -112,7 +113,7 @@
     </Linking>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="4">
+    <Exceptions Count="5">
       <Item1>
         <Name Value="EAbort"/>
       </Item1>
@@ -125,6 +126,9 @@
       <Item4>
         <Name Value="Unknown"/>
       </Item4>
+      <Item5>
+        <Name Value="EAssertionFailedError"/>
+      </Item5>
     </Exceptions>
   </Debugging>
 </CONFIG>
