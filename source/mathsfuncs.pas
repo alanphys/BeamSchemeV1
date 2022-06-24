@@ -6,7 +6,7 @@ unit mathsfuncs;
 interface
 
 uses
-   Classes, SysUtils, bstypes;
+   Classes, SysUtils, bstypes, utypes;
 
 type
 
@@ -29,12 +29,17 @@ function MaxPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 function MaxPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):T2DValuePos;
 function MinPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 function MinPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):T2DValuePos;
+function Diff(BeamArr:TPArr):TPArr;
 function Limit(A,B,C,Phi0,R0,MidX,MidY:double):TPoint;
 function LimitL(Angle,Phi,TanA,Offset,MidX,MidY:double; LowerX,LowerY,UpperX,UpperY:integer):TRect;
+function HillFunc(X:double; B:TVector):double;
+function InvHillFunc(Y:double; B:TVector):double;
+function DerivHillFunc(X:double; B:TVector): double;
+function InflHillFunc(B:TVector): double;
 
 implementation
 
-uses math, utypes, unlfit, uhillfit, uerrors;
+uses math, unlfit, uhillfit, uerrors;
 
 const
    MaxIter = 1000;             {maximum number of iterations for optimisation}
@@ -60,17 +65,25 @@ end;
 
 function MaxPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 {find the maximum and its location ignoring Nans. Limits are from and including
-LRow, LCol up to but not including URow and UCol.}
-var I          :integer;
+LRow up to but not including URow. Can search from either end.}
+var I,
+    Direc  :integer;
 begin
 Result.Val := 0;
 Result.Pos := 0;
-for I:=LRow to URow - 1 do
-   if not IsNan(BeamArr[I]) and (BeamArr[I] > Result.Val) then
-   begin
-   Result.Val := BeamArr[I];
-   Result.Pos := I;
-   end;
+if URow >= LRow then Direc := 1 else Direc := -1;
+begin
+  I := LRow;
+  while I <> URow do
+     begin
+     if not IsNan(BeamArr[I]) and (BeamArr[I] > Result.Val) then
+       begin
+       Result.Val := BeamArr[I];
+       Result.Pos := I;
+       end;
+     inc(I,Direc);
+     end;
+  end;
 end;
 
 
@@ -125,6 +138,22 @@ for I:=LRow to URow - 1 do
       Result.Row := I;
       Result.col := J;
       end;
+end;
+
+
+function Diff(BeamArr:TPArr):TPArr;
+{Differentiate the array using the central point difference function}
+var I,
+    N          :integer;
+    DiffArr    :TPArr;
+begin
+N := Length(BeamArr);
+SetLength(DiffArr,N);
+DiffArr[0] := 0;
+for I := 1 to N - 2 do
+   DiffArr[I] := BeamArr[I-1] - BeamArr[I+1];
+DiffArr[N-1] := 0;
+Result := DiffArr;
 end;
 
 
@@ -232,7 +261,7 @@ Result.BottomRight := BR;
 end;
 
 
-function HillFunc(X:float; B:TVector):double;
+function HillFunc(X:double; B:TVector):double;
 {calculates the value of the Hill function at x
 parameters:
    B[0] high limit
@@ -247,7 +276,7 @@ if X > 0 then
 end;
 
 
-function InvHillFunc(Y:float; B:TVector):double;
+function InvHillFunc(Y:double; B:TVector):double;
 {calculates the inverse Hill function at y
 parameters:
    B[0] high limit
@@ -262,7 +291,7 @@ if (Y > min(B[0],B[1])) and (Y < max(B[0],B[1])) and (B[3] <> 0) then
 end;
 
 
-function DerivHillFunc(X:float; B:TVector): double;
+function DerivHillFunc(X:double; B:TVector): double;
 {calculates the tangent of the Hill function at X
 parameters:
    B[0] high limit
@@ -276,6 +305,22 @@ if X > 0 then
    begin
    cxd := power(B[2]/X,B[3]);
    Result := (B[1] - B[0])*B[3]*cxd/(sqr(cxd + 1)*X)
+   end;
+end;
+
+
+function InflHillFunc(B:TVector): double;
+{calculates the inflection point of the Hill function
+parameters:
+   B[0] high limit
+   B[1] low limit
+   B[2] initial inf point
+   B[3] slope}
+begin
+Result := 0;
+if B[3] > 0 then
+   begin
+   Result := B[2]*power((B[3]-1)/(B[3]+1),1/B[3]);
    end;
 end;
 

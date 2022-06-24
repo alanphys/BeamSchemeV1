@@ -67,8 +67,13 @@ type
   TSingleProfile = class(TBasicProfile)
      private
      fPeak,                    {value, position and index of peak centre}
-     fLeftEdge,                {value, position and index of field left edge}
-     fRightEdge:TProfilePos;   {value, position and index of field right edge}
+     fLeftEdge,                {50% field left edge}
+     fRightEdge,               {50% field right edge}
+     fLeftDiff,                {Differential field left edge}
+     fRightDiff,               {Differential field right edge}
+     fLeftInfl,                {Inflection point field left edge}
+     fRightInfl:TProfilePos;   {Inflection point field right edge}
+     fHillP    :array[0..4] of double;{Hill parameters}
      public
      TopRight,                 {top right corner of wide profile}
      TopLeft,                  {top left corner of wide profile}
@@ -90,15 +95,20 @@ type
      procedure SetParams(aAngle,aOffset,aWidth:integer); {set parameters from GUI}
      procedure Show(TheBitMap:Tbitmap);
      procedure Draw(TheBitmap:TBitmap);
-     function GetPos(Value:double; D:Integer):TProfilePos;
+     function GetFWXMPos(Value:double; D:Integer):TProfilePos;
+     procedure GetDiffPos;
      function GetLeftE:TProfilePos; {get left edge of profile}
      function GetRightE:TProfilePos;{get right edge of profile}
+     function GetLEDiff:TProfilePos;{get left max slope}
+     function GetREDiff:TProfilePos;{get right max slope}
      function GetPeakPos:TProfilePos;{get centre of profile peak}
      procedure ToSeries(ProfileSeries:TLineSeries);
      function  ToText:string;
      function GetArea(Start,Stop:integer):double;
      property LeftEdge:TProfilePos read GetLeftE;
      property RightEdge:TProfilePos read GetRightE;
+     property LeftDiff:TProfilePos read GetLEDiff;
+     property RightDiff:TProfilePos read GetREDiff;
      property Peak:TProfilePos read GetPeakPos;
      end;
 
@@ -857,23 +867,12 @@ procedure TSingleProfile.ResetAll;
 {set all profile values back to default}
 begin
 inherited;
-IFA.ResetAll;
 Angle := 0;
 Offset := 0;
 Width := 1;
 PrevW := 1;
-fLeftEdge.ValueY := 0.0;
-fLeftEdge.ValueX := 0.0;
-fLeftEdge.Pos := 0;
-fRightEdge.ValueY := 0.0;
-fRightEdge.ValueX := 0.0;
-fRightEdge.Pos := 0;
-fPeak.ValueY := 0.0;
-fPeak.ValueX := 0.0;
-fPeak.Pos := 0;
 ResetCoords;
-sProt := '';
-sExpr := '';
+ResetParams;
 Norm := no_norm;
 end;
 
@@ -889,11 +888,27 @@ fLeftEdge.Pos := 0;
 fRightEdge.ValueY := 0.0;
 fRightEdge.ValueX := 0.0;
 fRightEdge.Pos := 0;
+fLeftDiff.ValueY := 0.0;
+fLeftDiff.ValueX := 0.0;
+fLeftDiff.Pos := 0;
+fRightDiff.ValueY := 0.0;
+fRightDiff.ValueX := 0.0;
+fRightDiff.Pos := 0;
+fLeftInfl.ValueY := 0.0;
+fLeftInfl.ValueX := 0.0;
+fLeftInfl.Pos := 0;
+fRightInfl.ValueY := 0.0;
+fRightInfl.ValueX := 0.0;
+fRightInfl.Pos := 0;
 fPeak.ValueY := 0.0;
 fPeak.ValueX := 0.0;
 fPeak.Pos := 0;
 sProt := '';
 sExpr := '';
+fHillP[0] := 0.0;
+fHillP[1] := 0.0;
+fHillP[2] := 0.0;
+fHillP[3] := 0.0;
 end;
 
 
@@ -915,7 +930,7 @@ Width := aWidth;
 end;
 
 
-function TSingleProfile.GetPos(Value:double; D:Integer):TProfilePos;
+function TSingleProfile.GetFWXMPos(Value:double; D:Integer):TProfilePos;
 {Return the first point from the centre where the profile becomes less than
 Max or Cax times Value. D gives direction Up (increment) or Down (decrement)}
 var I          :integer;
@@ -944,13 +959,26 @@ if (I >= 0) and (I < Len) then
 end;
 
 
+procedure TSingleProfile.GetDiffPos;
+var DiffArr    :TPArr;
+begin
+DiffArr := Diff(PArrY);
+fLeftDiff.Pos := MinPosNan(DiffArr,0,Len).Pos;
+fLeftDiff.ValueY := PArrY[fLeftDiff.Pos];
+fLeftDiff.ValueX := PArrX[fLeftDiff.Pos];
+fRightDiff.Pos := MaxPosNan(DiffArr,Len,0).Pos;
+fRightDiff.ValueY := PArrY[fRightDiff.Pos];
+fRightDiff.ValueX := PArrX[fRightDiff.Pos];
+end;
+
+
 function TSingleProfile.GetLeftE:TProfilePos;
 {Return the value, position and index of the field left edge. The index is the
 first integer index after the field edge.}
 begin
 {for performance only calculate if not previously calculated}
 if fLeftEdge.ValueY = 0 then
-   fLeftEdge := GetPos(0.5,-1);
+   fLeftEdge := GetFWXMPos(0.5,-1);
 Result := fLeftEdge;
 end;
 
@@ -961,8 +989,32 @@ first integer index after the field edge.}
 begin
 {for performance only calculate if not previously calculated}
 if fRightEdge.ValueY = 0 then
-   fRightEdge := GetPos(0.5,1);
+   fRightEdge := GetFWXMPos(0.5,1);
 Result := fRightEdge;
+end;
+
+
+function TSingleProfile.GetLEDiff:TProfilePos;
+{Return the value, position and index of the maximum slope of the field left
+edge. If there is more than one the one closest to the start of the profile
+is returned}
+begin
+{for performance only calculate if not previously calculated}
+if fLeftDiff.ValueX = 0 then
+   GetDiffPos;
+Result := fLeftDiff;
+end;
+
+
+function TSingleProfile.GetREDiff:TProfilePos;
+{Return the value, position and index of the maximum slope of the field right
+edge. If there is more than one the one closest to the end of the profile
+is returned}
+begin
+{for performance only calculate if not previously calculated}
+if fRightDiff.ValueX = 0 then
+   GetDiffPos;
+Result := fRightDiff;
 end;
 
 

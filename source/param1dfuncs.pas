@@ -45,6 +45,8 @@ T1DParams = (field_edge_left_50_1D,
              pen_9010_right_1D,
              pen_9050_left_1D,
              pen_9050_right_1D,
+             field_diff_left_1D,
+             field_diff_right_1D,
              cax_val_1D,
              max_val_1D,
              min_val_1D,
@@ -82,6 +84,9 @@ function Penumbra9010Left1D(ProfileArr:TSingleProfile):string;
 function Penumbra9010Right1D(ProfileArr:TSingleProfile):string;
 function Penumbra9050Left1D(ProfileArr:TSingleProfile):string;
 function Penumbra9050Right1D(ProfileArr:TSingleProfile):string;
+{differential params}
+function FieldDiffLeft1D(ProfileArr:TSingleProfile):string;
+function FieldDiffRight1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
@@ -119,6 +124,8 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Penumbra 9010 Right'; Func:@Penumbra9010Right1D),
    (Name:'1D Penumbra 9050 Left'; Func:@Penumbra9050Left1D),
    (Name:'1D Penumbra 9050 Right'; Func:@Penumbra9050Right1D),
+   (Name:'1D Left Diff'; Func:@FieldDiffLeft1D),
+   (Name:'1D Right Diff'; Func:@FieldDiffRight1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
@@ -140,7 +147,7 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
 
 implementation
 
-uses math, mathsfuncs;
+uses math;
 
 {-------------------------------------------------------------------------------
  Field statistics
@@ -239,7 +246,7 @@ end;
 function FieldCentre501D(ProfileArr:TSingleProfile):string;
 {Returns the field centre as given by the 50% field edges}
 begin
-if (ProfileArr.LeftEdge.ValueY > 0) and (ProfileArr.RightEdge.ValueY > 0) then
+if (ProfileArr.Peak.ValueY > 0) then
    begin
    Result := FloatToStrF(ProfileArr.Peak.ValueX,ffFixed,4,Precision) + ' cm'
    end
@@ -266,7 +273,7 @@ function Penumbra8020Left1D(ProfileArr:TSingleProfile):string;
 var Penumbra   :double;
 begin
 with ProfileArr do
-   Penumbra := abs(GetPos(0.2,-1).ValueX - GetPos(0.8,-1).ValueX);
+   Penumbra := abs(GetFWXMPos(0.2,-1).ValueX - GetFWXMPos(0.8,-1).ValueX);
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
@@ -275,7 +282,7 @@ function Penumbra8020Right1D(ProfileArr:TSingleProfile):string;
 var Penumbra   :double;
 begin
 with ProfileArr do
-   Penumbra := abs(GetPos(0.2,1).ValueX - GetPos(0.8,1).ValueX);
+   Penumbra := abs(GetFWXMPos(0.2,1).ValueX - GetFWXMPos(0.8,1).ValueX);
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
@@ -284,7 +291,7 @@ function Penumbra9010Left1D(ProfileArr:TSingleProfile):string;
 var Penumbra   :double;
 begin
 with ProfileArr do
-   Penumbra := abs(GetPos(0.1,-1).ValueX - GetPos(0.9,-1).ValueX);
+   Penumbra := abs(GetFWXMPos(0.1,-1).ValueX - GetFWXMPos(0.9,-1).ValueX);
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
@@ -293,7 +300,7 @@ function Penumbra9010Right1D(ProfileArr:TSingleProfile):string;
 var Penumbra   :double;
 begin
 with ProfileArr do
-   Penumbra := abs(GetPos(0.1,1).ValueX - GetPos(0.9,1).ValueX);
+   Penumbra := abs(GetFWXMPos(0.1,1).ValueX - GetFWXMPos(0.9,1).ValueX);
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
@@ -302,7 +309,7 @@ function Penumbra9050Left1D(ProfileArr:TSingleProfile):string;
 var Penumbra   :double;
 begin
 with ProfileArr do
-   Penumbra := abs(LeftEdge.ValueX - GetPos(0.9,-1).ValueX);
+   Penumbra := abs(LeftEdge.ValueX - GetFWXMPos(0.9,-1).ValueX);
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
@@ -311,8 +318,32 @@ function Penumbra9050Right1D(ProfileArr:TSingleProfile):string;
 var Penumbra   :double;
 begin
 with ProfileArr do
-   Penumbra := abs(RightEdge.ValueX - GetPos(0.9,1).ValueX);
+   Penumbra := abs(RightEdge.ValueX - GetFWXMPos(0.9,1).ValueX);
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
+end;
+
+
+{-------------------------------------------------------------------------------
+ Differential parameters
+-------------------------------------------------------------------------------}
+
+function FieldDiffLeft1D(ProfileArr:TSingleProfile):string;
+{Returns the position of the left maximum slope}
+begin
+if ProfileArr.LeftDiff.ValueX <> 0 then
+   Result := FloatToStrF(ProfileArr.LeftDiff.ValueX,ffFixed,4,Precision) + ' cm'
+  else
+   Result := 'No edge';
+end;
+
+
+function FieldDiffRight1D(ProfileArr:TSingleProfile):string;
+{Returns the position of the right maximum slope}
+begin
+if ProfileArr.RightDiff.ValueX <> 0 then
+   Result := FloatToStrF(ProfileArr.RightDiff.ValueX,ffFixed,4,Precision) + ' cm'
+  else
+   Result := 'No edge';
 end;
 
 

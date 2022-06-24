@@ -3,7 +3,7 @@ BeamScheme Readme file (c) 2008-2022 AC Chamberlain
 1) Introduction
 Welcome to BeamScheme
 
-This software will assist you in extracting 1D profiles from 2D datasets and calculating various parameters on the profiles and 2D dataset. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, XiO, DICOM, jpg, etc.
+This software will assist you in extracting 1D profiles from 2D datasets and calculating various parameters on the profiles and 2D dataset. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, Eclipse, XiO, DICOM, jpg, etc.
 
 Parameters such as field size, field centre, penumbra, flatness and symmetry are calculated. Profiles can be taken at any angle, offset or thickness. Profiles can be exported to a text file or clipboard for further processing. Results can be exported to PDF.
 
@@ -28,12 +28,15 @@ Use the Offset, Width and Angle boxes to manipulate the profiles.
 
 Windows can be maximised and restored by clicking the arrow in the top right hand corner of the window.
 
-5) Notes on using 2D Array files
+5) Validation
+BeamScheme features extensive internal and external validation against commercial and open source software. Please see the unit tests directory for more information.
+
+6)Notes on using 2D Array files
 For correct field sizes the detector plane of the 2D array must be at 100cm SSD.
 
 There will be small differences between the flatness and symmetry reported by BeamScheme and your 2D Array. This is due to differences in the algorithms. The differences should not be more than 0.05%.
 
-6) Notes on using EPID images
+7) Notes on using EPID images
 No correction for SSD is made. You will have to apply corrections yourselves at this stage.
 
 It is recommended that an EPID calibration be done before acquiring images to get the best image quality.
@@ -42,12 +45,12 @@ If you have an integrated imaging mode, use this as it will give you a better im
 
 DICOM images will usually need to be inverted (by clicking the Invert button) and then normalised (by clicking the normalise button).
 
-7) Notes on normalising
+8) Notes on normalising
 The program uses the normalised, corrected 2D array data. No normalisation should be necessary for the 2D arrays if they have been calibrated and zeroed correctly.
 
 There are three normalisation modes. None, CAX or maximum. Normalisation places the minimum of the image at 0 and the CAX or maximum value at 100. If the image contains dead pixels or other strange artifacts it is possible for the normalisation to fail and give you strange results. This is not the fault of the program but of the image. See the previous comment about calibration. Normalisation acts on the windowed data and is non-destructive.
 
-8) Release notes
+9) Release notes
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
 
 Version 1.00
@@ -81,12 +84,12 @@ Added Average and Standard Deviation parameters over the flattened region of the
 Version 0.40
 Profiles can now be positioned by clicking on the image with the mouse.
 
-9) Known issues
+10) Known issues
 Windows does not automatically focus the control under the mouse cursor therefore the context sensitive help may return the wrong help page.
 
-With the introduction of FFF parameters and model fitting the linear search algorithm that forms the core of BeamScheme has reached its limitations. The area symmetry used in the FFF protocol uses the field size as defined by the FWHM and not the inflection point due to the limitations of the algorithm.
+FFF parameters are currently not implemented.
 
-10) History
+11) History
 22/07/2008 version 0.1
 3/09/2009  added DICOM unit
 22/8/2011  Fix field centre error,
@@ -234,3 +237,18 @@ Version 0.5 released 25/10/2019
            fix invert and centre crash with no file open
 24/1/2022  show full file name in cImage hint
            fix display file name correctly on image maximise
+27/1/2022  set profile angle limits to corners of image
+           create TSingleProfile.ToSeries and refactor
+28/1/2022  shift Limit and LimitL to mathsfuncs
+           split calcprofile into drawing and calculation routines
+           shift to bstypes and refactor, delete drawfuncs
+31/1/2022  remove overlimit compensation in CreateProfile
+1/2/2022   fix profile grounding bug in param1Dfuncs
+           add TSingleProfile.ToString and refactor
+2/2/2022   fix rounding error on profile increment
+           create TBasicProfile, derive TSingleProfile and define IFA as TBasicProfile
+14/2/2022  add definable precision
+9/3/2022   add show/hide profile points
+           add peak params to TSingleProfile, refactor
+14/3/2022  fix window limit on normalise to centre
+2/6/2022   add relative centering to peak and absolute to detector to IFA}
