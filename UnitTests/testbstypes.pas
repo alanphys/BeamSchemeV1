@@ -28,6 +28,12 @@ type
       procedure TestMaxDiff;
       procedure TestPeak;
       procedure TestArea;
+      procedure TestLeftDiff;
+      procedure TestRightDiff;
+      procedure TestHPLeft;
+      procedure TestHPRight;
+      procedure TestLeftInfl;
+      procedure TestRightInfl;
    end;
 
    TestBeam= class(TTestCase)
@@ -174,6 +180,7 @@ fProfile := TSingleProfile.Create;
 fProfile.PArrX := ProfileArrX;
 fProfile.PArrY := ProfileArrY;
 fProfile.Len := 53;
+fProfile.Res := 0.5;
 end;
 
 procedure TestSingleProfile.TearDown;
@@ -280,6 +287,57 @@ begin
 AssertEquals('Test area value',77231.8,fProfile.GetArea(6,46));
 end;
 
+
+procedure TestSingleProfile.TestLeftDiff;
+begin
+AssertEquals('Test left Diff value',79.52,fProfile.LeftDiff.ValueY);
+AssertEquals('Test left Diff position',-9.5,fProfile.LeftDiff.ValueX);
+AssertEquals('Test left Diff index',7,fProfile.LeftDiff.Pos);
+end;
+
+
+procedure TestSingleProfile.TestRightDiff;
+begin
+AssertEquals('Test right Diff value',-80.02,fProfile.RightDiff.ValueY);
+AssertEquals('Test right Diff position',10.5,fProfile.RightDiff.ValueX);
+AssertEquals('Test right Diff index',47,fProfile.RightDiff.Pos);
+end;
+
+
+procedure TestSingleProfile.TestHPLeft;
+begin
+AssertEquals('Test B[0] high limit',4.2034,fProfile.HPLeft[0]);
+AssertEquals('Test B[1] low limit',98.5943,fProfile.HPLeft[1]);
+AssertEquals('Test B[2] initial inf point',-9.6059,fProfile.HPLeft[2]);
+AssertEquals('Test B[3] slope',-47.7425,fProfile.HPLeft[3]);
+end;
+
+
+procedure TestSingleProfile.TestHPRight;
+begin
+AssertEquals('Test B[0] high limit',97.9828,fProfile.HPRight[0]);
+AssertEquals('Test B[1] low limit',5.7595,fProfile.HPRight[1]);
+AssertEquals('Test B[2] initial inf point',10.3945,fProfile.HPRight[2]);
+AssertEquals('Test B[3] slope',63.1277,fProfile.HPRight[3]);
+end;
+
+
+procedure TestSingleProfile.TestLeftInfl;
+begin
+AssertEquals('Test left Infl value',52.3874,fProfile.LeftInfl.ValueY);
+AssertEquals('Test left Infl position',-9.5975,fProfile.LeftInfl.ValueX);
+AssertEquals('Test left Infl index',7,fProfile.LeftInfl.Pos);
+end;
+
+
+procedure TestSingleProfile.TestRightInfl;
+begin
+AssertEquals('Test Right Infl value',52.6016,fProfile.RightInfl.ValueY);
+AssertEquals('Test Right Infl position',10.3892,fProfile.RightInfl.ValueX);
+AssertEquals('Test Right Infl index',47,fProfile.RightInfl.Pos);
+end;
+
+
 {-------------------------------------------------------------------------------
 TBeam
 -------------------------------------------------------------------------------}
@@ -375,6 +433,8 @@ begin
 Prof := TSingleProfile.Create;
 Prof.SetParams(0,0,1);
 fBeam.CreateProfile(Prof,round(fBeam.Max),0);
+AssertEquals('Length ',53,Prof.Len);
+AssertEquals('Resolution ',0.5,Prof.Res);
 for I:=0 to Prof.Len - 1 do
    begin
    AssertEquals('Horizontal Profile X value ' + IntToStr(I),ProfileArrX[I],Prof.PArrX[I]);
@@ -393,6 +453,8 @@ begin
 Prof := TSingleProfile.Create;
 Prof.SetParams(90,0,1);
 fBeam.CreateProfile(Prof,round(fBeam.Max),0);
+AssertEquals('Length ',65,Prof.Len);
+AssertEquals('Resolution ',0.5,Prof.Res);
 for I:=0 to Prof.Len - 1 do
    begin
    AssertEquals('Vertical Profile X value ' + IntToStr(I),ProfileArrX3[I],Prof.PArrX[I]);

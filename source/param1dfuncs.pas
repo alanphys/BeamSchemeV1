@@ -47,6 +47,8 @@ T1DParams = (field_edge_left_50_1D,
              pen_9050_right_1D,
              field_diff_left_1D,
              field_diff_right_1D,
+             field_infl_left_1D,
+             field_infl_right_1D,
              cax_val_1D,
              max_val_1D,
              min_val_1D,
@@ -87,6 +89,9 @@ function Penumbra9050Right1D(ProfileArr:TSingleProfile):string;
 {differential params}
 function FieldDiffLeft1D(ProfileArr:TSingleProfile):string;
 function FieldDiffRight1D(ProfileArr:TSingleProfile):string;
+{inflection point params}
+function FieldInflLeft1D(ProfileArr:TSingleProfile):string;
+function FieldInflRight1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
@@ -126,6 +131,8 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Penumbra 9050 Right'; Func:@Penumbra9050Right1D),
    (Name:'1D Left Diff'; Func:@FieldDiffLeft1D),
    (Name:'1D Right Diff'; Func:@FieldDiffRight1D),
+   (Name:'1D Left Infl'; Func:@FieldInflLeft1D),
+   (Name:'1D Right Infl'; Func:@FieldInflRight1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
@@ -345,6 +352,30 @@ if ProfileArr.RightDiff.ValueX <> 0 then
   else
    Result := 'No edge';
 end;
+
+
+{-------------------------------------------------------------------------------
+ Inflection point parameters
+-------------------------------------------------------------------------------}
+function FieldInflLeft1D(ProfileArr:TSingleProfile):string;
+{Returns the position of the left inflection point}
+begin
+if ProfileArr.LeftInfl.ValueX <> 0 then
+   Result := FloatToStrF(ProfileArr.LeftInfl.ValueX,ffFixed,4,Precision) + ' cm'
+  else
+   Result := 'No edge';
+end;
+
+
+function FieldInflRight1D(ProfileArr:TSingleProfile):string;
+{Returns the position of the right inflection point slope}
+begin
+if ProfileArr.RightInfl.ValueX <> 0 then
+   Result := FloatToStrF(ProfileArr.RightInfl.ValueX,ffFixed,4,Precision) + ' cm'
+  else
+   Result := 'No edge';
+end;
+
 
 
 {-------------------------------------------------------------------------------

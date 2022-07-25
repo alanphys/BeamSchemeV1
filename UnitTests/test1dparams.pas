@@ -43,6 +43,12 @@ type
       procedure TestPenumbra9010Right1D;
       procedure TestPenumbra9050Left1D;
       procedure TestPenumbra9050Right1D;
+      {differential parameters}
+      procedure TestFieldDiffLeft1D;
+      procedure TestFieldDiffRight1D;
+      {inflection point parameters}
+      procedure TestFieldInflLeft1D;
+      procedure TestFieldInflRight1D;
       {flatness and uniformity parameters}
       procedure TestFlatnessAve1D;
       procedure TestFlatnessDiff1D;
@@ -260,6 +266,36 @@ end;
 procedure Test1DParamFuncs.TestPenumbra9050Right1D;
 begin
 AssertEquals('Test penumbra right 90-10%','0.34 cm',Penumbra9050Right1D(fProfile));
+end;
+
+
+{-------------------------------------------------------------------------------
+ Differential parameters
+-------------------------------------------------------------------------------}
+procedure Test1DParamFuncs.TestFieldDiffLeft1D;
+begin
+AssertEquals('Test field differential left','-9.50 cm',FieldDiffLeft1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFieldDiffRight1D;
+begin
+AssertEquals('Test field differential right','10.50 cm',FieldDiffRight1D(fProfile));
+end;
+
+
+{-------------------------------------------------------------------------------
+ Inflection point parameters
+-------------------------------------------------------------------------------}
+procedure Test1DParamFuncs.TestFieldInflLeft1D;
+begin
+AssertEquals('Test field differential left','-9.60 cm',FieldInflLeft1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFieldInflRight1D;
+begin
+AssertEquals('Test field differential right','10.39 cm',FieldInflRight1D(fProfile));
 end;
 
 

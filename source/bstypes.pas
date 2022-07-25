@@ -47,11 +47,14 @@ type
      fCentre   :TProfilePos;   {centre Y value and X position}
      public
      Len       :integer;       {number of elements in profile}
+     Res       :double;        {profile resolution}
      PArrY     :TPArr;         {1D array containing profile Y points}
      PArrX     :TPArr;         {1D array containing profile X points}
      constructor Create;
      destructor Destroy; override;
      procedure ResetAll;       {reset all parameters and zero array}
+     function GetSliceX(Lb,Ub:integer):TPArr; {return section of PArrX}
+     function GetSliceY(Lb,Ub:integer):TPArr; {return section of PArrY}
      function GetCentre:TProfilePos;{get centre of profile}
      function GetMin:TProfilePos;   {get minimum value and postion}
      function GetMax:TProfilePos;   {get maximum value and position}
@@ -73,7 +76,8 @@ type
      fRightDiff,               {Differential field right edge}
      fLeftInfl,                {Inflection point field left edge}
      fRightInfl:TProfilePos;   {Inflection point field right edge}
-     fHillP    :array[0..4] of double;{Hill parameters}
+     fHPLeft,                  {Hill parameters left edge}
+     fHPRight  :TPArr;         {Hill parameters left edge}
      public
      TopRight,                 {top right corner of wide profile}
      TopLeft,                  {top left corner of wide profile}
@@ -102,6 +106,10 @@ type
      function GetLEDiff:TProfilePos;{get left max slope}
      function GetREDiff:TProfilePos;{get right max slope}
      function GetPeakPos:TProfilePos;{get centre of profile peak}
+     function GetHPLeft:TPArr;
+     function GetHPRight:TPArr;
+     function GetLeftInfl:TProfilePos;
+     function GetRightInfl:TProfilePos;
      procedure ToSeries(ProfileSeries:TLineSeries);
      function  ToText:string;
      function GetArea(Start,Stop:integer):double;
@@ -110,6 +118,10 @@ type
      property LeftDiff:TProfilePos read GetLEDiff;
      property RightDiff:TProfilePos read GetREDiff;
      property Peak:TProfilePos read GetPeakPos;
+     property HPLeft:TPArr read GetHPLeft;
+     property HPRight:TPArr read GetHPRight;
+     property LeftInfl:TProfilePos read GetLeftInfl;
+     property RightInfl:TProfilePos read GetRightInfl;
      end;
 
   TBasicBeam = class
@@ -717,6 +729,7 @@ repeat
       AddWideProfile(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],X,Y,XInc,YInc,ProfileArr.PrevW);
    until (I = Stop.Y) and (J = Stop.X);
 ProfileArr.Norm := Norm;
+ProfileArr.Res := ProfileArr.PArrX[1] - ProfileArr.PArrX[0];
 ProfileArr.IFA.PArrX := ProfileArr.PArrX;
 end;
 
@@ -745,6 +758,7 @@ begin
 fAve := 0.0;
 fMaxDiff := 0.0;
 SetLength(PArrY,0);
+Res := 0.0;
 PArrY := nil;
 SetLength(PArrX,0);
 PArrX := nil;
@@ -758,6 +772,20 @@ fMax.Pos := 0;
 fCentre.ValueY := 0.0;
 fCentre.ValueX := 0.0;
 fCentre.Pos := 0;
+end;
+
+
+function TBasicProfile.GetSliceX(Lb,Ub:integer):TPArr;
+begin
+Result := nil;
+if Ub > Lb then Result := Copy(PArrX,Lb,Ub-Lb);
+end;
+
+
+function TBasicProfile.GetSliceY(Lb,Ub:integer):TPArr;
+begin
+Result := nil;
+if Ub > Lb then Result := Copy(PArrY,Lb,Ub-Lb);
 end;
 
 
@@ -905,10 +933,16 @@ fPeak.ValueX := 0.0;
 fPeak.Pos := 0;
 sProt := '';
 sExpr := '';
-fHillP[0] := 0.0;
-fHillP[1] := 0.0;
-fHillP[2] := 0.0;
-fHillP[3] := 0.0;
+SetLength(fHPLeft,4);
+fHPLeft[0] := 0.0;
+fHPLeft[1] := 0.0;
+fHPLeft[2] := 0.0;
+fHPLeft[3] := 0.0;
+SetLength(fHPRight,4);
+fHPRight[0] := 0.0;
+fHPRight[1] := 0.0;
+fHPRight[2] := 0.0;
+fHPRight[3] := 0.0;
 end;
 
 
@@ -961,13 +995,18 @@ end;
 
 procedure TSingleProfile.GetDiffPos;
 var DiffArr    :TPArr;
+    PeakDiff   :T1DValuePos;
 begin
 DiffArr := Diff(PArrY);
-fLeftDiff.Pos := MinPosNan(DiffArr,0,Len).Pos;
-fLeftDiff.ValueY := PArrY[fLeftDiff.Pos];
+{left side}
+PeakDiff := MaxPosNan(DiffArr,0,Len);
+fLeftDiff.Pos := PeakDiff.Pos;
+fLeftDiff.ValueY := PeakDiff.Val;
 fLeftDiff.ValueX := PArrX[fLeftDiff.Pos];
-fRightDiff.Pos := MaxPosNan(DiffArr,Len,0).Pos;
-fRightDiff.ValueY := PArrY[fRightDiff.Pos];
+{right side}
+PeakDiff := MinPosNan(DiffArr,Len,0);
+fRightDiff.Pos := PeakDiff.Pos;
+fRightDiff.ValueY := PeakDiff.Val;
 fRightDiff.ValueX := PArrX[fRightDiff.Pos];
 end;
 
@@ -1028,6 +1067,103 @@ if fPeak.ValueY = 0 then
    fPeak.ValueY := PArrY[fPeak.Pos];
    end;
 Result := fPeak;
+end;
+
+
+function TSingleProfile.GetHPLeft:TPArr;
+{Returns the Hill parameters of the fit to the left penumbra. Peak derivative
+is used as an initial estimate to the inflection point.}
+var Start,
+    Stop       :integer;
+    Delta      :integer = 20;
+    SliceX,
+    SliceY     :TPArr;
+begin
+if fHPLeft[2] = 0 then
+   begin
+   {get segment of penumbra}
+   Delta := math.min(Delta,math.min(LeftDiff.Pos,Peak.Pos - LeftDiff.Pos));
+   Start := LeftDiff.Pos - Delta;
+   Stop := LeftDiff.Pos + Delta;
+   SliceX := GetSliceX(Start,Stop);
+   SliceY := GetSliceY(Start,Stop);
+   if (SliceX <> nil) and (SliceY <> nil) then
+      begin
+      {set inital params}
+      fHPLeft[0] := math.max(SliceY[0],0.1);         {can't have inital param 0}
+      fHPLeft[1] := SliceY[length(SliceY) - 1];
+      fHPLeft[2] := LeftDiff.ValueX;
+      fHPLeft[3] := CoeffHillFunc(PArrX[LeftDiff.Pos - 1],PArrX[LeftDiff.Pos + 1],
+         PArrY[LeftDiff.Pos - 1],PArrY[LeftDiff.Pos + 1],fHPLeft);
+      {do regression}
+      HillFitParams(SliceX,SliceY,fHPLeft);
+      end;
+   end;
+Result := fHPLeft;
+end;
+
+
+function TSingleProfile.GetHPRight:TPArr;
+{Returns the Hill parameters of the fit to the left penumbra. Peak derivative
+is used as an initial estimate to the inflection point.}
+var Start,
+    Stop       :integer;
+    Delta      :integer = 20;
+    SliceX,
+    SliceY     :TPArr;
+begin
+if fHPRight[2] = 0 then
+   begin
+   {get segment of penumbra}
+   Delta := math.min(Delta,math.min(Len - RightDiff.Pos,RightDiff.Pos - Peak.Pos));
+   Start := RightDiff.Pos - Delta;
+   Stop := RightDiff.Pos + Delta;
+   SliceX := GetSliceX(Start,Stop);
+   SliceY := GetSliceY(Start,Stop);
+   if (SliceX <> nil) and (SliceY <> nil) then
+      begin
+      {set inital params}
+      Delta := Delta div 3;
+      fHPRight[0] := SliceY[0];
+      fHPRight[1] := math.max(SliceY[length(SliceY) - 1],0.1);      {can't have inital param 0}
+      fHPRight[2] := RightDiff.ValueX;
+      fHPRight[3] := CoeffHillFunc(PArrX[RightDiff.Pos - 1],PArrX[RightDiff.Pos + 1],
+         PArrY[RightDiff.Pos - 1],PArrY[RightDiff.Pos + 1],fHPRight);
+      {do regression}
+      HillFitParams(SliceX,SliceY,fHPRight);
+      end;
+   end;
+Result := fHPRight;
+end;
+
+
+function TSingleProfile.GetLeftInfl:TProfilePos;
+{Return the value, position and index of the field left edge. The index is the
+first integer index after the field edge.}
+begin
+{for performance only calculate if not previously calculated}
+if fLeftInfl.ValueY = 0 then
+   begin
+   fLeftInfl.ValueX := InflHillFunc(HPLeft);
+   fLeftInfl.ValueY := HillFunc(fLeftInfl.ValueX,HPLeft);
+   fLeftInfl.Pos := round(fLeftInfl.ValueX/Res) + Centre.Pos;
+   end;
+Result := fLeftInfl;
+end;
+
+
+function TSingleProfile.GetRightInfl:TProfilePos;
+{Return the value, position and index of the field right edge. The index is the
+first integer index after the field edge.}
+begin
+{for performance only calculate if not previously calculated}
+if fRightInfl.ValueY = 0 then
+   begin
+   fRightInfl.ValueX := InflHillFunc(HPRight);
+   fRightInfl.ValueY := HillFunc(fRightInfl.ValueX,HPRight);
+   fRightInfl.Pos := round(fRightInfl.ValueX/Res) + Centre.Pos;
+   end;
+Result := fRightInfl;
 end;
 
 
