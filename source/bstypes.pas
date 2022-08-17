@@ -133,7 +133,8 @@ type
      fCoM      :TProfilePoint; {centre of mass position}
      public
      Cols,                     {number of columns (X direction)}
-     Rows      :integer;       {number of rows (Y direction)}
+     Rows,                     {number of rows (Y direction)}
+     Scale     :integer;       {scale image values}
      Norm      :TNorm;         {Beam normalisation (none, max or cax)}
      Data      :TBeamData;     {2D array containing image data}
      constructor Create;
@@ -142,6 +143,7 @@ type
      procedure ResetParams;
      procedure Display(MBitMap:TBitMap; BMax,BMin:double);
      procedure Invert;
+     procedure Rescale;
      function GetMin:double;   {get minimum value and postion}
      function GetMax:double;   {get maximum value and position}
      function GetAve:double;   {get average of values}
@@ -257,6 +259,7 @@ begin
   Cols := 0;
   Rows := 0;
   Norm := no_norm;
+  Scale := 1;
   ResetParams;
 end;
 
@@ -316,6 +319,29 @@ if Max <> Min then
         begin
         Z := Data[I,J];
         Z := Max - Z + Min;
+        Data[I,J] := Z;
+        end;
+   ResetParams;
+   end;
+end;
+
+
+procedure TBasicBeam.Rescale;
+{Image displays only integer values so we need to rescale small floating point
+numbers}
+var I,J        :integer;
+    Z          :double;
+begin
+if Max < 10 then
+   begin
+   Scale := ceil(log10(Max));
+   Scale := trunc(power(10,Scale));
+   Scale := 100 div Scale;
+   for I:=0 to Rows - 1 do
+     for J:=0 to Cols - 1 do
+        begin
+        Z := Data[I,J];
+        Z := Z*Scale;
         Data[I,J] := Z;
         end;
    ResetParams;

@@ -160,7 +160,9 @@ unit bsunit;
             add peak params to TSingleProfile, refactor
  14/3/2022  fix window limit on normalise to centre
  2/6/2022   add relative centering to peak and absolute to detector to IFA
- 24/6/2022  make maxposnan bidirectional, add differential params}
+ 24/6/2022  make maxposnan bidirectional, add differential params
+ 20/7/2022  add sigmoid function and params
+ 16/8/2022  fix infinite loop error with small floats, add rescale}
 
 
 {$mode objfpc}{$H+}
@@ -863,6 +865,16 @@ if Length(Beam.Data) > 0 then
    begin
    Beam.Display(iBeam.Picture.Bitmap,BMax,BMin);
    if ShowParams and (Length(Beam.IFA.Data) > 0) then Beam.DisplayIFA(iBeam.Picture.Bitmap);
+   if Beam.Scale <> 1 then
+      begin
+      cXProfile.LeftAxis.Title.Caption := 'Dose x ' + IntToStr(Beam.Scale);
+      cYProfile.LeftAxis.Title.Caption := 'Dose x ' + IntToStr(Beam.Scale);
+      end
+     else
+      begin
+      cXProfile.LeftAxis.Title.Caption := 'Dose';
+      cYProfile.LeftAxis.Title.Caption := 'Dose';
+      end;
    Show2DResults(Beam);
    seXAngleChange(Self);
    seYAngleChange(Self);
@@ -955,6 +967,7 @@ if OpenDialog.Execute then
       seYOffset.Value := 0;
       seYWidth.MaxValue := Beam.Cols;
       seYWidth.Value := 1;
+      Beam.Rescale;
       BMin := round(Beam.Min);
       BMax := round(Beam.Max);
       DTrackBar.Max := BMax;

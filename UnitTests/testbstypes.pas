@@ -52,6 +52,7 @@ type
       procedure TestMax;
       procedure TestAve;
       procedure TestInvert;
+      procedure TestRescale;
       procedure TestCentre;
       procedure TestCreateXProfile;
       procedure TestCreateYProfile;
@@ -416,6 +417,24 @@ AssertEquals('Inverted top left',100,fBeam.Data[0,0]);
 AssertEquals('Inverted top right',100,fBeam.Data[0,52]);
 AssertEquals('Inverted bottom left',100,fBeam.Data[64,0]);
 AssertEquals('Inverted bottom right',100,fBeam.Data[64,52]);
+end;
+
+
+procedure TestBeam.TestReScale;
+{Rescale must return values to 100}
+var I,J        :integer;
+    Z          :double;
+begin
+for I:=0 to fBeam.Rows - 1 do
+  for J:=0 to fBeam.Cols - 1 do
+     begin
+     Z := fBeam.Data[I,J];
+     Z := Z/100;
+     fBeam.Data[I,J] := Z;
+     end;
+fBeam.ResetParams;
+fBeam.Rescale;
+AssertEquals('Rescaled max',100,fBeam.Max);
 end;
 
 
