@@ -69,7 +69,9 @@ type
 
   TSingleProfile = class(TBasicProfile)
      private
-     fPeak,                    {value, position and index of peak centre}
+     fPeakFWHM,                {value, position and index of FWHM peak centre}
+     fPeakDiff,                {value, position and index of differential peak centre}
+     fPeakInfl,                {value, position and index of inflection peak centre}
      fLeftEdge,                {50% field left edge}
      fRightEdge,               {50% field right edge}
      fLeftDiff,                {Differential field left edge}
@@ -100,16 +102,17 @@ type
      procedure Show(TheBitMap:Tbitmap);
      procedure Draw(TheBitmap:TBitmap);
      function GetFWXMPos(Value:double; D:Integer):TProfilePos;
-     procedure GetDiffPos;
+     procedure GetDiffPos;          {find left and right max slope}
      function GetLeftE:TProfilePos; {get left edge of profile}
      function GetRightE:TProfilePos;{get right edge of profile}
      function GetLEDiff:TProfilePos;{get left max slope}
      function GetREDiff:TProfilePos;{get right max slope}
-     function GetPeakPos:TProfilePos;{get centre of profile peak}
-     function GetHPLeft:TPArr;
-     function GetHPRight:TPArr;
-     function GetLeftInfl:TProfilePos;
-     function GetRightInfl:TProfilePos;
+     function GetPeakPosFWHM:TProfilePos;{get centre of profile peak FWHM}
+     function GetPeakPosDiff:TProfilePos;{get centre of profile peak differential}
+     function GetHPLeft:TPArr;           {get Hill parameters left side}
+     function GetHPRight:TPArr;          {get Hill parameters right side}
+     function GetLeftInfl:TProfilePos;   {get left inflection point from Hill fit}
+     function GetRightInfl:TProfilePos;  {get right inflection point from Hill fit}
      procedure ToSeries(ProfileSeries:TLineSeries);
      function  ToText:string;
      function GetArea(Start,Stop:integer):double;
@@ -117,7 +120,8 @@ type
      property RightEdge:TProfilePos read GetRightE;
      property LeftDiff:TProfilePos read GetLEDiff;
      property RightDiff:TProfilePos read GetREDiff;
-     property Peak:TProfilePos read GetPeakPos;
+     property PeakFWHM:TProfilePos read GetPeakPosFWHM;
+     property PeakDiff:TProfilePos read GetPeakPosDiff;
      property HPLeft:TPArr read GetHPLeft;
      property HPRight:TPArr read GetHPRight;
      property LeftInfl:TProfilePos read GetLeftInfl;
@@ -954,9 +958,15 @@ fLeftInfl.Pos := 0;
 fRightInfl.ValueY := 0.0;
 fRightInfl.ValueX := 0.0;
 fRightInfl.Pos := 0;
-fPeak.ValueY := 0.0;
-fPeak.ValueX := 0.0;
-fPeak.Pos := 0;
+fPeakFWHM.ValueY := 0.0;
+fPeakFWHM.ValueX := 0.0;
+fPeakFWHM.Pos := 0;
+fPeakDiff.ValueY := 0.0;
+fPeakDiff.ValueX := 0.0;
+fPeakDiff.Pos := 0;
+fPeakInfl.ValueY := 0.0;
+fPeakInfl.ValueX := 0.0;
+fPeakInfl.Pos := 0;
 sProt := '';
 sExpr := '';
 SetLength(fHPLeft,4);
@@ -1020,19 +1030,20 @@ end;
 
 
 procedure TSingleProfile.GetDiffPos;
+{Get the position and value of the maximum slope on left and right side of profile}
 var DiffArr    :TPArr;
-    PeakDiff   :T1DValuePos;
+    MaxSlope   :T1DValuePos;
 begin
 DiffArr := Diff(PArrY);
 {left side}
-PeakDiff := MaxPosNan(DiffArr,0,Len);
-fLeftDiff.Pos := PeakDiff.Pos;
-fLeftDiff.ValueY := PeakDiff.Val;
+MaxSlope := MaxPosNan(DiffArr,0,Len);
+fLeftDiff.Pos := MaxSlope.Pos;
+fLeftDiff.ValueY := MaxSlope.Val;
 fLeftDiff.ValueX := PArrX[fLeftDiff.Pos];
 {right side}
-PeakDiff := MinPosNan(DiffArr,Len,0);
-fRightDiff.Pos := PeakDiff.Pos;
-fRightDiff.ValueY := PeakDiff.Val;
+MaxSlope := MinPosNan(DiffArr,Len,0);
+fRightDiff.Pos := MaxSlope.Pos;
+fRightDiff.ValueY := MaxSlope.Val;
 fRightDiff.ValueX := PArrX[fRightDiff.Pos];
 end;
 
@@ -1083,16 +1094,29 @@ Result := fRightDiff;
 end;
 
 
-function TSingleProfile.GetPeakPos:TProfilePos;
+function TSingleProfile.GetPeakPosFWHM:TProfilePos;
 {Returns the centre of the profile peak}
 begin
-if fPeak.ValueY = 0 then
+if fPeakFWHM.ValueY = 0 then
    begin
-   fPeak.ValueX := (RightEdge.ValueX + LeftEdge.ValueX)/2;
-   fPeak.Pos := (RightEdge.Pos + LeftEdge.Pos) div 2;
-   fPeak.ValueY := PArrY[fPeak.Pos];
+   fPeakFWHM.ValueX := (RightEdge.ValueX + LeftEdge.ValueX)/2;
+   fPeakFWHM.Pos := (RightEdge.Pos + LeftEdge.Pos) div 2;
+   fPeakFWHM.ValueY := PArrY[fPeakFWHM.Pos];
    end;
-Result := fPeak;
+Result := fPeakFWHM;
+end;
+
+
+function TSingleProfile.GetPeakPosDiff:TProfilePos;
+{Returns the centre of the profile peak}
+begin
+if fPeakDiff.ValueY = 0 then
+   begin
+   fPeakDiff.ValueX := (RightDiff.ValueX + LeftDiff.ValueX)/2;
+   fPeakDiff.Pos := (RightDiff.Pos + LeftDiff.Pos) div 2;
+   fPeakDiff.ValueY := PArrY[fPeakDiff.Pos];
+   end;
+Result := fPeakDiff;
 end;
 
 
@@ -1108,7 +1132,7 @@ begin
 if fHPLeft[2] = 0 then
    begin
    {get segment of penumbra}
-   Delta := math.min(Delta,math.min(LeftDiff.Pos,Peak.Pos - LeftDiff.Pos));
+   Delta := math.min(Delta,math.min(LeftDiff.Pos,PeakDiff.Pos - LeftDiff.Pos));
    Start := LeftDiff.Pos - Delta;
    Stop := LeftDiff.Pos + Delta;
    SliceX := GetSliceX(Start,Stop);
@@ -1141,7 +1165,7 @@ begin
 if fHPRight[2] = 0 then
    begin
    {get segment of penumbra}
-   Delta := math.min(Delta,math.min(Len - RightDiff.Pos,RightDiff.Pos - Peak.Pos));
+   Delta := math.min(Delta,math.min(Len - RightDiff.Pos,RightDiff.Pos - PeakDiff.Pos));
    Start := RightDiff.Pos - Delta;
    Stop := RightDiff.Pos + Delta;
    SliceX := GetSliceX(Start,Stop);

@@ -47,6 +47,8 @@ T1DParams = (field_edge_left_50_1D,
              pen_9050_right_1D,
              field_diff_left_1D,
              field_diff_right_1D,
+             field_centre_diff_1D,
+             field_size_diff_1D,
              field_infl_left_1D,
              field_infl_right_1D,
              cax_val_1D,
@@ -89,6 +91,8 @@ function Penumbra9050Right1D(ProfileArr:TSingleProfile):string;
 {differential params}
 function FieldDiffLeft1D(ProfileArr:TSingleProfile):string;
 function FieldDiffRight1D(ProfileArr:TSingleProfile):string;
+function FieldCentreDiff1D(ProfileArr:TSingleProfile):string;
+function FieldSizeDiff1D(ProfileArr:TSingleProfile):string;
 {inflection point params}
 function FieldInflLeft1D(ProfileArr:TSingleProfile):string;
 function FieldInflRight1D(ProfileArr:TSingleProfile):string;
@@ -131,6 +135,8 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Penumbra 9050 Right'; Func:@Penumbra9050Right1D),
    (Name:'1D Left Diff'; Func:@FieldDiffLeft1D),
    (Name:'1D Right Diff'; Func:@FieldDiffRight1D),
+   (Name:'1D Field Centre Diff'; Func:@FieldCentreDiff1D),
+   (Name:'1D Field Size Diff'; Func:@FieldSizeDiff1D),
    (Name:'1D Left Infl'; Func:@FieldInflLeft1D),
    (Name:'1D Right Infl'; Func:@FieldInflRight1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
@@ -253,9 +259,9 @@ end;
 function FieldCentre501D(ProfileArr:TSingleProfile):string;
 {Returns the field centre as given by the 50% field edges}
 begin
-if (ProfileArr.Peak.ValueY > 0) then
+if (ProfileArr.PeakFWHM.ValueY > 0) then
    begin
-   Result := FloatToStrF(ProfileArr.Peak.ValueX,ffFixed,4,Precision) + ' cm'
+   Result := FloatToStrF(ProfileArr.PeakFWHM.ValueX,ffFixed,4,Precision) + ' cm'
    end
   else
    Result := 'No edge';
@@ -349,6 +355,32 @@ function FieldDiffRight1D(ProfileArr:TSingleProfile):string;
 begin
 if ProfileArr.RightDiff.ValueX <> 0 then
    Result := FloatToStrF(ProfileArr.RightDiff.ValueX,ffFixed,4,Precision) + ' cm'
+  else
+   Result := 'No edge';
+end;
+
+
+function FieldCentreDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the field centre as given by the max differential field edges}
+begin
+if (ProfileArr.PeakDiff.ValueY > 0) then
+   begin
+   Result := FloatToStrF(ProfileArr.PeakDiff.ValueX,ffFixed,4,Precision) + ' cm'
+   end
+  else
+   Result := 'No edge';
+end;
+
+
+function FieldSizeDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the full width half maximum.}
+var FieldSize :double;
+begin
+if (ProfileArr.LeftDiff.ValueY > 0) and (ProfileArr.RightDiff.ValueY < 0) then
+   begin
+   FieldSize := abs(ProfileArr.RightDiff.ValueX - ProfileArr.LeftDiff.ValueX);
+   Result := FloatToStrF(FieldSize,ffFixed,4,Precision) + ' cm'
+   end
   else
    Result := 'No edge';
 end;
@@ -476,7 +508,7 @@ with ProfileArr do
          begin
          Region := (RightEdge.Pos - LeftEdge.Pos);
          HalfR := Region div 2;
-         AreaM := Peak.ValueY*Peak.ValueX;
+         AreaM := PeakFWHM.ValueY*PeakFWHM.ValueX;
          AreaL := GetArea(LeftEdge.Pos,LeftEdge.Pos + HalfR);
          {correct for area between last index and edge}
          AreaL := AreaL + PArrY[LeftEdge.Pos - 1]*abs(LeftEdge.ValueX - PArrX[LeftEdge.Pos]);

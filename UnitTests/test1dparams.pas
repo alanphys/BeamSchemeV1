@@ -46,6 +46,8 @@ type
       {differential parameters}
       procedure TestFieldDiffLeft1D;
       procedure TestFieldDiffRight1D;
+      procedure TestFieldCentreDiff1D;
+      procedure TestFieldSizeDiff1D;
       {inflection point parameters}
       procedure TestFieldInflLeft1D;
       procedure TestFieldInflRight1D;
@@ -281,6 +283,18 @@ end;
 procedure Test1DParamFuncs.TestFieldDiffRight1D;
 begin
 AssertEquals('Test field differential right','10.50 cm',FieldDiffRight1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFieldCentreDiff1D;
+begin
+AssertEquals('Test field centre differential%','0.50 cm',FieldCentreDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFieldSizeDiff1D;
+begin
+AssertEquals('Test field size differential%','20.00 cm',FieldSizeDiff1D(fProfile));
 end;
 
 

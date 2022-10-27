@@ -164,6 +164,8 @@ const Params: array of string = (
 'Differential params	',
 '     Left edge	-9.50 cm',
 '     Right edge	10.50 cm',
+'     Centre	0.50 cm',
+'     Size	20.00 cm',
 '	',
 'Inflection params	',
 '     Left edge	-9.60 cm',
@@ -869,6 +871,7 @@ Prof := TSingleProfile.Create;
 Prof.SetParams(0,0,1);
 fBeam.CreateProfile(Prof,round(fBeam.Max),0);
 end;
+
 
 procedure TestProtocolImageJ.TearDown;
 begin

@@ -26,10 +26,11 @@ type
       procedure TestMax;
       procedure TestAve;
       procedure TestMaxDiff;
-      procedure TestPeak;
+      procedure TestPeakFWHM;
       procedure TestArea;
       procedure TestLeftDiff;
       procedure TestRightDiff;
+      procedure TestPeakDiff;
       procedure TestHPLeft;
       procedure TestHPRight;
       procedure TestLeftInfl;
@@ -275,11 +276,11 @@ AssertEquals('Test maximum difference', 76.76, fProfile.MaxDiff);
 end;
 
 
-procedure TestSingleProfile.TestPeak;
+procedure TestSingleProfile.TestPeakFWHM;
 begin
-AssertEquals('Test peak value',94.47,fProfile.Peak.ValueY);
-AssertEquals('Test peak position',0.3671,fProfile.Peak.ValueX);
-AssertEquals('Test peak index',26,fProfile.Peak.Pos);
+AssertEquals('Test peak value',94.47,fProfile.PeakFWHM.ValueY);
+AssertEquals('Test peak position',0.3671,fProfile.PeakFWHM.ValueX);
+AssertEquals('Test peak index',26,fProfile.PeakFWHM.Pos);
 end;
 
 
@@ -302,6 +303,14 @@ begin
 AssertEquals('Test right Diff value',-80.02,fProfile.RightDiff.ValueY);
 AssertEquals('Test right Diff position',10.5,fProfile.RightDiff.ValueX);
 AssertEquals('Test right Diff index',47,fProfile.RightDiff.Pos);
+end;
+
+
+procedure TestSingleProfile.TestPeakDiff;
+begin
+AssertEquals('Test peak value',94.46,fProfile.PeakDiff.ValueY);
+AssertEquals('Test peak position',0.50,fProfile.PeakDiff.ValueX);
+AssertEquals('Test peak index',27,fProfile.PeakDiff.Pos);
 end;
 
 
