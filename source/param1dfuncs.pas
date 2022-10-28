@@ -51,6 +51,8 @@ T1DParams = (field_edge_left_50_1D,
              field_size_diff_1D,
              field_infl_left_1D,
              field_infl_right_1D,
+             field_centre_infl_1D,
+             field_size_infl_1D,
              cax_val_1D,
              max_val_1D,
              min_val_1D,
@@ -96,6 +98,8 @@ function FieldSizeDiff1D(ProfileArr:TSingleProfile):string;
 {inflection point params}
 function FieldInflLeft1D(ProfileArr:TSingleProfile):string;
 function FieldInflRight1D(ProfileArr:TSingleProfile):string;
+function FieldCentreInfl1D(ProfileArr:TSingleProfile):string;
+function FieldSizeInfl1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
@@ -139,6 +143,8 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Field Size Diff'; Func:@FieldSizeDiff1D),
    (Name:'1D Left Infl'; Func:@FieldInflLeft1D),
    (Name:'1D Right Infl'; Func:@FieldInflRight1D),
+   (Name:'1D Field Centre Infl'; Func:@FieldCentreInfl1D),
+   (Name:'1D Field Size Infl'; Func:@FieldSizeInfl1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
@@ -404,6 +410,32 @@ function FieldInflRight1D(ProfileArr:TSingleProfile):string;
 begin
 if ProfileArr.RightInfl.ValueX <> 0 then
    Result := FloatToStrF(ProfileArr.RightInfl.ValueX,ffFixed,4,Precision) + ' cm'
+  else
+   Result := 'No edge';
+end;
+
+
+function FieldCentreInfl1D(ProfileArr:TSingleProfile):string;
+{Returns the field centre as given by the max differential field edges}
+begin
+if (ProfileArr.PeakInfl.ValueY > 0) then
+   begin
+   Result := FloatToStrF(ProfileArr.PeakInfl.ValueX,ffFixed,4,Precision) + ' cm'
+   end
+  else
+   Result := 'No edge';
+end;
+
+
+function FieldSizeInfl1D(ProfileArr:TSingleProfile):string;
+{Returns the full width half maximum.}
+var FieldSize :double;
+begin
+if (ProfileArr.LeftInfl.ValueY > 0) and (ProfileArr.RightInfl.ValueY > 0) then
+   begin
+   FieldSize := abs(ProfileArr.RightInfl.ValueX - ProfileArr.LeftInfl.ValueX);
+   Result := FloatToStrF(FieldSize,ffFixed,4,Precision) + ' cm'
+   end
   else
    Result := 'No edge';
 end;

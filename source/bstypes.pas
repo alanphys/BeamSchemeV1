@@ -105,27 +105,29 @@ type
      procedure GetDiffPos;          {find left and right max slope}
      function GetLeftE:TProfilePos; {get left edge of profile}
      function GetRightE:TProfilePos;{get right edge of profile}
+     function GetPeakPosFWHM:TProfilePos;{get centre of profile peak FWHM}
      function GetLEDiff:TProfilePos;{get left max slope}
      function GetREDiff:TProfilePos;{get right max slope}
-     function GetPeakPosFWHM:TProfilePos;{get centre of profile peak FWHM}
      function GetPeakPosDiff:TProfilePos;{get centre of profile peak differential}
      function GetHPLeft:TPArr;           {get Hill parameters left side}
      function GetHPRight:TPArr;          {get Hill parameters right side}
      function GetLeftInfl:TProfilePos;   {get left inflection point from Hill fit}
      function GetRightInfl:TProfilePos;  {get right inflection point from Hill fit}
+     function GetPeakPosInfl:TProfilePos;{get centre of profile peak inflection points}
      procedure ToSeries(ProfileSeries:TLineSeries);
      function  ToText:string;
      function GetArea(Start,Stop:integer):double;
      property LeftEdge:TProfilePos read GetLeftE;
      property RightEdge:TProfilePos read GetRightE;
+     property PeakFWHM:TProfilePos read GetPeakPosFWHM;
      property LeftDiff:TProfilePos read GetLEDiff;
      property RightDiff:TProfilePos read GetREDiff;
-     property PeakFWHM:TProfilePos read GetPeakPosFWHM;
      property PeakDiff:TProfilePos read GetPeakPosDiff;
      property HPLeft:TPArr read GetHPLeft;
      property HPRight:TPArr read GetHPRight;
      property LeftInfl:TProfilePos read GetLeftInfl;
      property RightInfl:TProfilePos read GetRightInfl;
+     property PeakInfl:TProfilePos read GetPeakPosInfl;
      end;
 
   TBasicBeam = class
@@ -1070,6 +1072,19 @@ Result := fRightEdge;
 end;
 
 
+function TSingleProfile.GetPeakPosFWHM:TProfilePos;
+{Returns the centre of the profile peak}
+begin
+if fPeakFWHM.ValueY = 0 then
+   begin
+   fPeakFWHM.ValueX := (RightEdge.ValueX + LeftEdge.ValueX)/2;
+   fPeakFWHM.Pos := (RightEdge.Pos + LeftEdge.Pos) div 2;
+   fPeakFWHM.ValueY := PArrY[fPeakFWHM.Pos];
+   end;
+Result := fPeakFWHM;
+end;
+
+
 function TSingleProfile.GetLEDiff:TProfilePos;
 {Return the value, position and index of the maximum slope of the field left
 edge. If there is more than one the one closest to the start of the profile
@@ -1091,19 +1106,6 @@ begin
 if fRightDiff.ValueX = 0 then
    GetDiffPos;
 Result := fRightDiff;
-end;
-
-
-function TSingleProfile.GetPeakPosFWHM:TProfilePos;
-{Returns the centre of the profile peak}
-begin
-if fPeakFWHM.ValueY = 0 then
-   begin
-   fPeakFWHM.ValueX := (RightEdge.ValueX + LeftEdge.ValueX)/2;
-   fPeakFWHM.Pos := (RightEdge.Pos + LeftEdge.Pos) div 2;
-   fPeakFWHM.ValueY := PArrY[fPeakFWHM.Pos];
-   end;
-Result := fPeakFWHM;
 end;
 
 
@@ -1214,6 +1216,19 @@ if fRightInfl.ValueY = 0 then
    fRightInfl.Pos := round(fRightInfl.ValueX/Res) + Centre.Pos;
    end;
 Result := fRightInfl;
+end;
+
+
+function TSingleProfile.GetPeakPosInfl:TProfilePos;
+{Returns the centre of the profile peak}
+begin
+if fPeakInfl.ValueY = 0 then
+   begin
+   fPeakInfl.ValueX := (RightInfl.ValueX + LeftInfl.ValueX)/2;
+   fPeakInfl.Pos := (RightInfl.Pos + LeftInfl.Pos) div 2;
+   fPeakInfl.ValueY := PArrY[fPeakInfl.Pos];
+   end;
+Result := fPeakInfl;
 end;
 
 

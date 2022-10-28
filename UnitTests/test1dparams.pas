@@ -51,6 +51,8 @@ type
       {inflection point parameters}
       procedure TestFieldInflLeft1D;
       procedure TestFieldInflRight1D;
+      procedure TestFieldCentreInfl1D;
+      procedure TestFieldSizeInfl1D;
       {flatness and uniformity parameters}
       procedure TestFlatnessAve1D;
       procedure TestFlatnessDiff1D;
@@ -288,13 +290,13 @@ end;
 
 procedure Test1DParamFuncs.TestFieldCentreDiff1D;
 begin
-AssertEquals('Test field centre differential%','0.50 cm',FieldCentreDiff1D(fProfile));
+AssertEquals('Test field centre differential','0.50 cm',FieldCentreDiff1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestFieldSizeDiff1D;
 begin
-AssertEquals('Test field size differential%','20.00 cm',FieldSizeDiff1D(fProfile));
+AssertEquals('Test field size differential','20.00 cm',FieldSizeDiff1D(fProfile));
 end;
 
 
@@ -303,13 +305,25 @@ end;
 -------------------------------------------------------------------------------}
 procedure Test1DParamFuncs.TestFieldInflLeft1D;
 begin
-AssertEquals('Test field differential left','-9.60 cm',FieldInflLeft1D(fProfile));
+AssertEquals('Test field inflection point left','-9.60 cm',FieldInflLeft1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestFieldInflRight1D;
 begin
-AssertEquals('Test field differential right','10.39 cm',FieldInflRight1D(fProfile));
+AssertEquals('Test field inflection point right','10.39 cm',FieldInflRight1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFieldCentreInfl1D;
+begin
+AssertEquals('Test field centre inflection point','0.40 cm',FieldCentreInfl1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFieldSizeInfl1D;
+begin
+AssertEquals('Test field size inflection point','19.99 cm',FieldSizeInfl1D(fProfile));
 end;
 
 

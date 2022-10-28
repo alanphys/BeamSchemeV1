@@ -35,6 +35,7 @@ type
       procedure TestHPRight;
       procedure TestLeftInfl;
       procedure TestRightInfl;
+      procedure TestPeakInfl;
    end;
 
    TestBeam= class(TTestCase)
@@ -345,6 +346,14 @@ begin
 AssertEquals('Test Right Infl value',52.6016,fProfile.RightInfl.ValueY);
 AssertEquals('Test Right Infl position',10.3892,fProfile.RightInfl.ValueX);
 AssertEquals('Test Right Infl index',47,fProfile.RightInfl.Pos);
+end;
+
+
+procedure TestSingleProfile.TestPeakInfl;
+begin
+AssertEquals('Test peak value',94.46,fProfile.PeakInfl.ValueY);
+AssertEquals('Test peak position',0.3959,fProfile.PeakInfl.ValueX);
+AssertEquals('Test peak index',27,fProfile.PeakInfl.Pos);
 end;
 
 
