@@ -162,7 +162,8 @@ unit bsunit;
  2/6/2022   add relative centering to peak and absolute to detector to IFA
  24/6/2022  make maxposnan bidirectional, add differential params
  20/7/2022  add sigmoid function and params
- 16/8/2022  fix infinite loop error with small floats, add rescale}
+ 16/8/2022  fix infinite loop error with small floats, add rescale
+ 7/11/2022  fix infinite loop for small dynamic range images}
 
 
 {$mode objfpc}{$H+}
@@ -991,6 +992,7 @@ if OpenDialog.Execute then
          Dummy := leftStr(Dummy, round(Length(Dummy)*cImage.Width/(2*I) - 1)) + '...'
             + RightStr(Dummy, round(Length(Dummy)*cImage.Width/(2*I) - 1));
       cImage.Caption := Dummy;
+      if (BMax - BMin) < 20 then BSWarning('Image has a low dynamic range.');
       end
    except
       on BSError:EBSError do HandleBSError(BSError);
