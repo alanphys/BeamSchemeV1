@@ -53,6 +53,8 @@ T1DParams = (field_edge_left_50_1D,
              field_infl_right_1D,
              field_centre_infl_1D,
              field_size_infl_1D,
+             pen_infl_left_1D,
+             pen_infl_right_1D,
              cax_val_1D,
              max_val_1D,
              min_val_1D,
@@ -100,6 +102,8 @@ function FieldInflLeft1D(ProfileArr:TSingleProfile):string;
 function FieldInflRight1D(ProfileArr:TSingleProfile):string;
 function FieldCentreInfl1D(ProfileArr:TSingleProfile):string;
 function FieldSizeInfl1D(ProfileArr:TSingleProfile):string;
+function PenumbraInflLeft1D(ProfileArr:TSingleProfile):string;
+function PenumbraInflRight1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
@@ -145,6 +149,8 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Right Infl'; Func:@FieldInflRight1D),
    (Name:'1D Field Centre Infl'; Func:@FieldCentreInfl1D),
    (Name:'1D Field Size Infl'; Func:@FieldSizeInfl1D),
+   (Name:'1D Penumbra Infl Left'; Func:@PenumbraInflLeft1D),
+   (Name:'1D Penumbra Infl Right'; Func:@PenumbraInflRight1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
@@ -166,7 +172,7 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
 
 implementation
 
-uses math;
+uses math, mathsfuncs;
 
 {-------------------------------------------------------------------------------
  Field statistics
@@ -440,6 +446,29 @@ if (ProfileArr.LeftInfl.ValueY > 0) and (ProfileArr.RightInfl.ValueY > 0) then
    Result := 'No edge';
 end;
 
+
+function PenumbraInflLeft1D(ProfileArr:TSingleProfile):string;
+{Return the distance between 0.4 and 1.6 of the inflection point. This
+corresponds to the 80%-20% conventional penumbra}
+var Penumbra   :double;
+begin
+with ProfileArr do
+   Penumbra := abs(InvHillFunc(ProfileArr.LeftInfl.ValueY*0.4, ProfileArr.HPLeft)
+      - InvHillFunc(ProfileArr.LeftInfl.ValueY*1.6, ProfileArr.HPLeft));
+Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
+end;
+
+
+function PenumbraInflRight1D(ProfileArr:TSingleProfile):string;
+{Return the distance between 0.4 and 1.6 of the inflection point. This
+corresponds to the 80%-20% conventional penumbra}
+var Penumbra   :double;
+begin
+with ProfileArr do
+   Penumbra := abs(InvHillFunc(ProfileArr.RightInfl.ValueY*1.6, ProfileArr.HPRight)
+      - InvHillFunc(ProfileArr.RightInfl.ValueY*0.4, ProfileArr.HPRight));
+Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
+end;
 
 
 {-------------------------------------------------------------------------------

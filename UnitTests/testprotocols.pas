@@ -170,6 +170,8 @@ const Params: array of string = (
 'Inflection params	',
 '     Left edge	-9.60 cm',
 '     Right edge	10.39 cm',
+'     Centre	0.40 cm',
+'     Size	19.99 cm',
 '	',
 'Flatness	',
 '     Average	102.40%',

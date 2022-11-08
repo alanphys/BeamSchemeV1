@@ -53,6 +53,8 @@ type
       procedure TestFieldInflRight1D;
       procedure TestFieldCentreInfl1D;
       procedure TestFieldSizeInfl1D;
+      procedure TestPenumbraInflLeft1D;
+      procedure TestPenumbraInflRight1D;
       {flatness and uniformity parameters}
       procedure TestFlatnessAve1D;
       procedure TestFlatnessDiff1D;
@@ -324,6 +326,18 @@ end;
 procedure Test1DParamFuncs.TestFieldSizeInfl1D;
 begin
 AssertEquals('Test field size inflection point','19.99 cm',FieldSizeInfl1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestPenumbraInflLeft1D;
+begin
+AssertEquals('Test inflection penumbra left 80-20%','0.65 cm',PenumbraInflLeft1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestPenumbraInflRight1D;
+begin
+AssertEquals('Test inflection penumbra right 80-20%','0.55 cm',PenumbraInflRight1D(fProfile));
 end;
 
 

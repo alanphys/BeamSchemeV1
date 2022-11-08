@@ -163,7 +163,9 @@ unit bsunit;
  24/6/2022  make maxposnan bidirectional, add differential params
  20/7/2022  add sigmoid function and params
  16/8/2022  fix infinite loop error with small floats, add rescale
- 7/11/2022  fix infinite loop for small dynamic range images}
+ 4/11/2022  add field centre and size for sigmoid and derivative functions
+ 7/11/2022  fix infinite loop for small dynamic range images
+ 8/11/2022  add penumbra for sigmoid function}
 
 
 {$mode objfpc}{$H+}
