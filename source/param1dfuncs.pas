@@ -55,6 +55,7 @@ T1DParams = (field_edge_left_50_1D,
              field_size_infl_1D,
              pen_infl_left_1D,
              pen_infl_right_1D,
+             dose_20_left_1D,
              cax_val_1D,
              max_val_1D,
              min_val_1D,
@@ -104,6 +105,7 @@ function FieldCentreInfl1D(ProfileArr:TSingleProfile):string;
 function FieldSizeInfl1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflLeft1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflRight1D(ProfileArr:TSingleProfile):string;
+function Dose20Left1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
@@ -151,6 +153,7 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Field Size Infl'; Func:@FieldSizeInfl1D),
    (Name:'1D Penumbra Infl Left'; Func:@PenumbraInflLeft1D),
    (Name:'1D Penumbra Infl Right'; Func:@PenumbraInflRight1D),
+   (Name:'1D Dose 20% FW Left'; Func:@Dose20Left1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
@@ -182,12 +185,11 @@ function CAXVal1D(ProfileArr:TSingleProfile):string;
 {Returns the value of the centre of the profile. If the profile is normalised
 to CAX this is by definition 100%.}
 begin
-with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(Centre.ValueY,ffFixed,4,Precision);
-   norm_cax: Result := '100.0%';
-   norm_max: Result := FloatToStrF((Centre.ValueY - Min.ValueY)
-      *100/(Max.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
-   end {of case}
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(Centre.ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
 end;
 
 
@@ -195,12 +197,11 @@ function MaxVal1D(ProfileArr:TSingleProfile):string;
 {Returns the maximum value of the profile. If the profile is normalised to Max
 this is by definition 100%}
 begin
-with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(Max.ValueY,ffFixed,4,Precision);
-   norm_cax: Result := FloatToStrF((Max.ValueY - Min.ValueY)
-      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
-   norm_max: Result := '100.00%';
-   end {of case}
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(Max.ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
 end;
 
 
@@ -208,11 +209,11 @@ function MinVal1D(ProfileArr:TSingleProfile):string;
 {Returns the minimum value of the profile. For norm_max and norm_cax the profile
 is grounded and the min value is 0.}
 begin
-with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(Min.ValueY,ffFixed,4,Precision);
-   norm_cax: Result := '0.00';
-   norm_max: Result := '0.00';
-   end; {of case}
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(Min.ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
 end;
 
 
@@ -220,13 +221,11 @@ function MinIFA1D(ProfileArr:TSingleProfile):string;
 {Returns the minimum value of the IFA. For norm_max and norm_cax the profile
 is grounded}
 begin
-with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(IFA.Min.ValueY,ffFixed,4,Precision);
-   norm_cax: Result := FloatToStrF((IFA.Min.ValueY - Min.ValueY)
-      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
-   norm_max: Result := FloatToStrF((IFA.Min.ValueY - Min.ValueY)
-      *100/(Max.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
-   end; {of case}
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(IFA.Min.ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
 end;
 
 
@@ -234,13 +233,11 @@ function AveIFA1D(ProfileArr:TSingleProfile):string;
 {Returns the average value of the IFA. For norm_max and norm_cax the profile
 is grounded}
 begin
-with ProfileArr do case Norm of
-   no_norm: Result := FloatToStrF(IFA.Ave,ffFixed,4,Precision);
-   norm_cax: Result := FloatToStrF((IFA.Ave - Min.ValueY)
-      *100/(Centre.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
-   norm_max: Result := FloatToStrF((IFA.Ave - Min.ValueY)
-      *100/(Max.ValueY - Min.ValueY),ffFixed,4,Precision) + '%';
-   end; {of case}
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(IFA.Ave),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
 end;
 
 
@@ -470,6 +467,15 @@ with ProfileArr do
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
+
+function Dose20Left1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 20% of the inflection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   Y := Normalise(GetRelativePosValue(-0.2).ValueY);
+Result := FloatToStrF(Y,ffFixed,4,Precision) + ' cm'
+end;
 
 {-------------------------------------------------------------------------------
  Flatness and uniformity parameters

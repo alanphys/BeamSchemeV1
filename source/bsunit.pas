@@ -165,7 +165,8 @@ unit bsunit;
  16/8/2022  fix infinite loop error with small floats, add rescale
  4/11/2022  add field centre and size for sigmoid and derivative functions
  7/11/2022  fix infinite loop for small dynamic range images
- 8/11/2022  add penumbra for sigmoid function}
+ 8/11/2022  add penumbra for sigmoid function
+ 15/11/2022 add normalise function to TSingleProfile and refactor}
 
 
 {$mode objfpc}{$H+}

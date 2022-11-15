@@ -101,6 +101,7 @@ type
      procedure SetParams(aAngle,aOffset,aWidth:integer); {set parameters from GUI}
      procedure Show(TheBitMap:Tbitmap);
      procedure Draw(TheBitmap:TBitmap);
+     function Normalise(Y:double):double;{scale Y according to Normalisation mode}
      function GetFWXMPos(Value:double; D:Integer):TProfilePos;
      procedure GetDiffPos;          {find left and right max slope}
      function GetLeftE:TProfilePos; {get left edge of profile}
@@ -114,6 +115,7 @@ type
      function GetLeftInfl:TProfilePos;   {get left inflection point from Hill fit}
      function GetRightInfl:TProfilePos;  {get right inflection point from Hill fit}
      function GetPeakPosInfl:TProfilePos;{get centre of profile peak inflection points}
+     function GetRelativePosValue(Value:double):TProfilePos; {get dose value at relative point from peak}
      procedure ToSeries(ProfileSeries:TLineSeries);
      function  ToText:string;
      function GetArea(Start,Stop:integer):double;
@@ -1002,6 +1004,16 @@ Width := aWidth;
 end;
 
 
+function TSingleProfile.Normalise(Y:double):double;
+begin
+case Norm of
+   no_norm : Result := Y;
+   norm_cax: Result := (Y - Min.ValueY)*100/(Centre.ValueY - Min.ValueY);
+   norm_max: Result := (Y - Min.ValueY)*100/(Max.ValueY - Min.ValueY);
+   end; {of case}
+end;
+
+
 function TSingleProfile.GetFWXMPos(Value:double; D:Integer):TProfilePos;
 {Return the first point from the centre where the profile becomes less than
 Max or Cax times Value. D gives direction Up (increment) or Down (decrement)}
@@ -1232,6 +1244,23 @@ Result := fPeakInfl;
 end;
 
 
+function TSingleProfile.GetRelativePosValue(Value:double):TProfilePos;
+{Returns the interpolated profile value at the proportion Value of the field size defined by the
+inflection point. Positive Value indicates right side of profile and negative
+the left side.}
+var Pos:       integer;
+begin
+Pos := PeakInfl.Pos + Trunc((RightInfl.Pos - LeftInfl.Pos)*Value*0.5);
+if Value > 0 then
+   Result.ValueX := RightInfl.ValueX*abs(Value)
+  else
+   Result.ValueX := LeftInfl.ValueX*abs(Value);
+Result.Pos := Pos;
+Result.ValueY := LReg(PArrX[Pos],PArrX[Pos + 1*sign(Value)],PArrY[Pos],
+   PArrY[Pos + 1*sign(Value)], Result.ValueX);
+end;
+
+
 procedure TSingleProfile.ToSeries(ProfileSeries:TLineSeries);
 var K          :integer;
     X,Y        :double;
@@ -1241,11 +1270,7 @@ ProfileSeries.Clear;
 for K := 0 to Len - 1 do
    begin
    X := PArrX[K];
-   case Norm of
-      no_norm : Y := PArrY[K];
-      norm_cax: Y := (PArrY[K] - Min.ValueY)*100/(Centre.ValueY - Min.ValueY);
-      norm_max: Y := (PArrY[K] - Min.ValueY)*100/(Max.ValueY - Min.ValueY);
-      end; {of case}
+   Y := Normalise(PArrY[K]);
    if (X <> 0) or (Y <> 0) then
       ProfileSeries.AddXY(X,Y,'',clRed);
    end;
@@ -1261,11 +1286,7 @@ Result :='';
 for K := 0 to Len - 1 do
    begin
    X := PArrX[K];
-   case Norm of
-      no_norm : Y := PArrY[K];
-      norm_cax: Y := (PArrY[K] - Min.ValueY)*100/(Centre.ValueY - Min.ValueY);
-      norm_max: Y := (PArrY[K] - Min.ValueY)*100/(Max.ValueY - Min.ValueY);
-      end; {of case}
+   Y := Normalise(PArrY[K]);
    Result := Result + FloatToStrF(X,ffFixed,5,Precision) + ', ' + FloatToStrF(Y,ffFixed,5,Precision);
    if ShowParams and not IsNaN(IFA.PArrY[K]) then Result := Result + ', ' +
       FloatToStrF(IFA.PArrY[K],ffFixed,5,Precision);

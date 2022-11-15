@@ -55,6 +55,7 @@ type
       procedure TestFieldSizeInfl1D;
       procedure TestPenumbraInflLeft1D;
       procedure TestPenumbraInflRight1D;
+      procedure TestDose20Left1D;
       {flatness and uniformity parameters}
       procedure TestFlatnessAve1D;
       procedure TestFlatnessDiff1D;
@@ -123,7 +124,7 @@ end;
 procedure Test1DParamFuncs.TestCAXVal1d_norm_cax;
 begin
 fProfile.Norm := norm_cax;
-AssertEquals('Test CAX value, normalisation to CAX','100.0%',CAXVal1D(fProfile));
+AssertEquals('Test CAX value, normalisation to CAX','100.00%',CAXVal1D(fProfile));
 end;
 
 
@@ -163,14 +164,14 @@ end;
 procedure Test1DParamFuncs.TestMinVal1D_norm_cax;
 begin
 fProfile.Norm := norm_cax;
-AssertEquals('Test Min value, normalisation to Cax','0.00',MinVal1D(fProfile));
+AssertEquals('Test Min value, normalisation to Cax','0.00%',MinVal1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestMinVal1D_norm_max;
 begin
 fProfile.Norm := norm_max;
-AssertEquals('Test Min value, normalisation to Max','0.00',MinVal1D(fProfile));
+AssertEquals('Test Min value, normalisation to Max','0.00%',MinVal1D(fProfile));
 end;
 
 
@@ -338,6 +339,12 @@ end;
 procedure Test1DParamFuncs.TestPenumbraInflRight1D;
 begin
 AssertEquals('Test inflection penumbra right 80-20%','0.55 cm',PenumbraInflRight1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose20Left1D;
+begin
+AssertEquals('Test dose point 20% FW left','94.70 cm',Dose20Left1D(fProfile));
 end;
 
 

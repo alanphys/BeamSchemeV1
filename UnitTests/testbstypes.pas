@@ -36,6 +36,11 @@ type
       procedure TestLeftInfl;
       procedure TestRightInfl;
       procedure TestPeakInfl;
+      procedure TestGetRelativePosValue_Left;
+      procedure TestGetRelativePosValue_Right;
+      procedure TestNormalise_none;
+      procedure TestNormalise_cax;
+      procedure TestNormalise_max;
    end;
 
    TestBeam= class(TTestCase)
@@ -356,6 +361,41 @@ AssertEquals('Test peak position',0.3959,fProfile.PeakInfl.ValueX);
 AssertEquals('Test peak index',27,fProfile.PeakInfl.Pos);
 end;
 
+
+procedure TestSingleProfile.TestGetRelativePosValue_Left;
+begin
+AssertEquals('Test left 100% value',54.3128,fProfile.GetRelativePosValue(-1.0).ValueY);
+AssertEquals('Test left 100% position',-9.5975,fProfile.GetRelativePosValue(-1.0).ValueX);
+AssertEquals('Test left 100% index',7,fProfile.GetRelativePosValue(-1.0).Pos);
+end;
+
+
+procedure TestSingleProfile.TestGetRelativePosValue_Right;
+begin
+AssertEquals('Test left 100% value',42.1073,fProfile.GetRelativePosValue(1.0).ValueY);
+AssertEquals('Test left 100% position',10.3892,fProfile.GetRelativePosValue(1.0).ValueX);
+AssertEquals('Test left 100% index',47,fProfile.GetRelativePosValue(1.0).Pos);
+end;
+
+
+procedure TestSingleProfile.TestNormalise_none;
+begin
+AssertEquals('Test maximum value no normalisation',99.0,fprofile.Normalise(fProfile.Max.ValueY));
+end;
+
+
+procedure TestSingleProfile.TestNormalise_cax;
+begin
+fProfile.Norm := norm_cax;
+AssertEquals('Test maximum value norm cax',104.9084,fprofile.Normalise(fProfile.Max.ValueY));
+end;
+
+
+procedure TestSingleProfile.TestNormalise_max;
+begin
+fProfile.Norm := norm_max;
+AssertEquals('Test maximum value norm max',100.0,fprofile.Normalise(fProfile.Max.ValueY));
+end;
 
 {-------------------------------------------------------------------------------
 TBeam
