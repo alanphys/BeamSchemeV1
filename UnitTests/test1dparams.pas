@@ -23,6 +23,7 @@ type
       procedure TestMaxVal1D_no_norm;
       procedure TestMaxVal1D_norm_cax;
       procedure TestMaxVal1D_norm_max;
+      procedure TestMaxPos1D;
       procedure TestMinVal1D_no_norm;
       procedure TestMinVal1D_norm_cax;
       procedure TestMinVal1D_norm_max;
@@ -160,6 +161,12 @@ procedure Test1DParamFuncs.TestMaxVal1D_norm_max;
 begin
 fProfile.Norm := norm_Max;
 AssertEquals('Test Max value, normlisation to Max','100.00%',MaxVal1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestMaxPos1D;
+begin
+AssertEquals('Test Max position','-6.50cm',MaxPos1D(fProfile));
 end;
 
 

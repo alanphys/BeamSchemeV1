@@ -786,9 +786,10 @@
       <Unit88>
         <Filename Value="source/bstypes.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="1204"/>
-        <CursorPos Y="1234"/>
+        <TopLine Value="37"/>
+        <CursorPos X="28" Y="55"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
@@ -910,7 +911,6 @@
       <Unit99>
         <Filename Value="source/param1dfuncs.pas"/>
         <UnitName Value="param1Dfuncs"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <TopLine Value="155"/>
         <CursorPos X="31" Y="177"/>

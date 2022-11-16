@@ -65,6 +65,7 @@ T1DParams = (field_edge_left_50_1D,
              dose_80_right_1D,
              cax_val_1D,
              max_val_1D,
+             max_pos_1D,
              min_val_1D,
              min_ifa_1D,
              ave_ifa_1D,
@@ -123,6 +124,7 @@ function Dose80Right1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
+function MaxPos1D(ProfileArr:TSingleProfile):string;
 function MinVal1D(ProfileArr:TSingleProfile):string;
 function MinIFA1D(ProfileArr:TSingleProfile):string;
 function AveIFA1D(ProfileArr:TSingleProfile):string;
@@ -177,6 +179,7 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Dose 80% FW Right'; Func:@Dose80Right1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
+   (Name:'1D Max Pos'; Func:@MaxPos1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
    (Name:'1D Min IFA'; Func:@MinIFA1D),
    (Name:'1D Average IFA'; Func:@AveIFA1D),
@@ -222,6 +225,17 @@ with ProfileArr do
    begin
    Result := FloatToStrF(Normalise(Max.ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function MaxPos1D(ProfileArr:TSingleProfile):string;
+{Returns the maximum value of the profile. If the profile is normalised to Max
+this is by definition 100%}
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(Max.ValueX),ffFixed,4,Precision) +'cm';
    end;
 end;
 
