@@ -372,7 +372,7 @@ end;
 
 procedure TestSingleProfile.TestGetRelativePosValue_Right;
 begin
-AssertEquals('Test left 100% value',42.1073,fProfile.GetRelativePosValue(1.0).ValueY);
+AssertEquals('Test left 100% value',48.9789,fProfile.GetRelativePosValue(1.0).ValueY);
 AssertEquals('Test left 100% position',10.3892,fProfile.GetRelativePosValue(1.0).ValueX);
 AssertEquals('Test left 100% index',47,fProfile.GetRelativePosValue(1.0).Pos);
 end;

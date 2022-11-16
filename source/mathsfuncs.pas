@@ -110,13 +110,22 @@ end;
 
 function MinPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 {find the minimum and its location ignoring Nans. Limits are from and including
-LRow, up to but not including URow. Can search from either end.}
+low value, up to but not including high value. Can search from either end.}
 var I          :integer;
     Direc  :integer;
 begin
 Result.Val := MaxDouble;
 Result.Pos := 0;
-if URow >= LRow then Direc := 1 else Direc := -1;
+if URow >= LRow then
+   begin
+   Direc := 1;
+   Dec(URow);
+   end
+  else
+   begin
+   Direc := -1;
+   Dec(LRow);
+   end;
 I := LRow;
 while I <> URow do
    begin

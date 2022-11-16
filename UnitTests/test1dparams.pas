@@ -56,6 +56,7 @@ type
       procedure TestPenumbraInflLeft1D;
       procedure TestPenumbraInflRight1D;
       procedure TestDose20Left1D;
+      procedure TestDose20Right1D;
       {flatness and uniformity parameters}
       procedure TestFlatnessAve1D;
       procedure TestFlatnessDiff1D;
@@ -103,6 +104,7 @@ fprofile.IFA.PArrY := ProfileIFA;
 fProfile.IFA.PArrX := fProfile.PArrX;
 fProfile.Len := 53;
 fProfile.IFA.Len := fProfile.Len;
+fprofile.Res := 0.5;
 end;
 
 
@@ -344,7 +346,13 @@ end;
 
 procedure Test1DParamFuncs.TestDose20Left1D;
 begin
-AssertEquals('Test dose point 20% FW left','94.70 cm',Dose20Left1D(fProfile));
+AssertEquals('Test dose point 20% FW left','96.12',Dose20Left1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose20Right1D;
+begin
+AssertEquals('Test dose point 20% FW right','94.77',Dose20Right1D(fProfile));
 end;
 
 

@@ -345,7 +345,7 @@ if Dummy = 'BEGIN_SCAN_DATA' then {file is PTW}
 CloseFile(Infile);
 end;
 
-
+{$R-}
 function DICOMOpen(sFileName:string; Beam:TBeam):boolean;
 {Import DICOM RI and RD files}
 
@@ -548,7 +548,7 @@ Result := false;
      raise EBSError.Create('DICOM file error, corrupt file!',error);
      end;
 end;
-
+{$R+}
 
 function HISOpen(sFileName:string; Beam:TBeam):boolean;
 {Import generic HIS files}

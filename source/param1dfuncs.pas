@@ -56,6 +56,7 @@ T1DParams = (field_edge_left_50_1D,
              pen_infl_left_1D,
              pen_infl_right_1D,
              dose_20_left_1D,
+             dose_20_right_1D,
              cax_val_1D,
              max_val_1D,
              min_val_1D,
@@ -106,6 +107,7 @@ function FieldSizeInfl1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflLeft1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflRight1D(ProfileArr:TSingleProfile):string;
 function Dose20Left1D(ProfileArr:TSingleProfile):string;
+function Dose20Right1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
@@ -154,6 +156,7 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Penumbra Infl Left'; Func:@PenumbraInflLeft1D),
    (Name:'1D Penumbra Infl Right'; Func:@PenumbraInflRight1D),
    (Name:'1D Dose 20% FW Left'; Func:@Dose20Left1D),
+   (Name:'1D Dose 20% FW Right'; Func:@Dose20Right1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
@@ -473,9 +476,24 @@ function Dose20Left1D(ProfileArr:TSingleProfile):string;
 var Y:         double;
 begin
 with ProfileArr do
-   Y := Normalise(GetRelativePosValue(-0.2).ValueY);
-Result := FloatToStrF(Y,ffFixed,4,Precision) + ' cm'
+   begin
+   Result := FloatToStrF(Normalise(GetRelativePosValue(-0.2).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
 end;
+
+
+function Dose20Right1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 20% of the inflection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelativePosValue(0.2).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
 
 {-------------------------------------------------------------------------------
  Flatness and uniformity parameters

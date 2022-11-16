@@ -792,7 +792,7 @@ begin
 fAve := 0.0;
 fMaxDiff := 0.0;
 SetLength(PArrY,0);
-Res := 0.0;
+Res := DefaultRes;
 PArrY := nil;
 SetLength(PArrX,0);
 PArrX := nil;
@@ -1256,8 +1256,10 @@ if Value > 0 then
   else
    Result.ValueX := LeftInfl.ValueX*abs(Value);
 Result.Pos := Pos;
-Result.ValueY := LReg(PArrX[Pos],PArrX[Pos + 1*sign(Value)],PArrY[Pos],
-   PArrY[Pos + 1*sign(Value)], Result.ValueX);
+{Result.ValueY := LReg(PArrX[Pos],PArrX[Pos + 1*sign(Value)],PArrY[Pos],
+   PArrY[Pos + 1*sign(Value)], Result.ValueX);}
+Result.ValueY := LReg(PArrX[Pos],PArrX[Pos - 1],PArrY[Pos],
+   PArrY[Pos - 1], Result.ValueX);
 end;
 
 
