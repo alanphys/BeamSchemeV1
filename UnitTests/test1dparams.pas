@@ -57,6 +57,12 @@ type
       procedure TestPenumbraInflRight1D;
       procedure TestDose20Left1D;
       procedure TestDose20Right1D;
+      procedure TestDose50Left1D;
+      procedure TestDose50Right1D;
+      procedure TestDose60Left1D;
+      procedure TestDose60Right1D;
+      procedure TestDose80Left1D;
+      procedure TestDose80Right1D;
       {flatness and uniformity parameters}
       procedure TestFlatnessAve1D;
       procedure TestFlatnessDiff1D;
@@ -353,6 +359,42 @@ end;
 procedure Test1DParamFuncs.TestDose20Right1D;
 begin
 AssertEquals('Test dose point 20% FW right','94.77',Dose20Right1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose50Left1D;
+begin
+AssertEquals('Test dose point 50% FW left','98.86',Dose50Left1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose50Right1D;
+begin
+AssertEquals('Test dose point 50% FW right','97.97',Dose50Right1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose60Left1D;
+begin
+AssertEquals('Test dose point 60% FW left','98.93',Dose60Left1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose60Right1D;
+begin
+AssertEquals('Test dose point 60% FW right','98.08',Dose60Right1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose80Left1D;
+begin
+AssertEquals('Test dose point 80% FW left','98.64',Dose80Left1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose80Right1D;
+begin
+AssertEquals('Test dose point 80% FW right','98.19',Dose80Right1D(fProfile));
 end;
 
 

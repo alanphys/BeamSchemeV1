@@ -167,7 +167,8 @@ unit bsunit;
  7/11/2022  fix infinite loop for small dynamic range images
  8/11/2022  add penumbra for sigmoid function
  15/11/2022 add normalise function to TSingleProfile and refactor
- 16/11/2022 fix TSingleProfile.Res initalisation and range check errors}
+ 16/11/2022 fix TSingleProfile.Res initalisation and range check errors
+            add dose points}
 
 
 {$mode objfpc}{$H+}

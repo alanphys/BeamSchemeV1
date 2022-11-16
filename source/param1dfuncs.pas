@@ -57,6 +57,12 @@ T1DParams = (field_edge_left_50_1D,
              pen_infl_right_1D,
              dose_20_left_1D,
              dose_20_right_1D,
+             dose_50_left_1D,
+             dose_50_right_1D,
+             dose_60_left_1D,
+             dose_60_right_1D,
+             dose_80_left_1D,
+             dose_80_right_1D,
              cax_val_1D,
              max_val_1D,
              min_val_1D,
@@ -108,6 +114,12 @@ function PenumbraInflLeft1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflRight1D(ProfileArr:TSingleProfile):string;
 function Dose20Left1D(ProfileArr:TSingleProfile):string;
 function Dose20Right1D(ProfileArr:TSingleProfile):string;
+function Dose50Left1D(ProfileArr:TSingleProfile):string;
+function Dose50Right1D(ProfileArr:TSingleProfile):string;
+function Dose60Left1D(ProfileArr:TSingleProfile):string;
+function Dose60Right1D(ProfileArr:TSingleProfile):string;
+function Dose80Left1D(ProfileArr:TSingleProfile):string;
+function Dose80Right1D(ProfileArr:TSingleProfile):string;
 {field statistics}
 function CAXVal1D(ProfileArr:TSingleProfile):string;
 function MaxVal1D(ProfileArr:TSingleProfile):string;
@@ -157,6 +169,12 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Penumbra Infl Right'; Func:@PenumbraInflRight1D),
    (Name:'1D Dose 20% FW Left'; Func:@Dose20Left1D),
    (Name:'1D Dose 20% FW Right'; Func:@Dose20Right1D),
+   (Name:'1D Dose 50% FW Left'; Func:@Dose50Left1D),
+   (Name:'1D Dose 50% FW Right'; Func:@Dose50Right1D),
+   (Name:'1D Dose 60% FW Left'; Func:@Dose60Left1D),
+   (Name:'1D Dose 60% FW Right'; Func:@Dose60Right1D),
+   (Name:'1D Dose 80% FW Left'; Func:@Dose80Left1D),
+   (Name:'1D Dose 80% FW Right'; Func:@Dose80Right1D),
    (Name:'1D CAX Value'; Func:@CAXVal1D),
    (Name:'1D Max Value'; Func:@MaxVal1D),
    (Name:'1D Min Value'; Func:@MinVal1D),
@@ -490,6 +508,78 @@ begin
 with ProfileArr do
    begin
    Result := FloatToStrF(Normalise(GetRelativePosValue(0.2).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose50Left1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 50% of the inflection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelativePosValue(-0.5).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose50Right1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 50% of the inflection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelativePosValue(0.5).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose60Left1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 60% of the inflection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelativePosValue(-0.6).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose60Right1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 60% of the inflection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelativePosValue(0.6).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose80Left1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 80% of the inflection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelativePosValue(-0.8).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose80Right1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 80% of the inflection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelativePosValue(0.8).ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
    end;
 end;

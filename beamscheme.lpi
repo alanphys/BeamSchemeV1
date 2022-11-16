@@ -161,7 +161,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <TopLine Value="142"/>
-        <CursorPos X="19" Y="170"/>
+        <CursorPos X="23" Y="154"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -832,7 +832,6 @@
       <Unit93>
         <Filename Value="source/mathsfuncs.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
         <TopLine Value="110"/>
         <CursorPos Y="132"/>
@@ -911,9 +910,10 @@
       <Unit99>
         <Filename Value="source/param1dfuncs.pas"/>
         <UnitName Value="param1Dfuncs"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <TopLine Value="155"/>
-        <CursorPos X="22" Y="169"/>
+        <CursorPos X="31" Y="177"/>
         <ExtraEditorCount Value="2"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
