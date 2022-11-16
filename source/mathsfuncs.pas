@@ -69,23 +69,22 @@ function MaxPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 {find the maximum and its location ignoring Nans. Limits are from and including
 LRow up to but not including URow. Can search from either end.}
 var I,
-    Direc  :integer;
+    Tmp       :integer;
 begin
 Result.Val := 0;
 Result.Pos := 0;
-if URow >= LRow then Direc := 1 else Direc := -1;
-begin
-  I := LRow;
-  while I <> URow do
-     begin
-     if not IsNan(BeamArr[I]) and (BeamArr[I] > Result.Val) then
-       begin
-       Result.Val := BeamArr[I];
-       Result.Pos := I;
-       end;
-     inc(I,Direc);
-     end;
-  end;
+if URow < LRow then     {swap URow and LRow}
+   begin
+   Tmp := URow;
+   URow := LRow;
+   LRow := Tmp;
+   end;
+for I:=LRow to URow - 1 do
+   if not IsNan(BeamArr[I]) and (BeamArr[I] > Result.Val) then
+      begin
+      Result.Val := BeamArr[I];
+      Result.Pos := I;
+      end;
 end;
 
 
@@ -111,31 +110,23 @@ end;
 function MinPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 {find the minimum and its location ignoring Nans. Limits are from and including
 low value, up to but not including high value. Can search from either end.}
-var I          :integer;
-    Direc  :integer;
+var I,
+    Tmp       :integer;
 begin
 Result.Val := MaxDouble;
 Result.Pos := 0;
-if URow >= LRow then
+if URow < LRow then     {swap URow and LRow}
    begin
-   Direc := 1;
-   Dec(URow);
-   end
-  else
-   begin
-   Direc := -1;
-   Dec(LRow);
+   Tmp := URow;
+   URow := LRow;
+   LRow := Tmp;
    end;
-I := LRow;
-while I <> URow do
-   begin
+for I:=LRow to URow - 1 do
    if not IsNan(BeamArr[I]) and (BeamArr[I] < Result.Val) then
       begin
       Result.Val := BeamArr[I];
       Result.Pos := I;
       end;
-   inc(I,Direc);
-   end;
 end;
 
 

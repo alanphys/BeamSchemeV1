@@ -160,9 +160,8 @@
         <ComponentName Value="BSForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="142"/>
-        <CursorPos X="66" Y="169"/>
+        <CursorPos X="19" Y="170"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -833,9 +832,10 @@
       <Unit93>
         <Filename Value="source/mathsfuncs.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="335"/>
-        <CursorPos Y="356"/>
+        <TopLine Value="110"/>
+        <CursorPos Y="132"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
