@@ -1,13 +1,12 @@
-.. index:: 
-   single: Field; CAX Dose
+.. index:: Parameters; 2D CAX Value
 
-CAX Dose
-========
+2D CAX Value
+============
 
-Dose on the central axis as defined by the array or imaging modality.
+Returns the geometric centre value of the image. If the number of points in the image are even the average of the two or four centre values is returned. If :ref:`Normalise to CAX` is enabled it will return 100%.
 
-Variable name: RCAX
+**Protocol invocation name**: 2D CAX Value
 
-|Note| The dose value may be affected by the normalisation or windowing.
+|Note| Normalisation affects this result.
 
 .. |Note| image:: _static/Note.png

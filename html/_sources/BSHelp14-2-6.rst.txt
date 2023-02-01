@@ -11,12 +11,13 @@ The defined photon parameters are:
 .. toctree::
    :maxdepth: 1
 
-*  :ref:`Field Centre` 
-*  :ref:`Field Size` 
-*  :ref:`Penumbra 80%-20%` 
-*  :ref:`Area Symmetry`
-*  :ref:`Dose Difference`
-*  :ref:`MAX/CAX`
+*  :ref:`Field Centre<1D Field Centre 50>`
+*  :ref:`Field Size<1D Field Size 50>`
+*  :ref:`Penumbra 80%-20% Left<1D Penumbra 8020 Left>`
+*  :ref:`Penumbra 80%-20% Right<1D Penumbra 8020 Right>`
+*  :ref:`Area Symmetry<1D Symmetry Area>`
+*  :ref:`Dose Difference<1D Flatness Diff>`
+*  :ref:`MAX/CAX<1D Deviation Ratio>`
 
 **Electron Profile Parameters**
 
@@ -24,4 +25,4 @@ The electron parameters are the same as the photon parameters
 
 **Flattened field**
 
-BeamScheme uses 80% of the :ref:`field size <Field Size>` as the flattened area.
+BeamScheme uses 80% of the :ref:`field size <1D Field Size 50>` as the flattened area.

@@ -1,10 +1,12 @@
-.. index:: 
-   single: Field; Maximum position
+.. index:: Parameters; 2D Ave Value
 
-Maximum position
-================
+2D Ave Value
+============
 
-Position of the maximum dose point in the profile over the in field area.
+Returns the average value of the image.
 
-Variable name: MPos
+**Protocol invocation name**: 2D Ave Value
 
+|Note| Normalisation affects this result.
+
+.. |Note| image:: _static/Note.png

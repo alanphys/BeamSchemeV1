@@ -168,7 +168,10 @@ unit bsunit;
  8/11/2022  add penumbra for sigmoid function
  15/11/2022 add normalise function to TSingleProfile and refactor
  16/11/2022 fix TSingleProfile.Res initalisation and range check errors
-            add dose points}
+            add dose points
+ 13/1/2023  add ShowPoints to View menu
+            fix dangling ShowParameters in View menu
+            fix Invert toggle}
 
 
 {$mode objfpc}{$H+}
@@ -197,6 +200,7 @@ type
    HelpServer: TLHTTPServerComponent;
    ImageList: TImageList;
    Label7: TLabel;
+   miShowPoints: TMenuItem;
    pmiShowPoints: TMenuItem;
    miView: TMenuItem;
    miShowP: TMenuItem;
@@ -500,6 +504,7 @@ begin
 sgResults.CopyToClipboard(false);
 end;
 
+
 procedure TBSForm.pmiShowPointsClick(Sender: TObject);
 begin
 ShowPoints := not ShowPoints;
@@ -507,6 +512,8 @@ XProfile.ShowPoints := ShowPoints;
 YProfile.ShowPoints := ShowPoints;
 if ShowPoints then pmiShowPoints.Caption := 'Hide Points'
   else pmiShowPoints.Caption := 'Show Points';
+miShowPoints.Checked := ShowPoints;
+pmiShowPoints.Checked := ShowPoints;
 end;
 
 
@@ -1110,7 +1117,9 @@ end;
 procedure TBSForm.sbInvertClick(Sender: TObject);
 {Invert and rescale}
 begin
-miInvert.Checked := tbInvert.Down;
+Invert := not Invert;
+miInvert.Checked := Invert;
+tbInvert.Down := Invert;
 XPArr.ResetCoords;
 YPArr.ResetCoords;
 Beam.Invert;
@@ -1427,10 +1436,9 @@ procedure TBSForm.tbShowParamsClick(Sender: TObject);
 begin
 XPArr.ResetCoords;
 YPArr.ResetCoords;
-if tbShowParams.Down then
-   ShowParams := True
-  else
-   ShowParams := False;
+ShowParams := not ShowParams;
+tbShowParams.Down := ShowParams;
+miShowP.Checked := ShowParams;
 Display(DTrackBar.PositionU,DTrackBar.PositionL);
 end;
 

@@ -1,12 +1,11 @@
+.. index:: Parameters; 1D
 
-.. index:: Parameters; calculated
+1D Parameters
+=============
 
-Calculated Parameters
-=====================
+BeamScheme has a comprehensive 1D parameter list and new parameters are added on a regular basis. The file param1dfuncs.pas should be consulted for the latest parameters
 
-All parameters are calculated relative to the central axis (CAX) value unless otherwise specified. The CAX is defined as half the profile or detector width or height. Where there is an even number of detectors or pixels and these straddle the CAX the average of the two detectors or pixels is taken. 
-
-Parameters are calculated by combining base parameters in an arithmetic expression. The following parameters have been defined in the existing protocols:
+Available 1D beam parameters listed by their protocol invocation names are:
 
 .. toctree::
    :maxdepth: 2
@@ -16,3 +15,5 @@ Parameters are calculated by combining base parameters in an arithmetic expressi
    BSHelp11-2-3.rst
    BSHelp11-2-4.rst
    BSHelp11-2-5.rst
+   BSHelp11-2-6.rst
+   BSHelp11-2-7.rst

@@ -354,8 +354,8 @@ end;
 
 procedure HillFitParams(PArrX,PArrY:TPArr; var B:TPArr);
 {Perform non-linear regression on Hill function to get inflection point. Builtin
-function of LMath is not used as it only caters for positive x values. Initial
-estimate for B is passed.
+initial estimation function of LMath is not used as it only caters for positive x values. Initial
+estimate for B is passed to ovrecome this.
 parameters:
    PArrX array of X values
    PArrY array of Y values

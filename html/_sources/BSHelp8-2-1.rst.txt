@@ -1,6 +1,6 @@
 
 .. index:: 
-   pair: Image; Invert
+   pair: Toolbar; Invert
 
 Invert
 ======

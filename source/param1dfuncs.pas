@@ -35,7 +35,13 @@ uses
 type
 T1DParamFunc = function(ProfileArr:TSingleProfile):string;
 
-T1DParams = (field_edge_left_50_1D,
+T1DParams = (cax_val_1D,
+             max_val_1D,
+             max_pos_1D,
+             min_val_1D,
+             min_ifa_1D,
+             ave_ifa_1D,
+             field_edge_left_50_1D,
              field_edge_right_50_1D,
              field_centre_50_1D,
              field_size_50_1D,
@@ -63,12 +69,6 @@ T1DParams = (field_edge_left_50_1D,
              dose_60_right_1D,
              dose_80_left_1D,
              dose_80_right_1D,
-             cax_val_1D,
-             max_val_1D,
-             max_pos_1D,
-             min_val_1D,
-             min_ifa_1D,
-             ave_ifa_1D,
              flat_ave_1D,
              flat_diff_1D,
              flat_ratio_1D,
@@ -90,6 +90,13 @@ T1DParamFuncs = record
 
 
 function Calc1DParam(ProfileArr:TSingleProfile):string;
+{field statistics}
+function CAXVal1D(ProfileArr:TSingleProfile):string;
+function MaxVal1D(ProfileArr:TSingleProfile):string;
+function MaxPos1D(ProfileArr:TSingleProfile):string;
+function MinVal1D(ProfileArr:TSingleProfile):string;
+function MinIFA1D(ProfileArr:TSingleProfile):string;
+function AveIFA1D(ProfileArr:TSingleProfile):string;
 {interpolated params}
 function FieldEdgeLeft501D(ProfileArr:TSingleProfile):string;
 function FieldEdgeRight501D(ProfileArr:TSingleProfile):string;
@@ -121,13 +128,6 @@ function Dose60Left1D(ProfileArr:TSingleProfile):string;
 function Dose60Right1D(ProfileArr:TSingleProfile):string;
 function Dose80Left1D(ProfileArr:TSingleProfile):string;
 function Dose80Right1D(ProfileArr:TSingleProfile):string;
-{field statistics}
-function CAXVal1D(ProfileArr:TSingleProfile):string;
-function MaxVal1D(ProfileArr:TSingleProfile):string;
-function MaxPos1D(ProfileArr:TSingleProfile):string;
-function MinVal1D(ProfileArr:TSingleProfile):string;
-function MinIFA1D(ProfileArr:TSingleProfile):string;
-function AveIFA1D(ProfileArr:TSingleProfile):string;
 {flatness and uniformity}
 function FlatnessAve1D(ProfileArr:TSingleProfile):string;
 function FlatnessDiff1D(ProfileArr:TSingleProfile):string;
@@ -148,7 +148,15 @@ function NoFunc1D(ProfileArr:TSingleProfile):string;
 
 
 const
-Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
+Params1D: array[cax_val_1D..no_func_1D] of T1DParamFuncs = (
+   {field statistics}
+   (Name:'1D CAX Value'; Func:@CAXVal1D),
+   (Name:'1D Max Value'; Func:@MaxVal1D),
+   (Name:'1D Max Pos'; Func:@MaxPos1D),
+   (Name:'1D Min Value'; Func:@MinVal1D),
+   (Name:'1D Min IFA'; Func:@MinIFA1D),
+   (Name:'1D Average IFA'; Func:@AveIFA1D),
+   {interpolated params}
    (Name:'1D Field Edge Left 50'; Func:@FieldEdgeLeft501D),
    (Name:'1D Field Edge Right 50'; Func:@FieldEdgeRight501D),
    (Name:'1D Field Centre 50'; Func:@FieldCentre501D),
@@ -159,10 +167,12 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Penumbra 9010 Right'; Func:@Penumbra9010Right1D),
    (Name:'1D Penumbra 9050 Left'; Func:@Penumbra9050Left1D),
    (Name:'1D Penumbra 9050 Right'; Func:@Penumbra9050Right1D),
+   {differential params}
    (Name:'1D Left Diff'; Func:@FieldDiffLeft1D),
    (Name:'1D Right Diff'; Func:@FieldDiffRight1D),
    (Name:'1D Field Centre Diff'; Func:@FieldCentreDiff1D),
    (Name:'1D Field Size Diff'; Func:@FieldSizeDiff1D),
+   {inflection point params}
    (Name:'1D Left Infl'; Func:@FieldInflLeft1D),
    (Name:'1D Right Infl'; Func:@FieldInflRight1D),
    (Name:'1D Field Centre Infl'; Func:@FieldCentreInfl1D),
@@ -177,24 +187,22 @@ Params1D: array[field_edge_left_50_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Dose 60% FW Right'; Func:@Dose60Right1D),
    (Name:'1D Dose 80% FW Left'; Func:@Dose80Left1D),
    (Name:'1D Dose 80% FW Right'; Func:@Dose80Right1D),
-   (Name:'1D CAX Value'; Func:@CAXVal1D),
-   (Name:'1D Max Value'; Func:@MaxVal1D),
-   (Name:'1D Max Pos'; Func:@MaxPos1D),
-   (Name:'1D Min Value'; Func:@MinVal1D),
-   (Name:'1D Min IFA'; Func:@MinIFA1D),
-   (Name:'1D Average IFA'; Func:@AveIFA1D),
+   {flatness and uniformity}
    (Name:'1D Flatness Ave'; Func:@FlatnessAve1D),
    (Name:'1D Flatness Diff'; Func:@FlatnessDiff1D),
    (Name:'1D Flatness Ratio'; Func:@FlatnessRatio1D),
    (Name:'1D Flatness CAX'; Func:@FlatnessCAX1D),
    (Name:'1D Uniformity ICRU'; Func:@UniformityAve1D),
+   {symmetry}
    (Name:'1D Symmetry Ratio'; Func:@SymmetryRatio1D),
    (Name:'1D Symmetry Diff'; Func:@SymmetryDiff1D),
    (Name:'1D Symmetry Ave'; Func:@SymmetryAve1D),
    (Name:'1D Symmetry Area'; Func:@SymmetryArea1D),
+   {deviation}
    (Name:'1D Deviation Ratio'; Func:@DeviationRatio1D),
    (Name:'1D Deviation Diff'; Func:@DeviationDiff1D),
    (Name:'1D Deviation CAX'; Func:@DeviationCAX1D),
+   {miscellaneous}
    (Name:'1D No Function'; Func:@NoFunc1D));
 
 implementation
@@ -454,7 +462,7 @@ end;
 
 
 function FieldCentreInfl1D(ProfileArr:TSingleProfile):string;
-{Returns the field centre as given by the max differential field edges}
+{Returns the field centre as given by the inflection point field edges}
 begin
 if (ProfileArr.PeakInfl.ValueY > 0) then
    begin
@@ -774,7 +782,7 @@ var Param:T1DParams;
 
 begin
 Result := '';
-Param := field_edge_left_50_1D;
+Param := cax_val_1D;
 while (Params1D[Param].Name <> ProfileArr.sExpr) and (Param <> no_func_1D) do inc(Param);
 Result := Params1D[Param].Func(ProfileArr);
 end;

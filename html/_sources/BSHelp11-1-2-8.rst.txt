@@ -1,9 +1,0 @@
-.. index:: 
-   single: Parameters; R20
-
-Right 20% dose distance
-=======================
-
-Distance from the central axis as defined by the array or imaging modality to the point on the right side of the displayed profile where the dose profile drops below 20% of the central axis dose. If this point lies between two measured values the distance is linearly interpolated.
-   
-Variable name: R20

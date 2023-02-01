@@ -1,13 +1,8 @@
-.. index:: 
-   single: Field; Sum
+.. index:: Parameters; 2D Min IFA
 
-Field Sum
-=========
+2D Min IFA
+==========
 
-Sum of the dose values of the profile over the in field area.
+Returns the minimum value of the :ref:`In Field Area` of the  image.
 
-Variable name: PSum
-
-|Note| The dose value may be affected by the normalisation or windowing.
-
-.. |Note| image:: _static/Note.png
+**Protocol invocation name**: 2D Min IFA

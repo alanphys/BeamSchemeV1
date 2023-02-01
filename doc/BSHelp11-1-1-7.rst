@@ -1,13 +1,8 @@
-.. index:: 
-   single: Field; Number of points
+.. index:: Parameters; 2D CoM Scaled
 
-Number of Profile Points
-========================
+2D CoM Scaled
+=============
 
-Number of measurement points in the profile evaluated over the in field area.
+Returns the Centre of Mass (CoM) of the image as (x, y).
 
-Variable name: N
-
-|Note| This is not the total number of points in the profile.
-
-.. |Note| image:: _static/Note.png
+**Protocol invocation name**: 2D CoM Scaled

@@ -1,7 +1,7 @@
 
 .. index:: 
-   single: Profiles; diagonal
-   single: Profiles; skew
+   pair: Algorithms; Profiles diagonal
+   pair: Algorithms; Profiles skew
 
 Diagonal/Skew Profiles
 ======================

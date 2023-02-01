@@ -1,17 +1,15 @@
+.. index:: 
+   single: Parameters; 1D Field Edge Left 50
 
-.. index:: Parameters; Penumbra interpolated
+1D Field Edge Left 50
+=====================
 
-Interpolated Penumbra Parameters
-================================
+Linear distance from the central axis as defined by the array or imaging modality to the point on the left side of the displayed profile where the dose profile drops below 50% of the central axis dose. If this point lies between two measured values the distance is linearly interpolated. This is the traditional field edge for flattened beams.
 
-All parameters are calculated relative to the central axis (CAX) value unless otherwise specified. The CAX is defined as half the profile or detector width or height. Where there is an even number of detectors or pixels and these straddle the CAX the average of the two detectors or pixels is taken. 
+Since version 0.5 BeamScheme no longer does automatic grounding of the profile, i.e. reducing the minimum to zero. This means that if you want the grounded field size you must *explicitly* normalise or window the image.
 
-Parameters are calculated by combining base parameters in an arithmetic expression. The following parameters are available:
-   
-.. toctree::
-   :maxdepth: 2
+**Protocol invocation name**: 1D Field Edge Left 50
 
-   BSHelp11-2-1-1-4.rst
-   BSHelp11-2-1-1-5.rst
-   BSHelp11-2-1-1-6.rst
+|Note| Noisy data can lead to a reduced field edge value being reported.
 
+.. |Note| image:: _static/Note.png

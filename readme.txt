@@ -3,9 +3,9 @@ BeamScheme Readme file (c) 2008-2022 AC Chamberlain
 1) Introduction
 Welcome to BeamScheme
 
-This software will assist you in extracting 1D profiles from 2D datasets and calculating various parameters on the profiles and 2D dataset. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, Eclipse, XiO, DICOM, jpg, etc.
+BeamScheme is an analysis tool for 2D datasets. It will assist you in extracting 1D profiles from 2D datasets and can calculate over 60 different parameters. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, Eclipse, XiO, BrainLab, DICOM, jpg, etc.
 
-Parameters such as field size, field centre, penumbra, flatness and symmetry are calculated. Profiles can be taken at any angle, offset or thickness. Profiles can be exported to a text file or clipboard for further processing. Results can be exported to PDF.
+Parameters include field size, field centre, penumbra, flatness and symmetry. FFF beams are supported with both maximum slope and sigmoid fit parameters available. Profiles can be taken at any angle, offset or thickness. Profiles can be exported to a text file or clipboard for further processing. Results can be exported to PDF.
 
 BeamScheme is not intended to replace the commercial software available with 2D arrays, but to complement it.
 
@@ -48,13 +48,13 @@ DICOM images will usually need to be inverted (by clicking the Invert button) an
 8) Notes on normalising
 The program uses the normalised, corrected 2D array data. No normalisation should be necessary for the 2D arrays if they have been calibrated and zeroed correctly.
 
-There are three normalisation modes. None, CAX or maximum. Normalisation places the minimum of the image at 0 and the CAX or maximum value at 100. If the image contains dead pixels or other strange artifacts it is possible for the normalisation to fail and give you strange results. This is not the fault of the program but of the image. See the previous comment about calibration. Normalisation acts on the windowed data and is non-destructive.
+There are three normalisation modes. None, CAX or maximum. Normalisation places the minimum of the image at 0 and the CAX or maximum value at 100. If the image contains dead pixels, burn markers or other strange artifacts it is possible for the normalisation to fail and give you strange results. This is not the fault of the program but of the image. See the previous comment about calibration. Normalisation acts on the windowed data and is non-destructive.
 
 9) Release notes
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
 
 Version 1.00
-BeamScheme v1.00 is virtually a complete rewrite of BeamScheme. The code has been extensively modularised making it easy to add new parameters. New algorithms have been implemented with individual parameter calculation. Extensive unit testing has been implemented. The GUI has been updated.
+BeamScheme v1.00 is virtually a complete rewrite of BeamScheme featuring a new parameter calculation engine. The code has been extensively modularised making it easy to add new parameters. New algorithms have been implemented with individual parameter calculation. Extensive unit testing has been implemented. The GUI has been updated. The expression parser has been dropped and all parameters are calculated in the code. Efficiency is achieved by only calculating needed parameters.
 
 Version 0.54
 This is a bug fix release.
@@ -87,7 +87,7 @@ Profiles can now be positioned by clicking on the image with the mouse.
 10) Known issues
 Windows does not automatically focus the control under the mouse cursor therefore the context sensitive help may return the wrong help page.
 
-FFF parameters are currently not implemented.
+FFF parameters are partially implemented.
 
 11) History
 22/07/2008 version 0.1
@@ -252,3 +252,12 @@ Version 0.5 released 25/10/2019
            add peak params to TSingleProfile, refactor
 14/3/2022  fix window limit on normalise to centre
 2/6/2022   add relative centering to peak and absolute to detector to IFA}
+24/6/2022  make maxposnan bidirectional, add differential params
+20/7/2022  add sigmoid function and params
+16/8/2022  fix infinite loop error with small floats, add rescale
+4/11/2022  add field centre and size for sigmoid and derivative functions
+7/11/2022  fix infinite loop for small dynamic range images
+8/11/2022  add penumbra for sigmoid function
+15/11/2022 add normalise function to TSingleProfile and refactor
+16/11/2022 fix TSingleProfile.Res initalisation and range check errors
+           add dose points

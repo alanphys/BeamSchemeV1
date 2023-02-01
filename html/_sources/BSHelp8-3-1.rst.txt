@@ -11,4 +11,6 @@ The file menu options are:
    :maxdepth: 1
    
    BSHelp8-3-1-1.rst
+   BSHelp8-3-3.rst
+   BSHelp8-6.rst
    BSHelp8-3-1-2.rst

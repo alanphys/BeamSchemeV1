@@ -1,0 +1,8 @@
+.. index:: Parameters; 2D X Size
+
+2D X Size
+=========
+
+Returns the size of the image in the X direction.
+
+**Protocol invocation name**: 2D X Size

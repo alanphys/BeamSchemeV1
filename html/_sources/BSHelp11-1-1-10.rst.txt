@@ -1,0 +1,8 @@
+.. index:: Parameters; 2D X Pixels
+
+2D X Pixels
+===========
+
+Returns the number of pixels/detectors of the image in the X direction.
+
+**Protocol invocation name**: 2D X Pixels

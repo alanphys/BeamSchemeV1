@@ -1,16 +1,22 @@
+.. index:: Parameters; 1D Interpolated Parameters
 
-.. index:: Parameters; Penumbra
+1D Interpolated Parameters
+==========================
 
-Penumbra Parameters
-===================
+Linear interpolation is performed between nearest neighbour data points to determine the relevant parameter. These are the traditional beam parameters
 
-Penumbra parameters have traditionally been defined according to the dose level. Where the dose level falls between measurement points the distance to the dose level is interpolated by linear regression. This approach does not work for FFF beams and instead the penumbra is defined relative to the inflection point of the penumbra. 
+Available interpolated parameters are:
 
-Parameters are calculated by combining base parameters in an arithmetic expression. The following parameters are defined in the existing protocols:
-   
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    BSHelp11-2-2-1.rst
    BSHelp11-2-2-2.rst
-
+   BSHelp11-2-2-3.rst
+   BSHelp11-2-2-4.rst
+   BSHelp11-2-2-5.rst
+   BSHelp11-2-2-6.rst
+   BSHelp11-2-2-7.rst
+   BSHelp11-2-2-8.rst
+   BSHelp11-2-2-9.rst
+   BSHelp11-2-2-10.rst

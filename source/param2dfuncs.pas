@@ -60,7 +60,7 @@ T2DParamFuncs = record
 
 
 function Calc2DParam(BeamArr:TBeam; sParam:string):string;
-{field statistics}
+{image statistics}
 function CaxVal2D(BeamArr:TBeam):string;
 function MaxVal2D(BeamArr:TBeam):string;
 function MinVal2D(BeamArr:TBeam):string;
@@ -79,6 +79,7 @@ function UniformityCAX2D(BeamArr:TBeam):string;
 function UniformityAve2D(BeamArr:TBeam):string;
 {symmetry parameters}
 function SymmetryAve2D(BeamArr:TBeam):string;
+{miscellaneous}
 function NoFunc2D(BeamArr:TBeam):string;
 
 
@@ -91,12 +92,12 @@ Params2D: array[cax_val_2D..no_func_2D] of T2DParamFuncs = (
    (Name:'2D Min IFA'; Func:@MinIFA2D),
    (Name:'2D CoM Value'; Func:@CoMVal2D),
    (Name:'2D CoM Scaled'; Func:@CoMScaled2D),
-   (Name:'2D XRes'; Func:@XRes2D),
-   (Name:'2D YRes'; Func:@YRes2D),
-   (Name:'2D XPixels'; Func:@XPixels2D),
-   (Name:'2D YPixels'; Func:@YPixels2D),
-   (Name:'2D XSize'; Func:@XSize2D),
-   (Name:'2D YSize'; Func:@YSize2D),
+   (Name:'2D X Res'; Func:@XRes2D),
+   (Name:'2D Y Res'; Func:@YRes2D),
+   (Name:'2D X Pixels'; Func:@XPixels2D),
+   (Name:'2D Y Pixels'; Func:@YPixels2D),
+   (Name:'2D X Size'; Func:@XSize2D),
+   (Name:'2D Y Size'; Func:@YSize2D),
    (Name:'2D Uniformity NCS-70'; Func:@UniformityCAX2D),
    (Name:'2D Uniformity ICRU 72'; Func:@UniformityAve2D),
    (Name:'2D Symmetry NCS-70'; Func:@SymmetryAve2D),
@@ -108,11 +109,11 @@ uses math;
 
 {-------------------------------------------------------------------------------
  Parameter calculation functions
- Field statistics
+ Image statistics
 -------------------------------------------------------------------------------}
 
 function CaxVal2D(BeamArr:TBeam):string;
-{Return the centre value, position and index of the beam. If the number of
+{Returns the centre value of the beam. If the number of
 points in the beam are even the average of the two or four centre values is returned}
 begin
 case BeamArr.Norm of

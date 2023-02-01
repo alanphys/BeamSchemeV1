@@ -1,22 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Flatness Parameters &#8212; BeamScheme 0.52-beta documentation</title>
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Inflection Point Parameters &#8212; BeamScheme 1.00 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Dose Difference" href="BSHelp11-2-1-1-10.html" />
-    <link rel="prev" title="Point Difference" href="BSHelp11-2-1-1-17.html" /> 
+    <link rel="next" title="1D Left Infl" href="BSHelp11-2-4-1.html" />
+    <link rel="prev" title="1D Field Size Diff" href="BSHelp11-2-3-4.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,15 +26,16 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="BSHelp11-2-1-1-10.html" title="Dose Difference"
+          <a href="BSHelp11-2-4-1.html" title="1D Left Infl"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="BSHelp11-2-1-1-17.html" title="Point Difference"
+          <a href="BSHelp11-2-3-4.html" title="1D Field Size Diff"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" accesskey="U">Calculated Parameters</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" accesskey="U">1D Parameters</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Inflection Point Parameters</a></li> 
       </ul>
     </div>  
 
@@ -42,33 +44,65 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="flatness-parameters">
-<span id="index-0"></span><h1>Flatness Parameters<a class="headerlink" href="#flatness-parameters" title="Permalink to this headline">¶</a></h1>
-<p>Flatness parameters are defined over the in field area.</p>
-<p>Parameters are calculated by combining base parameters in an arithmetic expression. The following parameters are defined in the existing protocols:</p>
+  <section id="inflection-point-parameters">
+<span id="index-0"></span><h1>Inflection Point Parameters<a class="headerlink" href="#inflection-point-parameters" title="Permalink to this headline">¶</a></h1>
+<p>For FFF beams the standard interpolated or dose level parameters do not give good results. The field edge of FFF beams is defined at the inflection point of the penumbra. For low resolution measuring devices like 2D arrays this can be quite inaccurate. Therefore a sigmoid model is fitted to the penumbra using a Hill function:</p>
+<div class="math notranslate nohighlight">
+\[f(x) = A + \cfrac {B - A} {1 + \left (\cfrac {C} {x} \right)^D}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p>A: sigmoid low level</p></li>
+<li><p>B: sigmoid high level</p></li>
+<li><p>C: approximate inflection point</p></li>
+<li><p>D: slope of the sigmoid</p></li>
+</ul>
+</dd>
+</dl>
+<p>The inflection point is determined from:</p>
+<div class="math notranslate nohighlight">
+\[x = C \cdot \left ( \cfrac {D - 1} {D + 1} \right )^{\cfrac {1} {D}}\]</div>
+<p>Once the regression parameters have been determined the inverse Hill function can be used to determine other parameters around the inflection point:</p>
+<div class="math notranslate nohighlight">
+\[x = C \cdot \left ( \cfrac {f(x) - A} {B - f(x)} \right )^{\cfrac {1} {D}}\]</div>
+<p>The algorithm selects 20 points around the maximum slope in the penumbra. For high resolution detectors these points may be within the penumbra, but for low resolution detectors there may not be enough points to fulfil this requirement and the selected points will extend from the start (or end) of the profile to the middle.</p>
+<p><img alt="Note" src="_images/Note.png" /> If the penumbra is not well formed the non-linear regression will fail and the results returned will be 0.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-1-1-10.html">Dose Difference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-1-1-11.html">Dose Ratio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-1-1-13.html">Mean Value</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-1-1-14.html">Flatness L90/L50</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-1-1-16.html">Flatness L80/L50</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-1.html">1D Left Infl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-2.html">1D Right Infl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-3.html">1D Field Centre Infl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-4.html">1D Field Size Infl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-5.html">1D Penumbra Infl Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-6.html">1D Penumbra Infl Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-7.html">1D Dose 20% FW Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-8.html">1D Dose 20% FW Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-9.html">1D Dose 50% FW Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-10.html">1D Dose 50% FW Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-11.html">1D Dose 60% FW Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-12.html">1D Dose 60% FW Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-13.html">1D Dose 80% FW Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-14.html">1D Dose 80% FW Right</a></li>
 </ul>
 </div>
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="BSHelp11-2-1-1-17.html"
-                        title="previous chapter">Point Difference</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="BSHelp11-2-1-1-10.html"
-                        title="next chapter">Dose Difference</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="BSHelp11-2-3-4.html"
+                          title="previous chapter">1D Field Size Diff</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="BSHelp11-2-4-1.html"
+                          title="next chapter">1D Left Infl</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -80,12 +114,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -97,20 +131,21 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="BSHelp11-2-1-1-10.html" title="Dose Difference"
+          <a href="BSHelp11-2-4-1.html" title="1D Left Infl"
              >next</a> |</li>
         <li class="right" >
-          <a href="BSHelp11-2-1-1-17.html" title="Point Difference"
+          <a href="BSHelp11-2-3-4.html" title="1D Field Size Diff"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" >Calculated Parameters</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" >1D Parameters</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Inflection Point Parameters</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, AC Chamberlain.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+        &#169; Copyright 2023, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

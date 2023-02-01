@@ -1,13 +1,12 @@
-.. index:: 
-   single: Field; Maximum dose
+.. index:: Parameters; 2D Max Value
 
-Maximum Dose
+2D Max Value
 ============
 
-Maximum dose of the profile over the in field area.
+Returns the maximum value of the image. If :ref:`Normalise to MAX` is enabled it will return 100%
 
-Variable name: PMax
+**Protocol invocation name**: 2D Max Value
 
-|Note| The dose value may be affected by the normalisation or windowing.
+|Note| Normalisation affects this result.
 
 .. |Note| image:: _static/Note.png

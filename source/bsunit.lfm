@@ -1325,6 +1325,12 @@ object BSForm: TBSForm
       object miShowP: TMenuItem
         Caption = '&ShowParams'
         ShowAlwaysCheckable = True
+        OnClick = tbShowParamsClick
+      end
+      object miShowPoints: TMenuItem
+        Caption = 'Show&Points'
+        ShowAlwaysCheckable = True
+        OnClick = pmiShowPointsClick
       end
     end
     object miExport: TMenuItem

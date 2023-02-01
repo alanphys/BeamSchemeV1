@@ -1,15 +1,14 @@
-.. index::
-   single: Parameters; LInf
+.. index:: Parameters; 2D Symmetry NCS-70
 
-Left inflection point
-=====================
+2D Symmetry NCS-70
+==================
 
-This is the inflection point on the left side of the profile as determined by non-linear regression on a Hill function:
+Returns the maximum difference between the IFA and the IFA rotated 180 degrees,
+normalised to the average of the IFA according to NCS-70 eq 3-6.
 
-Negative axis increments are converted to positive. The axis sign is then applied to the results.
+.. math:: {maximum \left [ abs(D(x,y) - D(-x,-y)) \right ]} \cdot \cfrac {100} {ave}
 
-Variable name: LInf
+Where D(x,y) is the pixel value at x,y and *ave* is the average value of the IFA.
 
-|Note| If the penumbra straddles the origin the non-linear regression will fail.
+**Protocol invocation name**: 2D Symmetry NCS-70
 
-.. |Note| image:: _static/Note.png

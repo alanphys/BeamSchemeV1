@@ -1,13 +1,8 @@
-.. index:: 
-   single: Field; Sum squares
+.. index:: Parameters; 2D CoM Value
 
-Field Sum of Squares
-====================
+2D CoM Value
+============
 
-Sum of the squared dose values of the profile over the in field area. Can be used to calculate the standard deviation.
+Returns the Centre of Mass (CoM) of the image as (row, column).
 
-Variable name: PSSqr
-
-|Note| The dose value may be affected by the normalisation or windowing.
-
-.. |Note| image:: _static/Note.png
+**Protocol invocation name**: 2D CoM Value

@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1D Penumbra 9010 Left &#8212; BeamScheme 1.00 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1D Penumbra 9010 Right" href="BSHelp11-2-2-8.html" />
+    <link rel="prev" title="1D Penumbra 8020 Right" href="BSHelp11-2-2-6.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="BSHelp11-2-2-8.html" title="1D Penumbra 9010 Right"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="BSHelp11-2-2-6.html" title="1D Penumbra 8020 Right"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" >1D Parameters</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="BSHelp11-2-2.html" accesskey="U">1D Interpolated Parameters</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">1D Penumbra 9010 Left</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="d-penumbra-9010-left">
+<span id="index-0"></span><h1>1D Penumbra 9010 Left<a class="headerlink" href="#d-penumbra-9010-left" title="Permalink to this headline">¶</a></h1>
+<p>The left 90%-10% penumbra is defined as the distance from the first point on the profile at 90% of the CAX value to the first point that reaches 10% of the CAX value on the left side of the profile:</p>
+<div class="math notranslate nohighlight">
+\[Penumbra(90-10) = |d(P_{10\%}) - d(P_{90\%})|\]</div>
+<div class="math notranslate nohighlight">
+\[P_{10\%} = CAX*0.1\]</div>
+<div class="math notranslate nohighlight">
+\[P_{90\%} = CAX*0.9\]</div>
+<p>Where d(P<sub>10%</sub>) and d(P<sub>90%</sub>) are the linear distances to the 10% and 90% profile values respectively as defined above.</p>
+<p>Since version 0.5 BeamScheme no longer does automatic grounding of the profile, i.e. reducing the minimum to zero. This means that if you want the grounded field size you must <em>explicitly</em> normalise or window the image.</p>
+<p><strong>Protocol invocation name</strong>: 1D Penumbra 9010 Left</p>
+<p><img alt="Note" src="_images/Note.png" /> Profiles are no longer grounded automatically. This can lead to differences in results from previous version.</p>
+<p><img alt="Note" src="_images/Note.png" /> Noisy data can lead to an inaccurate penumbra value being reported.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="BSHelp11-2-2-6.html"
+                          title="previous chapter">1D Penumbra 8020 Right</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="BSHelp11-2-2-8.html"
+                          title="next chapter">1D Penumbra 9010 Right</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/BSHelp11-2-2-7.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="BSHelp11-2-2-8.html" title="1D Penumbra 9010 Right"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="BSHelp11-2-2-6.html" title="1D Penumbra 8020 Right"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" >1D Parameters</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="BSHelp11-2-2.html" >1D Interpolated Parameters</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">1D Penumbra 9010 Left</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

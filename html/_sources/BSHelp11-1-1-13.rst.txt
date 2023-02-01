@@ -1,0 +1,8 @@
+.. index:: Parameters; 2D Y Size
+
+2D Y Size
+=========
+
+Returns the size of the image in the Y direction.
+
+**Protocol invocation name**: 2D Y Size

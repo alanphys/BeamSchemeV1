@@ -1,22 +1,22 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Penumbra Parameters &#8212; BeamScheme 0.52-beta documentation</title>
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1D Interpolated Parameters &#8212; BeamScheme 1.00 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Interpolated Penumbra Parameters" href="BSHelp11-2-2-1.html" />
-    <link rel="prev" title="Inflection Point Field Size" href="BSHelp11-2-1-2-3.html" /> 
+    <link rel="next" title="1D Field Edge Left 50" href="BSHelp11-2-2-1.html" />
+    <link rel="prev" title="1D Average IFA" href="BSHelp11-2-1-6.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,15 +25,16 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="BSHelp11-2-2-1.html" title="Interpolated Penumbra Parameters"
+          <a href="BSHelp11-2-2-1.html" title="1D Field Edge Left 50"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="BSHelp11-2-1-2-3.html" title="Inflection Point Field Size"
+          <a href="BSHelp11-2-1-6.html" title="1D Average IFA"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" accesskey="U">Calculated Parameters</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" accesskey="U">1D Parameters</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">1D Interpolated Parameters</a></li> 
       </ul>
     </div>  
 
@@ -42,39 +43,43 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="penumbra-parameters">
-<span id="index-0"></span><h1>Penumbra Parameters<a class="headerlink" href="#penumbra-parameters" title="Permalink to this headline">¶</a></h1>
-<p>Penumbra parameters have traditionally been defined according to the dose level. Where the dose level falls between measurement points the distance to the dose level is interpolated by linear regression. This approach does not work for FFF beams and instead the penumbra is defined relative to the inflection point of the penumbra.</p>
-<p>Parameters are calculated by combining base parameters in an arithmetic expression. The following parameters are defined in the existing protocols:</p>
+  <section id="d-interpolated-parameters">
+<span id="index-0"></span><h1>1D Interpolated Parameters<a class="headerlink" href="#d-interpolated-parameters" title="Permalink to this headline">¶</a></h1>
+<p>Linear interpolation is performed between nearest neighbour data points to determine the relevant parameter. These are the traditional beam parameters</p>
+<p>Available interpolated parameters are:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-1.html">Interpolated Penumbra Parameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-1-1-4.html">Penumbra 90%-10%</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-1-1-5.html">Penumbra 80%-20%</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-1-1-6.html">Penumbra 90%-50%</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-2.html">Inflection Point Penumbra Parameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-2-2-1.html">Inflection Point Penumbra 80%-20%</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-2-2-2.html">Penumbra Slope</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-1.html">1D Field Edge Left 50</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-2.html">1D Field Edge Right 50</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-3.html">1D Field Centre 50</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-4.html">1D Field Size 50</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-5.html">1D Penumbra 8020 Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-6.html">1D Penumbra 8020 Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-7.html">1D Penumbra 9010 Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-8.html">1D Penumbra 9010 Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-9.html">1D Penumbra 9050 Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-2-10.html">1D Penumbra 9050 Right</a></li>
 </ul>
 </div>
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="BSHelp11-2-1-2-3.html"
-                        title="previous chapter">Inflection Point Field Size</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="BSHelp11-2-2-1.html"
-                        title="next chapter">Interpolated Penumbra Parameters</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="BSHelp11-2-1-6.html"
+                          title="previous chapter">1D Average IFA</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="BSHelp11-2-2-1.html"
+                          title="next chapter">1D Field Edge Left 50</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -86,12 +91,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -103,20 +108,21 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="BSHelp11-2-2-1.html" title="Interpolated Penumbra Parameters"
+          <a href="BSHelp11-2-2-1.html" title="1D Field Edge Left 50"
              >next</a> |</li>
         <li class="right" >
-          <a href="BSHelp11-2-1-2-3.html" title="Inflection Point Field Size"
+          <a href="BSHelp11-2-1-6.html" title="1D Average IFA"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" >Calculated Parameters</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" >1D Parameters</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">1D Interpolated Parameters</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, AC Chamberlain.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+        &#169; Copyright 2023, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

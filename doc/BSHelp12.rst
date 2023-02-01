@@ -10,8 +10,8 @@ are displayed in the Status Bar. During the operation of
 the program you may encounter a variety of warning and error messages. There
 are three types of messages.
 
-#) Informational: These give details of the programs working. These messages 
-   have a grey background. No action is required they are for information only. For 
+#) Informational: These give details of the program's working. These messages
+   have a green background. No action is required they are for information only. For
    example the startup message "BeamScheme initialised correctly'.
 #) Actional: The program is requiring some kind of response from you. These messages
    have a yellow background. For example "Click Point A"

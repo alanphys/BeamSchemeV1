@@ -1,22 +1,22 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Parameters &#8212; BeamScheme 0.52-beta documentation</title>
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Parameters &#8212; BeamScheme 1.00 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Base Parameters" href="BSHelp11-1.html" />
-    <link rel="prev" title="Diagonal/Skew Profiles" href="BSHelp10.html" /> 
+    <link rel="next" title="2D Parameters" href="BSHelp11-1.html" />
+    <link rel="prev" title="Normalisation" href="BSHelp9-3.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,13 +25,14 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="BSHelp11-1.html" title="Base Parameters"
+          <a href="BSHelp11-1.html" title="2D Parameters"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="BSHelp10.html" title="Diagonal/Skew Profiles"
+          <a href="BSHelp9-3.html" title="Normalisation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="BSHelp9.html" accesskey="U">Algorithms</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="BSHelp9.html" accesskey="U">Algorithms</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Parameters</a></li> 
       </ul>
     </div>  
 
@@ -40,46 +41,57 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="parameters">
+  <section id="parameters">
 <span id="index-0"></span><h1>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h1>
-<p>All parameters are calculated relative to the central axis (CAX) value unless otherwise specified. The CAX is defined as half the profile or detector width or height. Where there is an even number of detectors or pixels and these straddle the CAX the average of the two detectors or pixels is taken.</p>
-<p>The parameters, except where otherwise specified, are calculated on the in field area. This area was previously defined as the flattened area, but this definition no longer holds for FFF beams. BeamScheme defines the in field area as 80% of the calculated field size.</p>
-<p><img alt="Note" src="_images/Note.png" /> Most commercial programs use the nominal field size to calculate the in field area.</p>
-<p>Parameters are calculated by combining base parameters in an arithmetic expression. The following parameters are available:</p>
+<p>BeamScheme v1.00+ features a completely rewritten parameter calculation engine.  Previously a linear search algorithm was used to calculate a series of base parameters from which the other parameters were derived. This was very efficient for single processors but encountered problems with non-linear parameters such as sigmoid fitting and could not be multithreaded for modern multiprocessor computers.</p>
+<p>BeamScheme now calculates each parameter separately. This creates a very modular design and makes it easy to add new parameters. Where parameters calculations rely on other parameters the previous results are stored so parameters are only calculated once. Efficiencies are achieved by only calculating the parameters required by a <a class="reference internal" href="BSHelp14.html#protocols"><span class="std std-ref">protocol</span></a>.</p>
+<p>Calculation of 2D parameters is now possible. The same modular approach is used.</p>
+<p>The calculation of parameters is affected by:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="BSHelp9-2.html#in-field-area"><span class="std std-ref">In Field Area</span></a></p></li>
+<li><p><a class="reference internal" href="BSHelp9-3.html#normalisation"><span class="std std-ref">Normalisation</span></a></p></li>
+<li><p><a class="reference internal" href="BSHelp8-6-5.html#centre-definition"><span class="std std-ref">Centre Definition</span></a></p></li>
+</ul>
+<p>The following parameters are available for use in <a class="reference internal" href="BSHelp14.html#protocols"><span class="std std-ref">protocols</span></a>. The protocol invocation name is the string by which the parameter is recognised in the protocol:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-1.html">Base Parameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-1-1.html">Field Statistics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-1-2.html">Interpolated Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-1-3.html">Inflection Point Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-1-4.html">Dose Point Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-1-5.html">Symmetry Base Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-1.html">2D Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-1-1.html">Image Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-1-2.html">2D Flatness and Unifomity Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-1-3.html">2D Symmetry Parameters</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2.html">Calculated Parameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-1.html">Field Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-2.html">Penumbra Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-3.html">Symmetry Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-4.html">Flatness Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-5.html">Deviation Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2.html">1D Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-1.html">1D Profile Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-2.html">1D Interpolated Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-3.html">1D Differential Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-4.html">Inflection Point Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-5.html">1D Flatness and Uniformity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-6.html">1D Symmetry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BSHelp11-2-7.html">1D Deviation</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="BSHelp10.html"
-                        title="previous chapter">Diagonal/Skew Profiles</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="BSHelp11-1.html"
-                        title="next chapter">Base Parameters</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="BSHelp9-3.html"
+                          title="previous chapter">Normalisation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="BSHelp11-1.html"
+                          title="next chapter">2D Parameters</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -91,12 +103,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -108,18 +120,19 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="BSHelp11-1.html" title="Base Parameters"
+          <a href="BSHelp11-1.html" title="2D Parameters"
              >next</a> |</li>
         <li class="right" >
-          <a href="BSHelp10.html" title="Diagonal/Skew Profiles"
+          <a href="BSHelp9-3.html" title="Normalisation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Parameters</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, AC Chamberlain.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+        &#169; Copyright 2023, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

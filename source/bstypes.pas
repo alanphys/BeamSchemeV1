@@ -225,6 +225,7 @@ var Beam         :TBeam;
     DefaultRes   :double = 2.54/75; {default to 75dpi for Gafchromic}
     ShowPoints   :boolean = False;
     ShowParams   :boolean = False;
+    Invert       :boolean = False;
     IFAType      :TIFAType = proportional;
     IFAFactor    :double;
     Precision    :integer = 2;

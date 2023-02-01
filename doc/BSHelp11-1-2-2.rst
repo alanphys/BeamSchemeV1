@@ -1,9 +1,16 @@
-.. index:: 
-   single: Parameters; R90
+.. index:: Parameters; 2D Uniformity ICRU 72
 
-Right 90% dose distance
-=======================
+2D Uniformity ICRU 72
+=====================
 
-Distance from the central axis as defined by the array or imaging modality to the point on the right side of the displayed profile where the dose profile drops below 90% of the central axis dose. If this point lies between two measured values the distance is linearly interpolated.
-   
-Variable name: R90
+Returns the maximum difference between the max and the min of the :ref:`In Field Area` normalised to the average of the IFA according to ICRU 72 eq 3.2.
+
+.. math:: {(max-min)} \cdot \cfrac {100} {ave}
+
+Where *max* and *min* are the IFA maximum and minimum respectively and *ave* is the average value of the IFA.
+
+**Protocol invocation name**: 2D Uniformity ICRU 72
+
+|Note| The *max* and *min* may be affected by the set window levels.
+
+.. |Note| image:: _static/Note.png

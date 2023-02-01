@@ -12,9 +12,9 @@ compiled for:
 
 - Fedora 32 running KDE 5 with Qt 5.6
 
-The program needs approximately 5 MB of disk space to install. A 19" monitor or 
+The program needs approximately 10 MB of disk space to install. A 19" monitor or
 larger is not essential but will make viewing easier. BeamScheme should not be viewed 
-at a resolution of less than 1280x1024. Other linux versions such as GTK based may be
+at a resolution of less than 1280x1024. Other linux versions such as GTK or Apple Mac based may be
 available on request.
 
 

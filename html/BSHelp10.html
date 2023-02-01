@@ -1,21 +1,21 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Diagonal/Skew Profiles &#8212; BeamScheme 0.52-beta documentation</title>
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Diagonal/Skew Profiles &#8212; BeamScheme 1.00 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Parameters" href="BSHelp11.html" />
+    <link rel="next" title="FFF algorithms" href="BSHelp9-1.html" />
     <link rel="prev" title="Algorithms" href="BSHelp9.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -25,13 +25,14 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="BSHelp11.html" title="Parameters"
+          <a href="BSHelp9-1.html" title="FFF algorithms"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="BSHelp9.html" title="Algorithms"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="BSHelp9.html" accesskey="U">Algorithms</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="BSHelp9.html" accesskey="U">Algorithms</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Diagonal/Skew Profiles</a></li> 
       </ul>
     </div>  
 
@@ -40,7 +41,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="diagonal-skew-profiles">
+  <section id="diagonal-skew-profiles">
 <span id="index-0"></span><h1>Diagonal/Skew Profiles<a class="headerlink" href="#diagonal-skew-profiles" title="Permalink to this headline">¶</a></h1>
 <p>Diagonal or skew profiles introduce a number of inaccuracies, which is probably why none of the major vendors offer them. However, if these inaccuracies are understood then skew profiles may yield a lot of useful information. The problem is simple. Consider the following situation.</p>
 <img alt="_images/Profile.png" class="align-center" src="_images/Profile.png" />
@@ -48,20 +49,25 @@
 <p>The situation is made worse by the introduction of wide profiles. A wide profile is a profile more than one pixel wide. BeamScheme uses a similar algorithm to that above in that for each index along the profile the normal to the profile is calculated and a second index is sequentially incremented and separated into its x and y components to give the correct pixel. The pixel values are summed. This is done symmetrically on either side of the ideal profile. Thus, the width of the profile will always be odd. This is because an even width will introduce asymmetry in the profile which can lead to further problems.</p>
 <p>Skew wide profiles are clipped at the edge of the detector area. This means that the start and finish of wide profiles should be treated with caution and may not be a reflection of reality. The array/image edge will tend to be blurred depending on how skew the profile is.</p>
 <p>A similar problem occurs where the profile crosses field edges. If the wide profile is not perpendicular to the field edge this will blur the field edge and increase the penumbra.</p>
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="BSHelp9.html"
-                        title="previous chapter">Algorithms</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="BSHelp11.html"
-                        title="next chapter">Parameters</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="BSHelp9.html"
+                          title="previous chapter">Algorithms</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="BSHelp9-1.html"
+                          title="next chapter">FFF algorithms</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -73,12 +79,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -90,18 +96,19 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="BSHelp11.html" title="Parameters"
+          <a href="BSHelp9-1.html" title="FFF algorithms"
              >next</a> |</li>
         <li class="right" >
           <a href="BSHelp9.html" title="Algorithms"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Diagonal/Skew Profiles</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, AC Chamberlain.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+        &#169; Copyright 2023, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

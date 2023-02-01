@@ -1,13 +1,12 @@
-.. index:: 
-   single: Field; Minimum dose
+.. index:: Parameters; 2D Min Value
 
-Minimum Dose
+2D Min Value
 ============
 
-Minimum dose of the profile over the in field area.
+Returns the minimum value of the image. If :ref:`Normalisation` is enabled it will return 0.
 
-Variable name: PMin
+**Protocol invocation name**: 2D Min Value
 
-|Note| The dose value may be affected by the normalisation or windowing.
+|Note| Normalisation affects this result.
 
 .. |Note| image:: _static/Note.png

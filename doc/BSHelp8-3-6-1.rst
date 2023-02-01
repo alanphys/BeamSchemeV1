@@ -4,25 +4,11 @@
 Editing Protocols
 =================
 
-Selecting "Protocol, Edit" in the menubar allows existing protocols to be edited. The Result window changes to the Edit Protocol window. The parameters are displayed in a grid with the left hand column giving the parameter name and the right hand column giving the parameter equation. Click in the appropriate block to edit. You can also use <ctrl-c> and <ctrl-v> to copy and paste.
+Selecting "Protocol, Edit" in the menubar allows existing protocols to be edited and new protocols created. :ref:`The Results Pane` changes to the Edit Protocol window. The parameters are displayed in a grid with the left hand column giving the parameter display name and the right hand column giving the :ref:`parameter invocation<Parameters>` name. Click in the appropriate block to edit. You can also use <ctrl-c> and <ctrl-v> to copy and paste.
 
-To create a parameter section heading leave the equation area blank. Parameter names may be indented by putting spaces in front.
+To create a parameter section heading leave the equation area blank. Parameter display names may be indented by putting spaces in front.
 
-Parameter equations are created by combining base parameters in an arithmetic expression. The expression may not include spaces and should conform to standard pascal.
-
-|Note| The multiplication operator is the '*' not the 'x'.
-
-For example the expression the flatness dose difference paramter 
-
-.. math:: 100 \cdot \cfrac {max-min} {max + min}
-
-is entered as:
-
-+--------------+--------------------------------+
-| Parameter    | Expression                     |
-+==============+================================+
-| Flatness (%) | 100*abs(PMax-PMin)/(PMax+PMin) |
-+--------------+--------------------------------+
+BeamScheme V1.00 no longer uses definable equations in the protocol list. Only parameter invocation names may be entered. Protocols from previous versions of BeamScheme are not compatible with version 1.00.
 
 Functions available are:
 
@@ -39,9 +25,11 @@ Functions available are:
    BSHelp8-3-6-1-2.rst
    BSHelp8-3-6-1-3.rst
    BSHelp8-3-6-3.rst
+
+|Note| Editing predefined protocols is not recommended. Rather save the protocol under a new name and then edit it.
    
-.. |Save| image:: _static/save.png
+.. |Save| image:: _static/saveprot.png
 .. |Add| image:: _static/add.png
 .. |Del| image:: _static/del.png
-.. |Exit| image:: _static/exit.png
+.. |Exit| image:: _static/exitprot.png
 .. |Note| image:: _static/Note.png

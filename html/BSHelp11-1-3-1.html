@@ -1,22 +1,23 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Left inflection point &#8212; BeamScheme 0.52-beta documentation</title>
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>2D Symmetry NCS-70 &#8212; BeamScheme 1.00 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Right inflection point" href="BSHelp11-1-3-2.html" />
-    <link rel="prev" title="Inflection Point Parameters" href="BSHelp11-1-3.html" /> 
+    <link rel="next" title="1D Parameters" href="BSHelp11-2.html" />
+    <link rel="prev" title="2D Symmetry Parameters" href="BSHelp11-1-3.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,16 +26,17 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="BSHelp11-1-3-2.html" title="Right inflection point"
+          <a href="BSHelp11-2.html" title="1D Parameters"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="BSHelp11-1-3.html" title="Inflection Point Parameters"
+          <a href="BSHelp11-1-3.html" title="2D Symmetry Parameters"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="BSHelp11-1.html" >Base Parameters</a> &#187;</li>
-          <li class="nav-item nav-item-4"><a href="BSHelp11-1-3.html" accesskey="U">Inflection Point Parameters</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="BSHelp11-1.html" >2D Parameters</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="BSHelp11-1-3.html" accesskey="U">2D Symmetry Parameters</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">2D Symmetry NCS-70</a></li> 
       </ul>
     </div>  
 
@@ -43,26 +45,33 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="left-inflection-point">
-<span id="index-0"></span><h1>Left inflection point<a class="headerlink" href="#left-inflection-point" title="Permalink to this headline">¶</a></h1>
-<p>This is the inflection point on the left side of the profile as determined by non-linear regression on a Hill function:</p>
-<p>Negative axis increments are converted to positive. The axis sign is then applied to the results.</p>
-<p>Variable name: LInf</p>
-<p><img alt="Note" src="_images/Note.png" /> If the penumbra straddles the origin the non-linear regression will fail.</p>
-</div>
+  <section id="d-symmetry-ncs-70">
+<span id="index-0"></span><h1>2D Symmetry NCS-70<a class="headerlink" href="#d-symmetry-ncs-70" title="Permalink to this headline">¶</a></h1>
+<p>Returns the maximum difference between the IFA and the IFA rotated 180 degrees,
+normalised to the average of the IFA according to NCS-70 eq 3-6.</p>
+<div class="math notranslate nohighlight">
+\[{maximum \left [ abs(D(x,y) - D(-x,-y)) \right ]} \cdot \cfrac {100} {ave}\]</div>
+<p>Where D(x,y) is the pixel value at x,y and <em>ave</em> is the average value of the IFA.</p>
+<p><strong>Protocol invocation name</strong>: 2D Symmetry NCS-70</p>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="BSHelp11-1-3.html"
-                        title="previous chapter">Inflection Point Parameters</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="BSHelp11-1-3-2.html"
-                        title="next chapter">Right inflection point</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="BSHelp11-1-3.html"
+                          title="previous chapter">2D Symmetry Parameters</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="BSHelp11-2.html"
+                          title="next chapter">1D Parameters</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -74,12 +83,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -91,21 +100,22 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="BSHelp11-1-3-2.html" title="Right inflection point"
+          <a href="BSHelp11-2.html" title="1D Parameters"
              >next</a> |</li>
         <li class="right" >
-          <a href="BSHelp11-1-3.html" title="Inflection Point Parameters"
+          <a href="BSHelp11-1-3.html" title="2D Symmetry Parameters"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="BSHelp11-1.html" >Base Parameters</a> &#187;</li>
-          <li class="nav-item nav-item-4"><a href="BSHelp11-1-3.html" >Inflection Point Parameters</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="BSHelp11-1.html" >2D Parameters</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="BSHelp11-1-3.html" >2D Symmetry Parameters</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">2D Symmetry NCS-70</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, AC Chamberlain.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+        &#169; Copyright 2023, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

@@ -1,14 +1,13 @@
+.. index:: 
+   single: Parameters; 1D CAX Value
 
-.. index:: Parameters; field interpolated
+1D CAX Value
+============
 
-Interpolated Field Parameters
-=============================
+Dose in the profile centre as defined by the image or 2D array.
 
-All parameters are calculated relative to the central axis (CAX) value unless otherwise specified. The CAX is defined as half the profile or detector width or height. Where there is an even number of detectors or pixels and these straddle the CAX the average of the two detectors or pixels is taken. 
+**Protocol invocation name**: 1D CAX Value
 
-.. toctree::
-   :maxdepth: 2
+|Note| The dose value may be affected by the :ref:`Normalisation` or windowing.
 
-   BSHelp11-2-1-1-1.rst
-   BSHelp11-2-1-1-2.rst
-   BSHelp11-2-1-1-3.rst
+.. |Note| image:: _static/Note.png

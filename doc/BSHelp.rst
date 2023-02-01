@@ -19,8 +19,6 @@ Welcome to BeamScheme's documentation!
    BSHelp8.rst
    BSHelp7.rst
    BSHelp9.rst
-   BSHelp10.rst
-   BSHelp11.rst
    BSHelp14.rst
    BSHelp12.rst
    BSHelp13.rst

@@ -12,6 +12,7 @@ The available predefined protocols are:
    :maxdepth: 1
    
    BSHelp14-2-1.rst
+   BSHelp14-2-9.rst
    BSHelp14-2-2.rst
    BSHelp14-2-3.rst
    BSHelp14-2-4.rst

@@ -1,16 +1,15 @@
-.. index::
-   single: Field; Statistics
+.. index:: Parameters; Image Statistics
 
-Field Statistics
+Image Statistics
 ================
 
-These parameters provide various statistics such as min and max values. 
+Image statistics contain basic information about the image.
 
-|Note| These values are calculated on 80% of the calculated field size.
+Available Image statistics are:
 
 .. toctree::
-   :maxdepth: 2
-   
+   :maxdepth: 1
+
    BSHelp11-1-1-1.rst
    BSHelp11-1-1-2.rst
    BSHelp11-1-1-3.rst
@@ -18,5 +17,9 @@ These parameters provide various statistics such as min and max values.
    BSHelp11-1-1-5.rst
    BSHelp11-1-1-6.rst
    BSHelp11-1-1-7.rst
-   
-.. |Note| image:: _static/Note.png
+   BSHelp11-1-1-8.rst
+   BSHelp11-1-1-9.rst
+   BSHelp11-1-1-10.rst
+   BSHelp11-1-1-11.rst
+   BSHelp11-1-1-12.rst
+   BSHelp11-1-1-13.rst

@@ -1,15 +1,18 @@
+.. index:: Parameters; 1D Profile Statistics
 
-.. index:: Parameters; field
+1D Profile Statistics
+=====================
 
-Field Parameters
-================
+These parameters provide basic statistics on the profile.
 
-The field parameters describe the geometry of the field. The edge of the field can be described in a number of ways. The most common are the Full Width Half Maximum (FHWM) or field size at 50% of the CAX value, and the inflection point.
+Available statistics are:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    BSHelp11-2-1-1.rst
    BSHelp11-2-1-2.rst
-
-
+   BSHelp11-2-1-3.rst
+   BSHelp11-2-1-4.rst
+   BSHelp11-2-1-5.rst
+   BSHelp11-2-1-6.rst

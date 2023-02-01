@@ -16,6 +16,7 @@ Calculation of the profiles and parameters are discussed in the following sectio
    :maxdepth: 1
    
    BSHelp10.rst
-   BSHelp11.rst
    BSHelp9-1.rst
    BSHelp9-2.rst
+   BSHelp9-3.rst
+   BSHelp11.rst

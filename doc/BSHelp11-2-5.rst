@@ -1,15 +1,17 @@
+.. index:: Parameters; 1D Flatness and Uniformity
 
-.. index:: Parameters; deviation
+1D Flatness and Uniformity
+==========================
 
-Deviation Parameters
-====================
+These metrics express the degree of unflatness or nonuniformity in the profile.
 
-Deviation parameters generally apply only to WFF beams and express the amount of deviation from the CAX value over the in field area. 
-
-Parameters are calculated by combining base parameters in an arithmetic expression. The following parameters are defined in existing protocols:
+Available flatness and uniformity parameters are:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   BSHelp11-2-1-1-12.rst
-   BSHelp11-2-1-1-15.rst
+   BSHelp11-2-5-1.rst
+   BSHelp11-2-5-2.rst
+   BSHelp11-2-5-3.rst
+   BSHelp11-2-5-4.rst
+   BSHelp11-2-5-5.rst

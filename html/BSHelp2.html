@@ -1,18 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Introduction &#8212; BeamScheme 0.52-beta documentation</title>
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Introduction &#8212; BeamScheme 1.00 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Conventions in this Manual" href="BSHelp3.html" />
@@ -30,7 +30,8 @@
         <li class="right" >
           <a href="BSHelp1.html" title="Licence and Disclaimer"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction</a></li> 
       </ul>
     </div>  
 
@@ -39,28 +40,32 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="introduction">
+  <section id="introduction">
 <span id="index-0"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>Welcome to BeamScheme. This software will assist you in extracting 1D profiles from 2D datasets and calculating various parameters on the profiles. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, XiO, DICOM, jpg, etc. Parameters such as field size, field centre, penumbra, flatness and symmetry are calculated. Profiles can be taken at any angle, offset or thickness. Profiles can be exported to a text file for further processing. Results can be printed or exported to PDF. BeamScheme is not intended to replace the commercial software available with 2D arrays, but to complement it.</p>
-<p>This manual assumes that you are familiar with using your operating system.
-If you are not then please consult the appropriate documentation and on-line
-help. BeamScheme can run on a variety of operating systems and while a thorough
-knowledge of your specific system is not necessary some basic knowledge such
-as running files will be an advantage.</p>
-</div>
+<p>BeamScheme is an analysis tool for 2D datasets. It will assist you in extracting 1D profiles from 2D datasets and can calculate over 60 different parameters. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, Eclipse, XiO, BrainLab, DICOM, jpg, etc.</p>
+<p>Parameters include field size, field centre, penumbra, flatness and symmetry. FFF beams are supported with both maximum slope and sigmoid fit parameters available. Profiles can be taken at any angle, offset or thickness. Profiles can be exported to a text file or clipboard for further processing. Results can be exported to PDF.</p>
+<p>BeamScheme v1.00 is virtually a complete rewrite of BeamScheme featuring a new parameter calculation engine. The code has been extensively modularised making it easy to add new parameters. New algorithms have been implemented with individual parameter calculation. Extensive unit testing has been implemented. The GUI has been updated. The expression parser has been dropped and all parameters are calculated in the code. Efficiency is achieved by only calculating needed parameters.</p>
+<p>BeamScheme is not intended to replace the commercial software available with 2D arrays, but to complement it.</p>
+<p>This manual assumes that you are familiar with using your operating system. If you are not then please consult the appropriate documentation and on-line help. BeamScheme can run on a variety of operating systems and while a thorough knowledge of your specific system is not necessary some basic knowledge such as running files will be an advantage.</p>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="BSHelp1.html"
-                        title="previous chapter">Licence and Disclaimer</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="BSHelp3.html"
-                        title="next chapter">Conventions in this Manual</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="BSHelp1.html"
+                          title="previous chapter">Licence and Disclaimer</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="BSHelp3.html"
+                          title="next chapter">Conventions in this Manual</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -72,12 +77,12 @@ as running files will be an advantage.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -94,12 +99,13 @@ as running files will be an advantage.</p>
         <li class="right" >
           <a href="BSHelp1.html" title="Licence and Disclaimer"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 0.52-beta documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, AC Chamberlain.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+        &#169; Copyright 2023, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

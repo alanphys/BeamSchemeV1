@@ -15,6 +15,15 @@ The profiles are altered by the Offset, Width and Angle spin boxes.
    BSHelp8-1-2.rst
    BSHelp8-1-3.rst
 
+Profiles can be exported from :ref:`The Export Menu` or by right clicking with the mouse and selecting from the context menu. Context menu option are:
+
+.. toctree::
+   :maxdepth: 1
+
+   BSHelp8-1-6.rst
+   BSHelp8-1-5.rst
+   BSHelp8-1-4.rst
+
 .. |max| image:: _static/max.png
 
 .. |min| image:: _static/min.png

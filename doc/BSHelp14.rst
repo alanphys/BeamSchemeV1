@@ -4,7 +4,7 @@
 Protocols
 =========
 
-From version 0.5 BeamScheme supports definable protocol and parameter sets. A library of standard protocols is supplied. These may be edited and renamed or new protocols defined.
+Protocols are groups of :ref:`parameters<Parameters>`. From version 0.5 BeamScheme supports definable protocol and parameter sets. A library of standard protocols is supplied. These may be edited and renamed or new protocols defined.
 
 .. toctree::
    :maxdepth: 2

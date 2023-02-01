@@ -4,13 +4,19 @@
 Parameters
 ==========
 
-All parameters are calculated relative to the central axis (CAX) value unless otherwise specified. The CAX is defined as half the profile or detector width or height. Where there is an even number of detectors or pixels and these straddle the CAX the average of the two detectors or pixels is taken.
+BeamScheme v1.00+ features a completely rewritten parameter calculation engine.  Previously a linear search algorithm was used to calculate a series of base parameters from which the other parameters were derived. This was very efficient for single processors but encountered problems with non-linear parameters such as sigmoid fitting and could not be multithreaded for modern multiprocessor computers.
 
-The parameters, except where otherwise specified, are calculated on the in field area. This area was previously defined as the flattened area, but this definition no longer holds for FFF beams. BeamScheme defines the in field area as 80% of the calculated field size. 
+BeamScheme now calculates each parameter separately. This creates a very modular design and makes it easy to add new parameters. Where parameters calculations rely on other parameters the previous results are stored so parameters are only calculated once. Efficiencies are achieved by only calculating the parameters required by a :ref:`protocol<Protocols>`.
 
-|Note| Most commercial programs use the nominal field size to calculate the in field area.
+Calculation of 2D parameters is now possible. The same modular approach is used.
 
-Parameters are calculated by combining base parameters in an arithmetic expression. The following parameters are available:
+The calculation of parameters is affected by:
+
+* :ref:`In Field Area`
+* :ref:`Normalisation`
+* :ref:`Centre Definition`
+
+The following parameters are available for use in :ref:`protocols<Protocols>`. The protocol invocation name is the string by which the parameter is recognised in the protocol:
 
 .. toctree::
    :maxdepth: 2

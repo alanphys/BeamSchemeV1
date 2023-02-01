@@ -5,23 +5,16 @@
 Default
 =======
 
-This protocol gives the parameters as calculated by previous versions of BeamScheme.
+The "Default" protocol is automatically loaded when BeamScheme starts. On first install this will be a copy of the :ref:`All` protocol. To make another protocol default perform the following steps:
 
-The defined parameters are
+#. Select the protocol you want using the list box in the results window.
+#. Enter editing mode using the "Protocol, Edit" menu entry.
+#. Select the name "Default" in the list box in the results window.
+#. Click the save button |save| or select the "Protocol, Save" menu entry
 
-*  :ref:`Field Edge` 
-*  :ref:`Field Centre` 
-*  :ref:`Field Size` 
-*  :ref:`Penumbra 90%-10%` 
-*  :ref:`Penumbra 80%-20%` 
-*  :ref:`Penumbra 90%-50%` 
-*  :ref:`Area Symmetry` 
-*  :ref:`Maximum Dose Ratio` 
-*  :ref:`Percent Symmetry` 
-*  :ref:`Dose Difference` 
-*  :ref:`Dose Ratio` 
-*  :ref:`MAX/CAX` 
+|Note| Make sure you do not accidentally save over another protocol.
 
-**Flattened field**
+.. |save| image:: _static/saveprot.png
+.. |Note| image:: _static/Note.png
 
-BeamScheme uses 80% of the :ref:`field size <Field Size>` as the flattened area.
+
