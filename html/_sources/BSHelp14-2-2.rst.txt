@@ -28,7 +28,7 @@ The defined electron parameters are:
 *  :ref:`Penumbra 80%-20% Left<1D Penumbra 8020 Left>`
 *  :ref:`Penumbra 80%-20% Right<1D Penumbra 8020 Right>`
 *  :ref:`Maximum Dose Ratio<1D Symmetry Ratio>`
-*  `Flatness L90/L50`
+*  :ref:`Flatness L90/L50<1D Flatness 9050>`
 *  :ref:`Maximum Variation<1D Deviation Diff>`
 
 .. Need to check electron deviation

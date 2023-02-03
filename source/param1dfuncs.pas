@@ -16,6 +16,7 @@ To add a parameter:
 4) Insert the enumerated type name in the parameter list (T1DParams) before the
    no_func entry. Make sure the position of the enumerated type name and entry
    in the constant array correspond.
+5) Remember to add a help entry
 
 See existing parameters for examples.
 
@@ -35,12 +36,14 @@ uses
 type
 T1DParamFunc = function(ProfileArr:TSingleProfile):string;
 
-T1DParams = (cax_val_1D,
+T1DParams = ({field statistics}
+             cax_val_1D,
              max_val_1D,
              max_pos_1D,
              min_val_1D,
              min_ifa_1D,
              ave_ifa_1D,
+             {interpolated params}
              field_edge_left_50_1D,
              field_edge_right_50_1D,
              field_centre_50_1D,
@@ -51,10 +54,12 @@ T1DParams = (cax_val_1D,
              pen_9010_right_1D,
              pen_9050_left_1D,
              pen_9050_right_1D,
+             {differential params}
              field_diff_left_1D,
              field_diff_right_1D,
              field_centre_diff_1D,
              field_size_diff_1D,
+             {inflection point params}
              field_infl_left_1D,
              field_infl_right_1D,
              field_centre_infl_1D,
@@ -69,18 +74,23 @@ T1DParams = (cax_val_1D,
              dose_60_right_1D,
              dose_80_left_1D,
              dose_80_right_1D,
+             {flatness and uniformity}
              flat_ave_1D,
              flat_diff_1D,
              flat_ratio_1D,
              flat_cax_1D,
              uniformity_ave_1D,
+             flat_9050_1D,
+             {symmetry}
              sym_ratio_1D,
              sym_diff_1D,
              sym_ave_1D,
              sym_area_1D,
+             {deviation}
              dev_ratio_1D,
              dev_diff_1D,
              dev_cax_1D,
+             {miscellaneous}
              no_func_1D);
 
 T1DParamFuncs = record
@@ -134,6 +144,7 @@ function FlatnessDiff1D(ProfileArr:TSingleProfile):string;
 function FlatnessRatio1D(ProfileArr:TSingleProfile):string;
 function FlatnessCAX1D(ProfileArr:TSingleProfile):string;
 function UniformityAve1D(ProfileArr:TSingleProfile):string;
+function Flatness90501D(ProfileArr:TSingleProfile):string;
 {symmetry}
 function SymmetryRatio1D(ProfileArr:TSingleProfile):string;
 function SymmetryDiff1D(ProfileArr:TSingleProfile):string;
@@ -193,6 +204,7 @@ Params1D: array[cax_val_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Flatness Ratio'; Func:@FlatnessRatio1D),
    (Name:'1D Flatness CAX'; Func:@FlatnessCAX1D),
    (Name:'1D Uniformity ICRU'; Func:@UniformityAve1D),
+   (Name:'1D Flatness 9050'; Func:@Flatness90501D),
    {symmetry}
    (Name:'1D Symmetry Ratio'; Func:@SymmetryRatio1D),
    (Name:'1D Symmetry Diff'; Func:@SymmetryDiff1D),
@@ -650,6 +662,18 @@ begin
 with ProfileArr do
 Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
    IFA.Ave,ffFixed,4,Precision) + '%';
+end;
+
+
+function Flatness90501D(ProfileArr:TSingleProfile):string;
+{Returns the ratio of the length of the 90% isodose over the length of the 50% isodose,
+with the dose normalized at 100% at beam center.}
+var Flat9050   :double;
+begin
+with ProfileArr do
+   Flat9050 := 100*(GetFWXMPos(0.9,1).ValueX - GetFWXMPos(0.9,-1).ValueX)/
+      (RightEdge.ValueX - LeftEdge.ValueX);
+Result := FloatToStrF(Flat9050,ffFixed,4,Precision) + '%';
 end;
 
 

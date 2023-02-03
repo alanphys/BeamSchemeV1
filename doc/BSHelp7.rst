@@ -27,6 +27,8 @@ Supported File Formats
 +----------------+--------------+-----------------------------------------+
 | :ref:`iPlan`   |None          | BrainLab iPlan dose plane text file     |
 +----------------+--------------+-----------------------------------------+
+| :ref:`RAW`     |\*.txt        | Structured text file                    |
++----------------+--------------+-----------------------------------------+
 
 As the 2D array files have all been reverse engineered there is absolutely no 
 guarantee of BeamScheme operating correctly on them. If you have a file that is 
@@ -45,3 +47,4 @@ along with a description of the problem to alanphys@yenzakahle.co.za.
    BSHelp7-6.rst
    BSHelp7-7.rst
    BSHelp7-8.rst
+   BSHelp7-9.rst

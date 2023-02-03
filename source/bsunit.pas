@@ -1391,7 +1391,7 @@ if ProfileArr <> nil then
             try
             sgResults.Cells[Col,I] := Calc1DParam(ProfileArr)
             except
-            on E:Exception do BSErrorMsg('Could not evaluate expression, ' + ProfileArr.sExpr);
+            on E:Exception do BSErrorMsg('Could not evaluate parameter, ' + ProfileArr.sExpr);
             end;
          end
         else sgResults.Cells[Col,I] := '';

@@ -1,6 +1,6 @@
 
 .. index:: 
-   single: Parameter; 1D Symmetry Ratio
+   single: Parameters; 1D Symmetry Ratio
 
 1D Symmetry Ratio
 =================

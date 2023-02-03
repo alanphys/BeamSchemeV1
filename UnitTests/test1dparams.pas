@@ -70,6 +70,7 @@ type
       procedure TestFlatnessRatio1D;
       procedure TestFlatnessCAX1D;
       procedure TestUniformityAve1D;
+      procedure TestFlatness90501D;
       {symmetry parameters}
       procedure TestSymmetryRatio1D;
       procedure TestSymmetryDiff1D;
@@ -281,13 +282,13 @@ end;
 
 procedure Test1DParamFuncs.TestPenumbra9050Left1D;
 begin
-AssertEquals('Test penumbra left 90-10%','0.51 cm',Penumbra9050Left1D(fProfile));
+AssertEquals('Test penumbra left 90-50%','0.51 cm',Penumbra9050Left1D(fProfile));
 end;
 
 
 procedure Test1DParamFuncs.TestPenumbra9050Right1D;
 begin
-AssertEquals('Test penumbra right 90-10%','0.34 cm',Penumbra9050Right1D(fProfile));
+AssertEquals('Test penumbra right 90-50%','0.34 cm',Penumbra9050Right1D(fProfile));
 end;
 
 
@@ -436,6 +437,12 @@ end;
 procedure Test1DParamFuncs.TestUniformityAve1D;
 begin
 AssertEquals('Test uniformity ICRU','4.67%',UniformityAve1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFlatness90501D;
+begin
+AssertEquals('Test flatness left 90-50%','95.76%',Flatness90501D(fProfile));
 end;
 
 

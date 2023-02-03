@@ -89,6 +89,7 @@ The predefined protocol All contains every parameter implemented in BeamScheme. 
      * :ref:`Ratio<1D Flatness Ratio>`
      * :ref:`CAX<1D Flatness CAX>`
      * :ref:`ICRU 72<1D Uniformity ICRU>`
+     * :ref:`90/50<1D Flatness 9050>`
 
 * Symmetry
      * :ref:`Ratio<1D Symmetry Ratio>`

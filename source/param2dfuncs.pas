@@ -16,6 +16,7 @@ To add a parameter:
 4) Insert the enumerated type name in the parameter list (T1DParams) before the
    no_func entry. Make sure the position of the enumerated type name and entry
    in the constant array correspond.
+5) Remember to add a help entry
 
 See existing parameters for examples.
 

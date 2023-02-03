@@ -604,7 +604,7 @@ Result := false;
    FreeMem(lbuff16);
    Result := true;
    except
-   raise EBSError.Create('HIS file error, corrupt file!',error);
+   raise EBSError.Create('Not a recognised HIS file!',error);
    end;
 end;
 
@@ -837,7 +837,7 @@ if LeftStr(Dummy,8) = 'BrainLAB' then {file is BrainLab}
    end
   else
    begin
-   raise EBSError.Create('File error, no data found!',error);
+   raise EBSError.Create('Not a recognised BrainLab iPlan file!',error);
    end;
 CloseFile(Infile);
 end;
