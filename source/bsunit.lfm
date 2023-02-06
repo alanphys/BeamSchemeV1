@@ -19,7 +19,7 @@ object BSForm: TBSForm
     Top = 42
     Width = 330
     HelpType = htKeyword
-    HelpKeyword = 'HTML/BSHelp8-2.html'
+    HelpKeyword = 'HTML/BSHelp8-5.html'
     ClientHeight = 308
     ClientWidth = 330
     ParentFont = False
@@ -31,7 +31,7 @@ object BSForm: TBSForm
       Top = 21
       Width = 286
       HelpType = htKeyword
-      HelpKeyword = 'HTML/BSHelp8-2.html'
+      HelpKeyword = 'HTML/BSHelp8-5.html'
       AntialiasingMode = amOff
       Align = alClient
       OnClick = iBeamClick
@@ -891,6 +891,8 @@ object BSForm: TBSForm
         Height = 24
         Top = 2
         Width = 152
+        HelpType = htKeyword
+        HelpKeyword = 'HTML/BSHelp14.html'
         AutoSize = False
         ItemHeight = 18
         OnEditingDone = cbProtocolChange

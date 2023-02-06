@@ -604,6 +604,8 @@ if ProtName <> '' then
       sgResults.Columns.Items[2].Visible := true;
       sgResults.Columns.Items[3].Visible := true;
       sgResults.Options := sgResults.Options - [goEditing];
+      sgResults.HelpKeyword := 'HTML/BSHelp8-4.html';
+      Panel8.HelpKeyword := 'HTML/BSHelp8-4.html';
       BuildProtocolList;
       if cbProtocol.Items.IndexOf(ProtName) >= 0 then
             cbProtocol.ItemIndex := cbProtocol.Items.IndexOf(ProtName);
@@ -682,6 +684,8 @@ sgResults.Columns.Items[1].Visible := false;
 sgResults.Columns.Items[2].Visible := true;
 sgResults.Columns.Items[3].Visible := true;
 sgResults.Options := sgResults.Options - [goEditing];
+sgResults.HelpKeyword := 'HTML/BSHelp8-4.html';
+Panel8.HelpKeyword := 'HTML/BSHelp8-4.html';
 Editing := false;
 LoadProtocol;                  {reload to wipe changes}
 Show2DResults(Beam);
@@ -1032,6 +1036,7 @@ var MouseXY:   TPoint;
     AR:        double;         {Aspect ratio}
 
 begin
+pBeam.SetFocus;
 if iBeam.Picture.Bitmap.Height > 0 then
    begin
    MouseXY := iBeam.ScreenToControl(Mouse.CursorPos);
@@ -1087,6 +1092,8 @@ sgResults.Columns.Items[1].Visible := true;
 sgResults.Columns.Items[2].Visible := false;
 sgResults.Columns.Items[3].Visible := false;
 sgResults.Options := sgResults.Options + [goEditing];
+sgResults.HelpKeyword := 'HTML/BSHelp8-3-6-1.html';
+Panel8.HelpKeyword := 'HTML/BSHelp8-3-6-1.html';
 end;
 
 
