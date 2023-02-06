@@ -171,7 +171,10 @@ unit bsunit;
             add dose points
  13/1/2023  add ShowPoints to View menu
             fix dangling ShowParameters in View menu
-            fix Invert toggle}
+            fix Invert toggle
+ 3/2/2023   update help
+ 6/2/2023   fix config directory creation
+            fix formatting issues in Windows}
 
 
 {$mode objfpc}{$H+}
@@ -1179,7 +1182,7 @@ procedure TBSForm.sbIMaxClick(Sender: TObject);
 var I          :integer;
     Dummy      :string;
 begin
-pBeam.Height := ClientHeight - 65;
+pBeam.Height := ClientHeight - ToolBar.Height - StatusBar.Height;
 pBeam.Width := ClientWidth;
 pBeam.BringToFront;
 sbIMax.Enabled := False;
@@ -1206,8 +1209,8 @@ procedure TBSForm.sbIMinClick(Sender: TObject);
 var I          :integer;
     Dummy      :string;
 begin
-pBeam.Height := (BSForm.ClientHeight - 65) div 2 - 1;
-pBeam.Width := BSForm.ClientWidth div 2 - 1;
+pBeam.Height := (ClientHeight - ToolBar.Height - StatusBar.Height) div 2 - 1;
+pBeam.Width := ClientWidth div 2 - 1;
 pBeam.SendToBack;
 sbIMax.Left := pBeam.Width - 30;
 sbIMax.Enabled := true;
@@ -1233,7 +1236,7 @@ end;
 
 procedure TBSForm.sbRMaxClick(Sender: TObject);
 begin
-pResults.Height := ClientHeight - 65;
+pResults.Height := ClientHeight - ToolBar.Height - StatusBar.Height;
 pResults.Width := ClientWidth;
 pResults.Left := 0;
 pResults.Top := 42;
@@ -1250,10 +1253,10 @@ end;
 
 procedure TBSForm.sbRMinClick(Sender: TObject);
 begin
-pResults.Height := (ClientHeight - 65) div 2 - 1;
+pResults.Height := (ClientHeight - ToolBar.Height - StatusBar.Height) div 2 - 1;
 pResults.Width := ClientWidth div 2 - 1;
 pResults.Left := ClientWidth div 2 - 1;
-pResults.Top := (ClientHeight - 65) div 2 + 42;
+pResults.Top := (ClientHeight - ToolBar.Height - StatusBar.Height) div 2 + ToolBar.Height;
 pResults.SendToBack;
 sbRMax.Left := pResults.Width - 30;
 sbRMax.Enabled := true;
@@ -1269,7 +1272,7 @@ end;
 
 procedure TBSForm.sbXMaxClick(Sender: TObject);
 begin
-pXProfile.Height := ClientHeight - 65;
+pXProfile.Height := ClientHeight - ToolBar.Height - StatusBar.Height;
 pXProfile.Width := ClientWidth;
 pXProfile.Left := 0;
 pXProfile.Top := 42;
@@ -1287,7 +1290,7 @@ end;
 
 procedure TBSForm.sbXMinClick(Sender: TObject);
 begin
-pXProfile.Height := (BSForm.ClientHeight - 65) div 2 - 1;
+pXProfile.Height := (BSForm.ClientHeight - ToolBar.Height - StatusBar.Height) div 2 - 1;
 pXProfile.Width := BSForm.ClientWidth div 2 - 1;
 pXProfile.Left := BSForm.ClientWidth div 2 - 1;
 pXProfile.Top := 42;
@@ -1305,7 +1308,7 @@ end;
 
 procedure TBSForm.sbYMaxClick(Sender: TObject);
 begin
-pYProfile.Height := ClientHeight - 65;
+pYProfile.Height := ClientHeight - ToolBar.Height - StatusBar.Height;
 pYProfile.Width := ClientWidth;
 pYProfile.Top := 42;
 pYProfile.BringToFront;
@@ -1322,9 +1325,9 @@ end;
 
 procedure TBSForm.sbYMinClick(Sender: TObject);
 begin
-pYProfile.Height := (BSForm.ClientHeight - 65) div 2 - 1;
+pYProfile.Height := (BSForm.ClientHeight - ToolBar.Height - StatusBar.Height) div 2 - 1;
 pYProfile.Width := BSForm.ClientWidth div 2 - 1;
-pYProfile.Top := (BSForm.ClientHeight - 65) div 2 + 42;
+pYProfile.Top := (BSForm.ClientHeight - ToolBar.Height - StatusBar.Height) div 2 + ToolBar.Height;
 pYProfile.SendToBack;
 sbYMax.Left := pYProfile.Width - 30;
 sbYMax.Enabled := true;

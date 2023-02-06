@@ -1,4 +1,4 @@
-BeamScheme Readme file (c) 2008-2022 AC Chamberlain
+BeamScheme Readme file (c) 2008-2023 AC Chamberlain
 
 1) Introduction
 Welcome to BeamScheme
@@ -13,7 +13,7 @@ BeamScheme is not intended to replace the commercial software available with 2D 
 Please read the file Licence.txt. This means that if as a result of using this program you fry your patients, trash your linac, nuke the cat, blow the city power in a ten block radius and generally cause global thermonuclear meltdown! Sorry, you were warned!
 
 3) Installation
-It is not necessary to remove previous versions unless these were installed manually.
+It is not necessary to remove previous versions unless these were installed manually. The protocol definition files from version 0.5X are not compatible with verson 1.X and will be copied to a backup directory.
 
 Run the BSSetup.exe file.
 
@@ -261,3 +261,9 @@ Version 0.5 released 25/10/2019
 15/11/2022 add normalise function to TSingleProfile and refactor
 16/11/2022 fix TSingleProfile.Res initalisation and range check errors
            add dose points
+13/1/2023  add ShowPoints to View menu
+           fix dangling ShowParameters in View menu
+           fix Invert toggle
+3/2/2023   update help
+6/2/2023   fix config directory creation
+           fix formatting issues in Windows}
