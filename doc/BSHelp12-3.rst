@@ -14,5 +14,6 @@ Errors associated with the :ref:`Protocols` are:
    BSHelp12-3-3.rst
    BSHelp12-3-4.rst
    BSHelp12-3-5.rst
+   BSHelp12-3-8.rst
    BSHelp12-3-6.rst
    BSHelp12-3-7.rst

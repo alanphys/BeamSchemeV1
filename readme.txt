@@ -13,9 +13,9 @@ BeamScheme is not intended to replace the commercial software available with 2D 
 Please read the file Licence.txt. This means that if as a result of using this program you fry your patients, trash your linac, nuke the cat, blow the city power in a ten block radius and generally cause global thermonuclear meltdown! Sorry, you were warned!
 
 3) Installation
-It is not necessary to remove previous versions unless these were installed manually. The protocol definition files from version 0.5X are not compatible with verson 1.X and will be copied to a backup directory.
+BeamScheme V1.00 is not compatible with previous versions of BeamScheme. While it is not necessary to uninstall previous versions all data in the program executable directory and the program configuration directory will be deleted before installing the new version.
 
-Run the BSSetup.exe file.
+To install BeamScheme run the BSSetup.exe file.
 
 Alternatively extract the files manually and copy into a directory of your choosing.
 
@@ -267,3 +267,9 @@ Version 0.5 released 25/10/2019
 3/2/2023   update help
 6/2/2023   fix config directory creation
            fix formatting issues in Windows}
+ 7/2/2023  fix protocol save path under Windows
+           change protocol dir from exe or program config to both
+           fix protocol save errors
+           fix memory leak in buildprotocol
+           fix crash on protocol edit exit
+Version 1.00 released 7/2/2023}

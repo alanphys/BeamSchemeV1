@@ -172,9 +172,13 @@ unit bsunit;
  13/1/2023  add ShowPoints to View menu
             fix dangling ShowParameters in View menu
             fix Invert toggle
- 3/2/2023   update help
- 6/2/2023   fix config directory creation
-            fix formatting issues in Windows}
+ 6/2/2023   fix formatting issues in Windows
+ 7/2/2023   fix protocol save path under Windows
+            change protocol dir from exe or program config to both
+            fix protocol save errors
+            fix memory leak in buildprotocol
+            fix crash on protocol edit exit
+ Version 1.00 released 7/2/2023}
 
 
 {$mode objfpc}{$H+}
@@ -376,10 +380,10 @@ type
 
 var
     BSForm       :TBSForm;
-    sProtPath    :string;
     Safe,
     Editing      :boolean;
     Normalisation:TNorm;
+    ProtocolIndx :integer;
 
 implementation
 
@@ -566,14 +570,15 @@ if ProtName <> '' then
    begin
    SaveDialog.Title := 'Save parameters';
    {$ifdef WINDOWS}
-   ProtPath := GetAppConfigDir(true);
+   ProtPath := GetAppConfigDir(true) + AppendPathDelim(ProtPath) + 'Protocols';
    SaveDialog.Filter := 'Comma delimited files|*.csv|All files|*.*';
    {$else}
-   ProtPath := GetAppConfigDir(false);
+   ProtPath := GetAppConfigDir(false) + AppendPathDelim(ProtPath) + 'Protocols';
    SaveDialog.Filter := 'Comma delimited files|*.csv|All files|*';
    {$endif}
    if not DirectoryExists(ProtPath) then CreateDir(ProtPath);
    SaveDialog.DefaultExt := '.csv';
+   SaveDialog.InitialDir := ProtPath;
    SaveDialog.FileName := AppendPathDelim(ProtPath) + DelSpace(ProtName) + '.csv';
 
    for I:=1 to sgResults.Rowcount-1 do
@@ -586,37 +591,37 @@ if ProtName <> '' then
       begin
          try;
          sgResults.SaveToCSVFile(SaveDialog.FileName,',',false);
+         cbProtocol.Style := csDropDownList;
+         sbSaveP.Enabled := false;
+         sbSaveP.Visible := false;
+         miSaveP.Enabled := false;
+         miEditP.Enabled := true;
+         miQuitEdit.Enabled := false;
+         sbAddP.Enabled := false;
+         sbAddP.Visible := false;
+         sbDelP.Enabled := false;
+         sbDelP.Visible := false;
+         sbExitP.Enabled := false;
+         sbExitP.Visible := false;
+         CResults.Caption := 'Results';
+         sgResults.Columns.Items[1].Visible := false;
+         sgResults.Columns.Items[2].Visible := true;
+         sgResults.Columns.Items[3].Visible := true;
+         sgResults.Options := sgResults.Options - [goEditing];
+         sgResults.HelpKeyword := 'HTML/BSHelp8-4.html';
+         Panel8.HelpKeyword := 'HTML/BSHelp8-4.html';
+         BuildProtocolList;
+         if cbProtocol.Items.IndexOf(ProtName) >= 0 then
+               cbProtocol.ItemIndex := cbProtocol.Items.IndexOf(ProtName);
+         LoadProtocol;
+         Show2DResults(Beam);
+         seXAngleChange(Self);
+         seYAngleChange(Self);
+         Editing := false;
          except
          on E:Exception do
             BSErrorMsg('Could not save protocol.');
          end;
-      cbProtocol.Style := csDropDownList;
-      sbSaveP.Enabled := false;
-      sbSaveP.Visible := false;
-      miSaveP.Enabled := false;
-      miEditP.Enabled := true;
-      miQuitEdit.Enabled := false;
-      sbAddP.Enabled := false;
-      sbAddP.Visible := false;
-      sbDelP.Enabled := false;
-      sbDelP.Visible := false;
-      sbExitP.Enabled := false;
-      sbExitP.Visible := false;
-      CResults.Caption := 'Results';
-      sgResults.Columns.Items[1].Visible := false;
-      sgResults.Columns.Items[2].Visible := true;
-      sgResults.Columns.Items[3].Visible := true;
-      sgResults.Options := sgResults.Options - [goEditing];
-      sgResults.HelpKeyword := 'HTML/BSHelp8-4.html';
-      Panel8.HelpKeyword := 'HTML/BSHelp8-4.html';
-      BuildProtocolList;
-      if cbProtocol.Items.IndexOf(ProtName) >= 0 then
-            cbProtocol.ItemIndex := cbProtocol.Items.IndexOf(ProtName);
-      LoadProtocol;
-      Show2DResults(Beam);
-      seXAngleChange(Self);
-      seYAngleChange(Self);
-      Editing := false;
       end;
    end
   else
@@ -671,6 +676,7 @@ procedure TBSForm.bbExitPClick(Sender: TObject);
 begin
 ClearStatus;
 cbProtocol.Style := csDropDownList;
+cbProtocol.ItemIndex := ProtocolIndx;
 sbSaveP.Enabled := false;
 sbSaveP.Visible := false;
 miSaveP.Enabled := false;
@@ -712,61 +718,80 @@ end;
 procedure TBSForm.BuildProtocolList;
 var sExePath,
     sSearchPath,
+    sProtPath,
     FileName   :string;
     ProtList   :TStringList;
     SearchRec  :TSearchRec;
 
 begin
 {look for parameter definition files and make list}
+cbProtocol.Clear;
+ProtList := TStringList.Create;
+
+{look in exe dir first}
 sExePath := ExtractFilePath(Application.ExeName);
 sProtPath := AppendPathDelim(sExePath) + 'Protocols';
 sSearchPath := AppendPathDelim(sProtPath) + '*.csv';
-cbProtocol.Clear;
-ProtList := TStringList.Create;
 if FindFirst(sSearchPath,0,SearchRec) = 0 then
    begin
       repeat
       FileName := ExtractFileNameOnly(SearchRec.Name);
       ProtList.Add(Filename);
       until FindNext(Searchrec) <> 0;
-   ProtList.Sort;
-   cbProtocol.Items.Assign(ProtList);
-   cbProtocol.ItemIndex := 0;
-   end
-  else
-   begin
-   {$ifdef WINDOWS}
-   sProtPath := GetAppConfigDir(true);
-   {$else}
-   sProtPath := GetAppConfigDir(false);
-   {$endif}
-   sProtPath := AppendPathDelim(sProtPath) + 'Protocols';
-   sSearchPath := AppendPathDelim(sProtPath) + '*.csv';
-   if FindFirst(sSearchPath,0,SearchRec) = 0 then
-      begin
-        repeat
-         FileName := ExtractFileNameOnly(SearchRec.Name);
-         ProtList.Add(Filename);
-         until FindNext(Searchrec) <> 0;
-      ProtList.Sort;
-      cbProtocol.Items.Assign(ProtList);
-      cbProtocol.ItemIndex := 0;
-      end
-     else BSErrorMsg('No protocol definition files found. Please create a file.');
    end;
-   Findclose(SearchRec);
+Findclose(SearchRec);
+
+{look in program settings dir second}
+{$ifdef WINDOWS}
+sProtPath := GetAppConfigDir(true);
+{$else}
+sProtPath := GetAppConfigDir(false);
+{$endif}
+sProtPath := AppendPathDelim(sProtPath) + 'Protocols';
+sSearchPath := AppendPathDelim(sProtPath) + '*.csv';
+if FindFirst(sSearchPath,0,SearchRec) = 0 then
+  begin
+    repeat
+     FileName := ExtractFileNameOnly(SearchRec.Name);
+     ProtList.Add(Filename);
+     until FindNext(Searchrec) <> 0;
+  end;
+Findclose(SearchRec);
+
+ProtList.Sort;
+cbProtocol.Items.Assign(ProtList);
+cbProtocol.ItemIndex := 0;
 ProtList.Free;
 if cbProtocol.Items.Count > 0 then
-   cbProtocol.ItemIndex := cbProtocol.Items.IndexOf('Default');
+   cbProtocol.ItemIndex := cbProtocol.Items.IndexOf('Default')
+  else
+   BSErrorMsg('No protocol definition files found. Please create a file.');
 end;
 
 
 procedure TBSForm.LoadProtocol;
-var FileName   :string;
+var FileName,
+    sExePath,
+    sProtPath  :string;
+
 begin
 if (cbProtocol.Items.Count > 0) and not Editing then
    begin
+   {first look in exe dir}
+   sExePath := ExtractFilePath(Application.ExeName);
+   sProtPath := AppendPathDelim(sExePath) + 'Protocols';
    FileName := AppendPathDelim(sProtPath) + cbProtocol.Items[cbProtocol.ItemIndex] + '.csv';
+   if not FileExists(FileName) then
+      begin
+      {second look in program config dir}
+      {$ifdef WINDOWS}
+      sProtPath := GetAppConfigDir(true);
+      {$else}
+      sProtPath := GetAppConfigDir(false);
+      {$endif}
+      sProtPath := AppendPathDelim(sProtPath) + 'Protocols';
+      FileName := AppendPathDelim(sProtPath) + cbProtocol.Items[cbProtocol.ItemIndex] + '.csv';
+      end;
    try
       sgResults.LoadFromCSVFile(FileName,',',false);
    except
@@ -1077,6 +1102,7 @@ end;
 procedure TBSForm.miEditPClick(Sender: TObject);
 begin
 Editing := true;
+ProtocolIndx := cbProtocol.ItemIndex;
 cbProtocol.Style := csDropDown;
 cbProtocol.Text := cbProtocol.Items[cbProtocol.ItemIndex];
 sbSaveP.Enabled := true;
@@ -1116,7 +1142,7 @@ end;
 
 procedure TBSForm.miRestoreClick(Sender: TObject);
 begin
-ToolbarExit.Left := Width - 86;
+ToolbarExit.Left := Width - ToolBarExit.Width - 1;
 sbIMinClick(Sender);
 sbXMinClick(Sender);
 sbYMinClick(Sender);
@@ -1182,6 +1208,7 @@ procedure TBSForm.sbIMaxClick(Sender: TObject);
 var I          :integer;
     Dummy      :string;
 begin
+pBeam.Top := ToolBar.Height + 1;
 pBeam.Height := ClientHeight - ToolBar.Height - StatusBar.Height;
 pBeam.Width := ClientWidth;
 pBeam.BringToFront;
@@ -1209,6 +1236,7 @@ procedure TBSForm.sbIMinClick(Sender: TObject);
 var I          :integer;
     Dummy      :string;
 begin
+pBeam.Top := ToolBar.Height + 1;
 pBeam.Height := (ClientHeight - ToolBar.Height - StatusBar.Height) div 2 - 1;
 pBeam.Width := ClientWidth div 2 - 1;
 pBeam.SendToBack;
@@ -1239,7 +1267,7 @@ begin
 pResults.Height := ClientHeight - ToolBar.Height - StatusBar.Height;
 pResults.Width := ClientWidth;
 pResults.Left := 0;
-pResults.Top := 42;
+pResults.Top := ToolBar.Height + 1;
 pResults.BringToFront;
 sbRMax.Enabled := false;
 sbRMax.Visible := false;
@@ -1275,7 +1303,7 @@ begin
 pXProfile.Height := ClientHeight - ToolBar.Height - StatusBar.Height;
 pXProfile.Width := ClientWidth;
 pXProfile.Left := 0;
-pXProfile.Top := 42;
+pXProfile.Top := ToolBar.Height + 1;
 pXProfile.BringToFront;
 sbXMax.Enabled := false;
 sbXMax.Visible := false;
@@ -1293,7 +1321,7 @@ begin
 pXProfile.Height := (BSForm.ClientHeight - ToolBar.Height - StatusBar.Height) div 2 - 1;
 pXProfile.Width := BSForm.ClientWidth div 2 - 1;
 pXProfile.Left := BSForm.ClientWidth div 2 - 1;
-pXProfile.Top := 42;
+pXProfile.Top := ToolBar.Height + 1;
 pXProfile.SendToBack;
 sbXMax.Left := pXProfile.Width - 30;
 sbXMax.Enabled := true;
@@ -1310,7 +1338,7 @@ procedure TBSForm.sbYMaxClick(Sender: TObject);
 begin
 pYProfile.Height := ClientHeight - ToolBar.Height - StatusBar.Height;
 pYProfile.Width := ClientWidth;
-pYProfile.Top := 42;
+pYProfile.Top := ToolBar.Height + 1;
 pYProfile.BringToFront;
 sbYMax.Enabled := false;
 sbYMax.Visible := false;
@@ -1402,7 +1430,10 @@ if ProfileArr <> nil then
             sgResults.Cells[Col,I] := Calc1DParam(ProfileArr)
             except
             on E:Exception do BSErrorMsg('Could not evaluate parameter, ' + ProfileArr.sExpr);
-            end;
+            end
+           else
+            if Leftstr(ProfileArr.sExpr,2) <> '2D' then
+               BSErrorMsg('Illegal parameter name: ' + ProfileArr.sExpr);
          end
         else sgResults.Cells[Col,I] := '';
       end;
