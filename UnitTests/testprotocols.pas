@@ -37,6 +37,7 @@ TestProtocolPTW = class(TTestCase)
    procedure TestProtocolElekta;
    procedure TestProtocolAFSSAPS;
    procedure TestProtocolIEC;
+   procedure TestProtocolWFF;
    end;
 
 TestProtocolIBA = class(TTestCase)
@@ -54,6 +55,8 @@ TestProtocolIBA = class(TTestCase)
    procedure TestProtocolAFSSAPS;
    procedure TestProtocolIEC;
    procedure TestProtocolDIN;
+   procedure TestProtocolWFF;
+   procedure TestProtocolFFF;
    end;
 
 TestProtocolPylinac = class(TTestCase)
@@ -68,6 +71,22 @@ TestProtocolPylinac = class(TTestCase)
    procedure TestProtocolVarian;
    procedure TestProtocolSiemens;
    procedure TestProtocolElekta;
+   procedure TestProtocolWFF;
+   procedure TestProtocolFFF;
+   end;
+
+TestProtocolBistroMath = class(TTestCase)
+   private
+   fBeam    :TBeam;
+   sgExpr   :TStringGrid;
+   Prof     :TSingleProfile;
+   protected
+   procedure SetUp; override;
+   procedure TearDown; override;
+   published
+   procedure TestProtocolElekta;
+   procedure TestProtocolWFF;
+   procedure TestProtocolFFF;
    end;
 
 TestProtocolImageJ = class(TTestCase)
@@ -81,6 +100,8 @@ TestProtocolImageJ = class(TTestCase)
    published
    procedure TestProtocolQSA;
    end;
+
+
 
 implementation
 
@@ -193,6 +214,7 @@ const Params: array of string = (
 '     Ratio	104.80%',
 '     CAX	2.40%',
 '     ICRU 72	4.67%',
+'     90/50	95.76%',
 '	',
 'Symmetry	',
 '     Ratio	102.66%',
@@ -476,6 +498,53 @@ for I:=0 to sgExpr.RowCount - 1 do
    end;
 end;
 
+
+procedure TestProtocolPTW.TestProtocolWFF;
+{Verified from PTW-DataAnalyze file X06 NONE 20X20 CR 00 BEA 140724 12'23.mcc}
+{Note: PTW-DataAnalyze uses the method of Fogliata}
+
+var I          :integer;
+
+const Params: array of string = (
+'Differential params	',
+'     Left edge	-10.00 cm',
+'     Right edge	10.00 cm',
+'     Centre	0.00 cm',
+'     Size	20.00 cm',
+'	',
+'Inflection params	',
+'     Left edge	-10.06 cm',        {DataAnalyze reports 10.50}
+'     Right edge	10.13 cm', {DataAnalyze reports 10.54}
+'     Centre	0.03 cm',
+'     Size	20.20 cm',         {DataAnalyze reports 21.04}
+'     Penumbra	',
+'          Left	0.96 cm',          {DataAnalyze reports 8.73}
+'          Right	0.92 cm',  {DataAnalyze reports 7.85}
+'	',
+'Symmetry	',
+'     Difference	0.55%',
+'	');
+
+begin
+sgExpr.LoadFromCSVFile('../Protocols/FFF.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
+
+
 {-------------------------------------------------------------------------------
  IBA Protocol tests
 -------------------------------------------------------------------------------}
@@ -726,6 +795,106 @@ for I:=0 to sgExpr.RowCount - 1 do
 end;
 
 
+procedure TestProtocolIBA.TestProtocolWFF;
+{Verified from IBA-FastTrack file 6MV.opg}
+{Note: FastTrack uses centre point of maximum gradient for inflection point}
+
+var I          :integer;
+
+const Params: array of string = (
+'Differential params	',
+'     Left edge	-8.00 cm',         {FastTrack reports 7.69}
+'     Right edge	8.00 cm',  {FastTrack reports 7.66}
+'     Centre	0.00 cm',          {FastTrack reports -0.01}
+'     Size	16.00 cm',         {FastTrack reports 15.34}
+'	',
+'Inflection params	',
+'     Left edge	-7.68 cm',         {FastTrack reports 7.69}
+'     Right edge	7.65 cm',  {FastTrack reports 7.66}
+'     Centre	-0.01 cm',
+'     Size	15.33 cm',         {FastTrack reports 15.34}
+'     Penumbra	',
+'          Left	0.56 cm',          {FastTrack reports 0.59}
+'          Right	0.55 cm',  {FastTrack reports 0.60}
+'	',
+'Symmetry	',
+'     Difference	0.44%',    {FastTrack reports 0.49}
+'	');
+
+begin
+sgExpr.LoadFromCSVFile('../Protocols/FFF.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
+
+
+procedure TestProtocolIBA.TestProtocolFFF;
+{Verified from IBA-FastTrack file 6FFF.opg}
+{Note: FastTrack uses centre point of maximum gradient for inflection point}
+
+var I          :integer;
+
+const Params: array of string = (
+'Differential params	',
+'     Left edge	-10.00 cm',        {FastTrack reports 10.31}
+'     Right edge	10.00 cm', {FastTrack reports 10.04}
+'     Centre	0.00 cm',          {FastTrack reports -1.4}
+'     Size	20.00 cm',         {FastTrack reports 20.36}
+'	',
+'Inflection params	',
+'     Left edge	-10.02 cm',
+'     Right edge	9.97 cm',
+'     Centre	-0.02 cm',
+'     Size	19.99 cm',
+'     Penumbra	',
+'          Left	0.79 cm',
+'          Right	0.88 cm',
+'	',
+'Symmetry	',
+'     Difference	0.68%',
+'	');
+
+begin
+fBeam.Free;
+fBeam := TBeam.Create;
+IBAOpen('../TestFiles/6FFF.opg',fBeam);
+fBeam.Norm := norm_cax;
+Prof.Free;
+Prof := TSingleProfile.Create;
+Prof.SetParams(0,0,1);
+fBeam.CreateProfile(Prof,round(fBeam.Max),0);
+sgExpr.LoadFromCSVFile('../Protocols/FFF.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
+
+
 {-------------------------------------------------------------------------------
  Pylinac Protocol tests
 -------------------------------------------------------------------------------}
@@ -831,7 +1000,7 @@ end;
 
 
 procedure TestProtocolPylinac.TestProtocolElekta;
-{Verified from Pylinac file 6MV-20x20.dcm}
+{Verified from Pylinac v3.1 file 6MV-20x20.dcm}
 var I          :integer;
 
 const Params: array of string = (
@@ -867,6 +1036,270 @@ for I:=0 to sgExpr.RowCount - 1 do
    end;
 end;
 
+
+procedure TestProtocolPylinac.TestProtocolWFF;
+{Verified from Pylinac 3.10 file 6FFF.dcm}
+{Note: Pylinac run with the following options:
+centering=Centering.GEOMETRIC_CENTER,
+normalization_method=Normalization.BEAM_CENTER
+interpolation_resolution_mm=0.01,
+edge_detection_method=Edge.Edge.INFLECTION_HILL}
+var I          :integer;
+
+const Params: array of string = (
+'Differential params	',
+'     Left edge	-10.03 cm',
+'     Right edge	9.96 cm',
+'     Centre	-0.03 cm',
+'     Size	19.99 cm',         {Pylinac reports 19.98}
+'	',
+'Inflection params	',
+'     Left edge	-10.03 cm',
+'     Right edge	9.97 cm',  {Pylinac reports 19.96}
+'     Centre	-0.03 cm',
+'     Size	20.00 cm',         {Pylinac reports 19.98}
+'     Penumbra	',
+'          Left	0.38 cm',          {Pylinac reports 0.35}
+'          Right	0.39 cm',  {Pylinac reports 0.36}
+'	',
+'Symmetry	',
+'     Difference	0.67%',    {Pylinac reports 0.62}
+'	');
+
+begin
+sgExpr.LoadFromCSVFile('../Protocols/FFF.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
+
+
+procedure TestProtocolPylinac.TestProtocolFFF;
+{Verified from Pylinac 3.10 file 6FFF.dcm}
+{Note: Pylinac run with the following options:
+centering=Centering.GEOMETRIC_CENTER,
+normalization_method=Normalization.BEAM_CENTER
+interpolation_resolution_mm=0.01,
+edge_detection_method=Edge.Edge.INFLECTION_HILL}
+var I          :integer;
+
+const Params: array of string = (
+'Differential params	',
+'     Left edge	-10.00 cm',        {Pylinac reports 10.02}
+'     Right edge	10.06 cm', {Pylinac reports 10.05}
+'     Centre	0.03 cm',
+'     Size	20.06 cm',         {Pylinac reports 20.07}
+'	',
+'Inflection params	',
+'     Left edge	-10.02 cm',        {Pylinac reports 10.03}
+'     Right edge	10.04 cm',
+'     Centre	0.01 cm',
+'     Size	20.07 cm',         {Pylinac reports 20.06}
+'     Penumbra	',
+'          Left	0.36 cm',          {Pylinac reports 0.38}
+'          Right	0.35 cm',  {Pylinac reports 0.38}
+'	',
+'Symmetry	',
+'     Difference	0.41%',    {Pylinac reports 0.36}
+'	');
+
+begin
+DICOMOpen('../TestFiles/6FFF.dcm',fBeam);
+fBeam.Norm := norm_cax;
+fBeam.CreateProfile(Prof,round(fBeam.Max),0);
+sgExpr.LoadFromCSVFile('../Protocols/FFF.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
+
+
+{-------------------------------------------------------------------------------
+ BistroMath Protocol tests
+-------------------------------------------------------------------------------}
+
+procedure TestProtocolBistroMath.SetUp;
+begin
+fBeam := TBeam.Create;
+sgExpr := TStringGrid.Create(nil);
+sgExpr.Visible := false;
+Prof := TSingleProfile.Create;
+Prof.SetParams(0,0,1);
+end;
+
+procedure TestProtocolBistroMath.TearDown;
+begin
+fBeam.Free;
+sgExpr.Free;
+Prof.Free;
+end;
+
+
+procedure TestProtocolBistroMath.TestProtocolElekta;
+{Verified from BistroMath 4.30.1 file 2-Sep-2011-A.txt}
+{Note: Bistromath run with the following options:
+Field types tab, Center of Field definition: Border/Edge}
+var I          :integer;
+
+const Params: array of string = (
+'Field	',
+'     Left edge	-9.67 cm',
+'     Right edge	10.40 cm',
+'     Centre	0.37 cm',
+'     Size	20.08 cm',
+'Penumbra 80-20%	',
+'     Left	0.65 cm',
+'     Right	0.71 cm',
+'Flatness	104.80%',
+'Symmetry	102.66%',            {Bistromath reports 101.4 but is calculated on a filtered curve}
+'Deviation	4.80%',
+'	');
+
+begin
+MapCheckOpen('../TestFiles/2-Sep-2011-A.txt',fBeam);
+fBeam.Norm := no_norm;
+fBeam.CreateProfile(Prof,round(fBeam.Max),0);
+sgExpr.LoadFromCSVFile('../Protocols/ElektaPhoton.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
+
+
+procedure TestProtocolBistroMath.TestProtocolWFF;
+{Verified from BistroMath 4.30.1 file 6FFF.opg}
+{Note: Bistromath run with the following options:
+Field types tab:
+   Center of Field definition: Border/Edge
+   Primary border/edge definition: Sigmoid50}
+var I          :integer;
+
+const Params: array of string = (
+'Differential params	',
+'     Left edge	-9.50 cm',         {BistroMath reports -9.55}
+'     Right edge	10.50 cm', {BistroMath reports 10.46}
+'     Centre	0.50 cm',          {BistroMath reports 0.45}
+'     Size	20.00 cm',         {BistroMath reports 20.01}
+'	',
+'Inflection params	',
+'     Left edge	-9.60 cm',         {BistroMath reports -9.62}
+'     Right edge	10.39 cm', {BistroMath reports 10.42}
+'     Centre	0.40 cm',          {BistroMath reports 0.40}
+'     Size	19.99 cm',         {BistroMath reports 20.04}
+'     Penumbra	',
+'          Left	0.65 cm',          {BistroMath reports 0.64}
+'          Right	0.55 cm',  {BistroMath reports 0.68}
+'	',
+'Symmetry	',
+'     Difference	2.69%',
+'	');
+
+begin
+MapCheckOpen('../TestFiles/2-Sep-2011-A.txt',fBeam);
+fBeam.Norm := no_norm;
+fBeam.CreateProfile(Prof,round(fBeam.Max),0);
+sgExpr.LoadFromCSVFile('../Protocols/FFF.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
+
+
+procedure TestProtocolBistroMath.TestProtocolFFF;
+{Verified from BistroMath 4.30.1 file 6FFF.opg}
+{Note: Bistromath run with the following options:
+Field types tab, Center of Field definition: Border/Edge}
+var I          :integer;
+
+const Params: array of string = (
+'Differential params	',
+'     Left edge	-10.00 cm',
+'     Right edge	10.00 cm',
+'     Centre	0.00 cm',
+'     Size	20.00 cm',
+'	',
+'Inflection params	',
+'     Left edge	-10.02 cm',        {BistroMath reports 10.05}
+'     Right edge	9.97 cm',  {BistroMath reports 10.03}
+'     Centre	-0.02 cm',         {BistroMath reports -0.05}
+'     Size	19.99 cm',         {BistroMath reports 20.08}
+'     Penumbra	',
+'          Left	0.79 cm',          {BistroMath reports 0.82}
+'          Right	0.88 cm',  {BistroMath reports 0.82}
+'	',
+'Symmetry	',
+'     Difference	0.68%',    {BistroMath reports 0.4}
+'	');
+
+begin
+IBAOpen('../TestFiles/6FFF.opg',fBeam);
+fBeam.Norm := no_norm;
+fBeam.CreateProfile(Prof,round(fBeam.Max),0);
+sgExpr.LoadFromCSVFile('../Protocols/FFF.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
 
 {-------------------------------------------------------------------------------
  ImageJ Protocol tests
@@ -953,11 +1386,13 @@ for I:=0 to sgExpr.RowCount - 1 do
 end;
 
 
+
 initialization
    RegisterTest(TestProtocolSNC);
    RegisterTest(TestProtocolPTW);
    RegisterTest(TestProtocolIBA);
    RegisterTest(TestProtocolPylinac);
+   RegisterTest(TestProtocolBistroMath);
    RegisterTest(TestProtocolImageJ);
 end.
 

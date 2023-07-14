@@ -141,8 +141,8 @@ type
      fCoM      :TProfilePoint; {centre of mass position}
      public
      Cols,                     {number of columns (X direction)}
-     Rows,                     {number of rows (Y direction)}
-     Scale     :integer;       {scale image values}
+     Rows      :integer;       {number of rows (Y direction)}
+     Scale     :double;        {scale image values}
      Norm      :TNorm;         {Beam normalisation (none, max or cax)}
      Data      :TBeamData;     {2D array containing image data}
      constructor Create;
@@ -268,7 +268,7 @@ begin
   Cols := 0;
   Rows := 0;
   Norm := no_norm;
-  Scale := 1;
+  Scale := 1.0;
   ResetParams;
 end;
 
@@ -344,8 +344,8 @@ begin
 if Max < 10 then
    begin
    Scale := ceil(log10(Max));
-   Scale := trunc(power(10,Scale));
-   Scale := 100 div Scale;
+   Scale := power(10,Scale);
+   Scale := 100/Scale;
    for I:=0 to Rows - 1 do
      for J:=0 to Cols - 1 do
         begin

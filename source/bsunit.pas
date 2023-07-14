@@ -912,8 +912,8 @@ if Length(Beam.Data) > 0 then
    if ShowParams and (Length(Beam.IFA.Data) > 0) then Beam.DisplayIFA(iBeam.Picture.Bitmap);
    if Beam.Scale <> 1 then
       begin
-      cXProfile.LeftAxis.Title.Caption := 'Dose x ' + IntToStr(Beam.Scale);
-      cYProfile.LeftAxis.Title.Caption := 'Dose x ' + IntToStr(Beam.Scale);
+      cXProfile.LeftAxis.Title.Caption := 'Dose x ' + FloatToStr(Beam.Scale);
+      cYProfile.LeftAxis.Title.Caption := 'Dose x ' + FloatToStr(Beam.Scale);
       end
      else
       begin

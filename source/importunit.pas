@@ -689,7 +689,7 @@ Result := true;
       begin
       SetLength(Beam.Data,I+1);
       readln(Infile,Dummy);
-      Dummy := Tab2Space(Dummy,1);
+      Dummy := TrimLeft(Tab2Space(Dummy,1));
       J := 0;
       while Result and (Dummy <> '') do
          begin
