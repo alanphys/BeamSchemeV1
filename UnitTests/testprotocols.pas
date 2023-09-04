@@ -98,7 +98,7 @@ TestProtocolImageJ = class(TTestCase)
    procedure SetUp; override;
    procedure TearDown; override;
    published
-   procedure TestProtocolQSA;
+   procedure TestProtocolBrachy;
    end;
 
 
@@ -1330,7 +1330,7 @@ Prof.Free;
 end;
 
 
-procedure TestProtocolImageJ.TestProtocolQSA;
+procedure TestProtocolImageJ.TestProtocolBrachy;
 {Verified from 75dpi_49x49.txt. ImageJ macros centre on profile length. ImageJ
 adds 1/2 pixel to CoM to give geometric centre of image. BeamScheme reports top
 left corner of pixel containing CoM}
@@ -1358,7 +1358,7 @@ const Params: array of string = (
 '     Right edge	0.50 cm',
 '     Centre	-0.02 cm',
 '     Size	1.04 cm',
-'Flatness	',
+'Uniformity	',
 '     NCS-70	15.81%',
 '     ICRU 72	30.49%',
 'Symmetry	',

@@ -66,6 +66,7 @@ T1DParams = ({field statistics}
              field_size_infl_1D,
              pen_infl_left_1D,
              pen_infl_right_1D,
+             {dose point values}
              dose_20_left_1D,
              dose_20_right_1D,
              dose_50_left_1D,
@@ -130,6 +131,7 @@ function FieldCentreInfl1D(ProfileArr:TSingleProfile):string;
 function FieldSizeInfl1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflLeft1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflRight1D(ProfileArr:TSingleProfile):string;
+{Dose point values}
 function Dose20Left1D(ProfileArr:TSingleProfile):string;
 function Dose20Right1D(ProfileArr:TSingleProfile):string;
 function Dose50Left1D(ProfileArr:TSingleProfile):string;
@@ -523,6 +525,9 @@ Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
 
+{-------------------------------------------------------------------------------
+ Dose point values
+-------------------------------------------------------------------------------}
 function Dose20Left1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 20% of the inflection point field size on the profile left}
 var Y:         double;

@@ -116,6 +116,7 @@ type
      function GetRightInfl:TProfilePos;  {get right inflection point from Hill fit}
      function GetPeakPosInfl:TProfilePos;{get centre of profile peak inflection points}
      function GetRelativePosValue(Value:double):TProfilePos; {get dose value at relative point from peak}
+     function GetRelPosValue(Value:double; Edge, Mid:TProfilePos):TProfilePos;
      procedure ToSeries(ProfileSeries:TLineSeries);
      function  ToText:string;
      function GetArea(Start,Stop:integer):double;
@@ -1246,9 +1247,9 @@ end;
 
 
 function TSingleProfile.GetRelativePosValue(Value:double):TProfilePos;
-{Returns the interpolated profile value at the proportion Value of the field size defined by the
-inflection point. Positive Value indicates right side of profile and negative
-the left side.}
+{Returns the interpolated profile value at the proportion Value of the field
+size defined by the inflection point. Positive Value indicates right side of
+profile and negative the left side.}
 var Pos:       integer;
 begin
 Pos := PeakInfl.Pos + Trunc((RightInfl.Pos - LeftInfl.Pos)*Value*0.5);
@@ -1259,6 +1260,19 @@ if Value > 0 then
 Result.Pos := Pos;
 {Result.ValueY := LReg(PArrX[Pos],PArrX[Pos + 1*sign(Value)],PArrY[Pos],
    PArrY[Pos + 1*sign(Value)], Result.ValueX);}
+Result.ValueY := LReg(PArrX[Pos],PArrX[Pos - 1],PArrY[Pos],
+   PArrY[Pos - 1], Result.ValueX);
+end;
+
+
+function TSingleProfile.GetRelPosValue(Value:double; Edge, Mid:TProfilePos):TProfilePos;
+{Returns the interpolated profile value at the proportion Value of the 100%
+defined by Edge.}
+var Pos:       integer;
+begin
+Pos := Trunc(Mid.Pos + (Mid.Pos - Edge.Pos)*Value);
+Result.ValueX := Mid.ValueX + (Mid.ValueX - Edge.ValueX)*Value;
+Result.Pos := Pos;
 Result.ValueY := LReg(PArrX[Pos],PArrX[Pos - 1],PArrY[Pos],
    PArrY[Pos - 1], Result.ValueX);
 end;
@@ -1290,8 +1304,8 @@ for K := 0 to Len - 1 do
    begin
    X := PArrX[K];
    Y := Normalise(PArrY[K]);
-   Result := Result + FloatToStrF(X,ffFixed,5,Precision) + ', ' + FloatToStrF(Y,ffFixed,5,Precision);
-   if ShowParams and not IsNaN(IFA.PArrY[K]) then Result := Result + ', ' +
+   Result := Result + FloatToStrF(X,ffFixed,5,Precision) + ' ' + FloatToStrF(Y,ffFixed,5,Precision);
+   if ShowParams and not IsNaN(IFA.PArrY[K]) then Result := Result + ' ' +
       FloatToStrF(IFA.PArrY[K],ffFixed,5,Precision);
    Result := Result + LineEnding;
    end;
