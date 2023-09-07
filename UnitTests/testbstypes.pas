@@ -36,8 +36,14 @@ type
       procedure TestLeftInfl;
       procedure TestRightInfl;
       procedure TestPeakInfl;
-      procedure TestGetRelativePosValue_Left;
-      procedure TestGetRelativePosValue_Right;
+      procedure TestGetRelPosValue0_Left;
+      procedure TestGetRelPosValue0_Right;
+      procedure TestGetRelPosValueFWHM_Left;
+      procedure TestGetRelPosValueFWHM_Right;
+      procedure TestGetRelPosValueInfl_Left;
+      procedure TestGetRelPosValueInfl_Right;
+      procedure TestGetRelPosValueDiff_Left;
+      procedure TestGetRelPosValueDiff_Right;
       procedure TestNormalise_none;
       procedure TestNormalise_cax;
       procedure TestNormalise_max;
@@ -185,9 +191,9 @@ TSingleProfile
 procedure TestSingleProfile.SetUp;
 begin
 fProfile := TSingleProfile.Create;
+fProfile.Len := 53;
 fProfile.PArrX := ProfileArrX;
 fProfile.PArrY := ProfileArrY;
-fProfile.Len := 53;
 fProfile.Res := 0.5;
 end;
 
@@ -284,9 +290,9 @@ end;
 
 procedure TestSingleProfile.TestPeakFWHM;
 begin
-AssertEquals('Test peak value',94.47,fProfile.PeakFWHM.ValueY);
+AssertEquals('Test peak value',94.46,fProfile.PeakFWHM.ValueY);
 AssertEquals('Test peak position',0.3671,fProfile.PeakFWHM.ValueX);
-AssertEquals('Test peak index',26,fProfile.PeakFWHM.Pos);
+AssertEquals('Test peak index',27,fProfile.PeakFWHM.Pos);
 end;
 
 
@@ -350,7 +356,7 @@ procedure TestSingleProfile.TestRightInfl;
 begin
 AssertEquals('Test Right Infl value',52.6016,fProfile.RightInfl.ValueY);
 AssertEquals('Test Right Infl position',10.3892,fProfile.RightInfl.ValueX);
-AssertEquals('Test Right Infl index',47,fProfile.RightInfl.Pos);
+AssertEquals('Test Right Infl index',46,fProfile.RightInfl.Pos);
 end;
 
 
@@ -362,19 +368,67 @@ AssertEquals('Test peak index',27,fProfile.PeakInfl.Pos);
 end;
 
 
-procedure TestSingleProfile.TestGetRelativePosValue_Left;
+procedure TestSingleProfile.TestGetRelPosValue0_Left;
 begin
-AssertEquals('Test left 100% value',54.3128,fProfile.GetRelativePosValue(-1.0).ValueY);
-AssertEquals('Test left 100% position',-9.5975,fProfile.GetRelativePosValue(-1.0).ValueX);
-AssertEquals('Test left 100% index',7,fProfile.GetRelativePosValue(-1.0).Pos);
+AssertEquals('Test left 100% FWHM value',94.4627,fProfile.GetRelPosValue(0.0, fProfile.LeftEdge, fProfile.PeakFWHM).ValueY);
+AssertEquals('Test left 100% FWHM position',0.3671,fProfile.GetRelPosValue(0.0, fProfile.LeftEdge, fProfile.PeakFWHM).ValueX);
+AssertEquals('Test left 100% FWHM index',27,fProfile.GetRelPosValue(0.0, fProfile.LeftEdge, fProfile.PeakFWHM).Pos);
 end;
 
 
-procedure TestSingleProfile.TestGetRelativePosValue_Right;
+procedure TestSingleProfile.TestGetRelPosValue0_Right;
 begin
-AssertEquals('Test left 100% value',48.9789,fProfile.GetRelativePosValue(1.0).ValueY);
-AssertEquals('Test left 100% position',10.3892,fProfile.GetRelativePosValue(1.0).ValueX);
-AssertEquals('Test left 100% index',47,fProfile.GetRelativePosValue(1.0).Pos);
+AssertEquals('Test left 100% FWHM value',94.4627,fProfile.GetRelPosValue(0.0, fProfile.RightEdge, fProfile.PeakFWHM).ValueY);
+AssertEquals('Test left 100% FWHM position',0.3671,fProfile.GetRelPosValue(0.0, fProfile.RightEdge, fProfile.PeakFWHM).ValueX);
+AssertEquals('Test left 100% FWHM index',27,fProfile.GetRelPosValue(0.0, fProfile.RightEdge, fProfile.PeakFWHM).Pos);
+end;
+
+
+procedure TestSingleProfile.TestGetRelPosValueFWHM_Left;
+begin
+AssertEquals('Test left 100% FWHM value',47.235,fProfile.GetRelPosValue(1.0, fProfile.LeftEdge, fProfile.PeakFWHM).ValueY);
+AssertEquals('Test left 100% FWHM position',-9.6708,fProfile.GetRelPosValue(1.0, fProfile.LeftEdge, fProfile.PeakFWHM).ValueX);
+AssertEquals('Test left 100% FWHM index',7,fProfile.GetRelPosValue(1.0, fProfile.LeftEdge, fProfile.PeakFWHM).Pos);
+end;
+
+
+procedure TestSingleProfile.TestGetRelPosValueFWHM_Right;
+begin
+AssertEquals('Test left 100% FWHM value',47.235,fProfile.GetRelPosValue(1.0, fProfile.RightEdge, fProfile.PeakFWHM).ValueY);
+AssertEquals('Test left 100% FWHM position',10.4049,fProfile.GetRelPosValue(1.0, fProfile.RightEdge, fProfile.PeakFWHM).ValueX);
+AssertEquals('Test left 100% FWHM index',46,fProfile.GetRelPosValue(1.0, fProfile.RightEdge, fProfile.PeakFWHM).Pos);
+end;
+
+
+procedure TestSingleProfile.TestGetRelPosValueInfl_Left;
+begin
+AssertEquals('Test left 100% inflection value',54.3128,fProfile.GetRelPosValue(1.0, fProfile.LeftInfl, fProfile.PeakInfl).ValueY);
+AssertEquals('Test left 100% inflection position',-9.5975,fProfile.GetRelPosValue(1.0, fProfile.LeftInfl, fProfile.PeakInfl).ValueX);
+AssertEquals('Test left 100% inflection index',7,fProfile.GetRelPosValue(1.0, fProfile.LeftInfl, fProfile.PeakInfl).Pos);
+end;
+
+
+procedure TestSingleProfile.TestGetRelPosValueInfl_Right;
+begin
+AssertEquals('Test left 100% inflection value',48.9789,fProfile.GetRelPosValue(1.0, fProfile.RightInfl, fProfile.PeakInfl).ValueY);
+AssertEquals('Test left 100% inflection position',10.3892,fProfile.GetRelPosValue(1.0, fProfile.RightInfl, fProfile.PeakInfl).ValueX);
+AssertEquals('Test left 100% inflection index',46,fProfile.GetRelPosValue(1.0, fProfile.RightInfl, fProfile.PeakInfl).Pos);
+end;
+
+
+procedure TestSingleProfile.TestGetRelPosValueDiff_Left;
+begin
+AssertEquals('Test left 100% max gradient value',63.73,fProfile.GetRelPosValue(1.0, fProfile.LeftDiff, fProfile.PeakDiff).ValueY);
+AssertEquals('Test left 100% max gradient position',-9.5,fProfile.GetRelPosValue(1.0, fProfile.LeftDiff, fProfile.PeakDiff).ValueX);
+AssertEquals('Test left 100% max gradient index',7,fProfile.GetRelPosValue(1.0, fProfile.LeftDiff, fProfile.PeakDiff).Pos);
+end;
+
+
+procedure TestSingleProfile.TestGetRelPosValueDiff_Right;
+begin
+AssertEquals('Test left 100% Diffection value',36.68,fProfile.GetRelPosValue(1.0, fProfile.RightDiff, fProfile.PeakDiff).ValueY);
+AssertEquals('Test left 100% Diffection position',10.5,fProfile.GetRelPosValue(1.0, fProfile.RightDiff, fProfile.PeakDiff).ValueX);
+AssertEquals('Test left 100% Diffection index',47,fProfile.GetRelPosValue(1.0, fProfile.RightDiff, fProfile.PeakDiff).Pos);
 end;
 
 
@@ -405,6 +459,8 @@ procedure TestBeam.SetUp;
 begin
 fBeam := TBeam.Create;
 MapCheckOpen('../TestFiles/2-Sep-2011-A.txt',fBeam);
+IFAType := Proportional;
+IFAFactor := 0.8;
 end;
 
 
@@ -510,16 +566,19 @@ begin
 Prof := TSingleProfile.Create;
 Prof.SetParams(0,0,1);
 fBeam.CreateProfile(Prof,round(fBeam.Max),0);
-AssertEquals('Length ',53,Prof.Len);
-AssertEquals('Resolution ',0.5,Prof.Res);
-for I:=0 to Prof.Len - 1 do
-   begin
-   AssertEquals('Horizontal Profile X value ' + IntToStr(I),ProfileArrX[I],Prof.PArrX[I]);
-   AssertEquals('Horizontal Profile Y value ' + IntToStr(I),ProfileArrY[I],Prof.PArrY[I],0.01);
-   if not IsNaN(ProfileIFA[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
-      AssertEquals('Horizontal Profile IFA value ' + IntToStr(I),ProfileIFA[I],Prof.IFA.PArrY[I],0.01);
+   try
+   AssertEquals('Length ',53,Prof.Len);
+   AssertEquals('Resolution ',0.5,Prof.Res);
+   for I:=0 to Prof.Len - 1 do
+      begin
+      AssertEquals('Horizontal Profile X value ' + IntToStr(I),ProfileArrX[I],Prof.PArrX[I]);
+      AssertEquals('Horizontal Profile Y value ' + IntToStr(I),ProfileArrY[I],Prof.PArrY[I],0.01);
+      if not IsNaN(ProfileIFA[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
+         AssertEquals('Horizontal Profile IFA value ' + IntToStr(I),ProfileIFA[I],Prof.IFA.PArrY[I],0.01);
+      end;
+   finally
+   Prof.Free;
    end;
-Prof.Free;
 end;
 
 
@@ -530,16 +589,19 @@ begin
 Prof := TSingleProfile.Create;
 Prof.SetParams(90,0,1);
 fBeam.CreateProfile(Prof,round(fBeam.Max),0);
-AssertEquals('Length ',65,Prof.Len);
-AssertEquals('Resolution ',0.5,Prof.Res);
-for I:=0 to Prof.Len - 1 do
-   begin
-   AssertEquals('Vertical Profile X value ' + IntToStr(I),ProfileArrX3[I],Prof.PArrX[I]);
-   AssertEquals('Vertical Profile Y value ' + IntToStr(I),ProfileArrY3[I],Prof.PArrY[I],0.01);
-   if not IsNaN(ProfileIFA3[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
-      AssertEquals('Vertical Profile IFA value ' + IntToStr(I),ProfileIFA3[I],Prof.IFA.PArrY[I],0.01);
-   end;
-Prof.Free;
+   try
+   AssertEquals('Length ',65,Prof.Len);
+   AssertEquals('Resolution ',0.5,Prof.Res);
+   for I:=0 to Prof.Len - 1 do
+      begin
+      AssertEquals('Vertical Profile X value ' + IntToStr(I),ProfileArrX3[I],Prof.PArrX[I]);
+      AssertEquals('Vertical Profile Y value ' + IntToStr(I),ProfileArrY3[I],Prof.PArrY[I],0.01);
+      if not IsNaN(ProfileIFA3[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
+         AssertEquals('Vertical Profile IFA value ' + IntToStr(I),ProfileIFA3[I],Prof.IFA.PArrY[I],0.01);
+      end;
+   finally
+   Prof.Free;
+end;
 end;
 
 
@@ -550,13 +612,16 @@ begin
 Prof := TSingleProfile.Create;
 Prof.SetParams(0,-20,1);
 fBeam.CreateProfile(Prof,round(fBeam.Max),0);
-for I:=0 to Prof.Len - 1 do
-   begin
-   AssertEquals('Offset Profile X value ' + IntToStr(I),ProfileArrX4[I],Prof.PArrX[I]);
-   AssertEquals('Offset Profile Y value ' + IntToStr(I),ProfileArrY4[I],Prof.PArrY[I],0.01);
-   AssertTrue(IsNaN(Prof.IFA.PArrY[I]));          {profile lies outside in field area}
+   try
+   for I:=0 to Prof.Len - 1 do
+      begin
+      AssertEquals('Offset Profile X value ' + IntToStr(I),ProfileArrX4[I],Prof.PArrX[I]);
+      AssertEquals('Offset Profile Y value ' + IntToStr(I),ProfileArrY4[I],Prof.PArrY[I],0.01);
+      AssertTrue(IsNaN(Prof.IFA.PArrY[I]));          {profile lies outside in field area}
+      end;
+   finally
+   Prof.Free;
    end;
-Prof.Free;
 end;
 
 
@@ -567,14 +632,17 @@ begin
 Prof := TSingleProfile.Create;
 Prof.SetParams(45,0,1);
 fBeam.CreateProfile(Prof,round(fBeam.Max),0);
-for I:=0 to Prof.Len - 1 do
-   begin
-   AssertEquals('Diagonal Profile X value ' + IntToStr(I),ProfileArrX5[I],Prof.PArrX[I],0.01);
-   AssertEquals('Diagonal Profile Y value ' + IntToStr(I),ProfileArrY5[I],Prof.PArrY[I],0.01);
-   if not IsNaN(ProfileIFA5[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
-      AssertEquals('Diagonal Profile IFA value ' + IntToStr(I),ProfileIFA5[I],Prof.IFA.PArrY[I],0.01);
+   try
+   for I:=0 to Prof.Len - 1 do
+      begin
+      AssertEquals('Diagonal Profile X value ' + IntToStr(I),ProfileArrX5[I],Prof.PArrX[I],0.01);
+      AssertEquals('Diagonal Profile Y value ' + IntToStr(I),ProfileArrY5[I],Prof.PArrY[I],0.01);
+      if not IsNaN(ProfileIFA5[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
+         AssertEquals('Diagonal Profile IFA value ' + IntToStr(I),ProfileIFA5[I],Prof.IFA.PArrY[I],0.01);
+      end;
+   finally
+   Prof.Free;
    end;
-Prof.Free;
 end;
 
 
@@ -584,8 +652,11 @@ begin
 Prof := TSingleProfile.Create;
 Prof.SetParams(0,0,41);
 fBeam.CreateProfile(Prof,round(fBeam.Max),0);
-AssertEquals('Wide profile centre value ',3840.04,Prof.Centre.ValueY,0.01);
-Prof.Free;
+   try
+   AssertEquals('Wide profile centre value ',3840.04,Prof.Centre.ValueY,0.01);
+   finally
+   Prof.Free;
+   end;
 end;
 
 
@@ -596,14 +667,17 @@ begin
 Prof := TSingleProfile.Create;
 Prof.SetParams(-20,16,11);
 fBeam.CreateProfile(Prof,round(fBeam.Max),0);
-for I:=0 to Prof.Len - 1 do
-   begin
-   AssertEquals('Diagonal Profile X value ' + IntToStr(I),ProfileArrX6[I],Prof.PArrX[I],0.01);
-   AssertEquals('Diagonal Profile Y value ' + IntToStr(I),ProfileArrY6[I],Prof.PArrY[I],0.01);
-   if not IsNaN(ProfileIFA6[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
-      AssertEquals('Diagonal Profile IFA value ' + IntToStr(I),ProfileIFA6[I],Prof.IFA.PArrY[I],0.01);
-   end;
-Prof.Free;
+   try
+   for I:=0 to Prof.Len - 1 do
+      begin
+      AssertEquals('Diagonal Profile X value ' + IntToStr(I),ProfileArrX6[I],Prof.PArrX[I],0.01);
+      AssertEquals('Diagonal Profile Y value ' + IntToStr(I),ProfileArrY6[I],Prof.PArrY[I],0.01);
+      if not IsNaN(ProfileIFA6[I]) or not IsNaN(Prof.IFA.PArrY[I]) then
+         AssertEquals('Diagonal Profile IFA value ' + IntToStr(I),ProfileIFA6[I],Prof.IFA.PArrY[I],0.01);
+      end;
+   finally
+   Prof.Free;
+   end
 end;
 
 

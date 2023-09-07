@@ -150,8 +150,9 @@
       <Unit0>
         <Filename Value="beamscheme.lpr"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="3" Y="2"/>
+        <CursorPos X="36" Y="28"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -161,7 +162,7 @@
         <ComponentName Value="BSForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="477"/>
+        <TopLine Value="174"/>
         <CursorPos X="50" Y="498"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -787,7 +788,6 @@
       <Unit88>
         <Filename Value="source/bstypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <TopLine Value="115"/>
         <CursorPos X="15" Y="119"/>

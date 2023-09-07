@@ -54,11 +54,20 @@ T1DParams = ({field statistics}
              pen_9010_right_1D,
              pen_9050_left_1D,
              pen_9050_right_1D,
-             {differential params}
+             {differential params (max gradient)}
              field_diff_left_1D,
              field_diff_right_1D,
              field_centre_diff_1D,
              field_size_diff_1D,
+             {dose point values relative to the maximum gradient}
+             dose_20_left_diff_1D,
+             dose_20_right_diff_1D,
+             dose_50_left_diff_1D,
+             dose_50_right_diff_1D,
+             dose_60_left_diff_1D,
+             dose_60_right_diff_1D,
+             dose_80_left_diff_1D,
+             dose_80_right_diff_1D,
              {inflection point params}
              field_infl_left_1D,
              field_infl_right_1D,
@@ -66,15 +75,15 @@ T1DParams = ({field statistics}
              field_size_infl_1D,
              pen_infl_left_1D,
              pen_infl_right_1D,
-             {dose point values}
-             dose_20_left_1D,
-             dose_20_right_1D,
-             dose_50_left_1D,
-             dose_50_right_1D,
-             dose_60_left_1D,
-             dose_60_right_1D,
-             dose_80_left_1D,
-             dose_80_right_1D,
+             {dose point values relative to the inflection point}
+             dose_20_left_infl_1D,
+             dose_20_right_infl_1D,
+             dose_50_left_infl_1D,
+             dose_50_right_infl_1D,
+             dose_60_left_infl_1D,
+             dose_60_right_infl_1D,
+             dose_80_left_infl_1D,
+             dose_80_right_infl_1D,
              {flatness and uniformity}
              flat_ave_1D,
              flat_diff_1D,
@@ -119,11 +128,20 @@ function Penumbra9010Left1D(ProfileArr:TSingleProfile):string;
 function Penumbra9010Right1D(ProfileArr:TSingleProfile):string;
 function Penumbra9050Left1D(ProfileArr:TSingleProfile):string;
 function Penumbra9050Right1D(ProfileArr:TSingleProfile):string;
-{differential params}
+{differential params (max gradient)}
 function FieldDiffLeft1D(ProfileArr:TSingleProfile):string;
 function FieldDiffRight1D(ProfileArr:TSingleProfile):string;
 function FieldCentreDiff1D(ProfileArr:TSingleProfile):string;
 function FieldSizeDiff1D(ProfileArr:TSingleProfile):string;
+{Dose point values relative to the maximum gradient}
+function Dose20LeftDiff1D(ProfileArr:TSingleProfile):string;
+function Dose20RightDiff1D(ProfileArr:TSingleProfile):string;
+function Dose50LeftDiff1D(ProfileArr:TSingleProfile):string;
+function Dose50RightDiff1D(ProfileArr:TSingleProfile):string;
+function Dose60LeftDiff1D(ProfileArr:TSingleProfile):string;
+function Dose60RightDiff1D(ProfileArr:TSingleProfile):string;
+function Dose80LeftDiff1D(ProfileArr:TSingleProfile):string;
+function Dose80RightDiff1D(ProfileArr:TSingleProfile):string;
 {inflection point params}
 function FieldInflLeft1D(ProfileArr:TSingleProfile):string;
 function FieldInflRight1D(ProfileArr:TSingleProfile):string;
@@ -131,15 +149,15 @@ function FieldCentreInfl1D(ProfileArr:TSingleProfile):string;
 function FieldSizeInfl1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflLeft1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflRight1D(ProfileArr:TSingleProfile):string;
-{Dose point values}
-function Dose20Left1D(ProfileArr:TSingleProfile):string;
-function Dose20Right1D(ProfileArr:TSingleProfile):string;
-function Dose50Left1D(ProfileArr:TSingleProfile):string;
-function Dose50Right1D(ProfileArr:TSingleProfile):string;
-function Dose60Left1D(ProfileArr:TSingleProfile):string;
-function Dose60Right1D(ProfileArr:TSingleProfile):string;
-function Dose80Left1D(ProfileArr:TSingleProfile):string;
-function Dose80Right1D(ProfileArr:TSingleProfile):string;
+{Dose point values relative to the inflection point}
+function Dose20LeftInfl1D(ProfileArr:TSingleProfile):string;
+function Dose20RightInfl1D(ProfileArr:TSingleProfile):string;
+function Dose50LeftInfl1D(ProfileArr:TSingleProfile):string;
+function Dose50RightInfl1D(ProfileArr:TSingleProfile):string;
+function Dose60LeftInfl1D(ProfileArr:TSingleProfile):string;
+function Dose60RightInfl1D(ProfileArr:TSingleProfile):string;
+function Dose80LeftInfl1D(ProfileArr:TSingleProfile):string;
+function Dose80RightInfl1D(ProfileArr:TSingleProfile):string;
 {flatness and uniformity}
 function FlatnessAve1D(ProfileArr:TSingleProfile):string;
 function FlatnessDiff1D(ProfileArr:TSingleProfile):string;
@@ -185,6 +203,15 @@ Params1D: array[cax_val_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Right Diff'; Func:@FieldDiffRight1D),
    (Name:'1D Field Centre Diff'; Func:@FieldCentreDiff1D),
    (Name:'1D Field Size Diff'; Func:@FieldSizeDiff1D),
+   {dose point values relative to the max gradient}
+   (Name:'1D Dose 20% Diff Left'; Func:@Dose20LeftDiff1D),
+   (Name:'1D Dose 20% Diff Right'; Func:@Dose20RightDiff1D),
+   (Name:'1D Dose 50% Diff Left'; Func:@Dose50LeftDiff1D),
+   (Name:'1D Dose 50% Diff Right'; Func:@Dose50RightDiff1D),
+   (Name:'1D Dose 60% Diff Left'; Func:@Dose60LeftDiff1D),
+   (Name:'1D Dose 60% Diff Right'; Func:@Dose60RightDiff1D),
+   (Name:'1D Dose 80% Diff Left'; Func:@Dose80LeftDiff1D),
+   (Name:'1D Dose 80% Diff Right'; Func:@Dose80RightDiff1D),
    {inflection point params}
    (Name:'1D Left Infl'; Func:@FieldInflLeft1D),
    (Name:'1D Right Infl'; Func:@FieldInflRight1D),
@@ -192,14 +219,15 @@ Params1D: array[cax_val_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Field Size Infl'; Func:@FieldSizeInfl1D),
    (Name:'1D Penumbra Infl Left'; Func:@PenumbraInflLeft1D),
    (Name:'1D Penumbra Infl Right'; Func:@PenumbraInflRight1D),
-   (Name:'1D Dose 20% FW Left'; Func:@Dose20Left1D),
-   (Name:'1D Dose 20% FW Right'; Func:@Dose20Right1D),
-   (Name:'1D Dose 50% FW Left'; Func:@Dose50Left1D),
-   (Name:'1D Dose 50% FW Right'; Func:@Dose50Right1D),
-   (Name:'1D Dose 60% FW Left'; Func:@Dose60Left1D),
-   (Name:'1D Dose 60% FW Right'; Func:@Dose60Right1D),
-   (Name:'1D Dose 80% FW Left'; Func:@Dose80Left1D),
-   (Name:'1D Dose 80% FW Right'; Func:@Dose80Right1D),
+   {dose point values relative to the inflection point}
+   (Name:'1D Dose 20% Infl Left'; Func:@Dose20LeftInfl1D),
+   (Name:'1D Dose 20% Infl Right'; Func:@Dose20RightInfl1D),
+   (Name:'1D Dose 50% Infl Left'; Func:@Dose50LeftInfl1D),
+   (Name:'1D Dose 50% Infl Right'; Func:@Dose50RightInfl1D),
+   (Name:'1D Dose 60% Infl Left'; Func:@Dose60LeftInfl1D),
+   (Name:'1D Dose 60% Infl Right'; Func:@Dose60RightInfl1D),
+   (Name:'1D Dose 80% Infl Left'; Func:@Dose80LeftInfl1D),
+   (Name:'1D Dose 80% Infl Right'; Func:@Dose80RightInfl1D),
    {flatness and uniformity}
    (Name:'1D Flatness Ave'; Func:@FlatnessAve1D),
    (Name:'1D Flatness Diff'; Func:@FlatnessDiff1D),
@@ -453,6 +481,105 @@ end;
 
 
 {-------------------------------------------------------------------------------
+ Dose point values relative to the max gradient
+-------------------------------------------------------------------------------}
+function Dose20LeftDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 20% of the Diffection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.2, LeftDiff, PeakDiff).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose20RightDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 20% of the Diffection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.2, RightDiff, PeakDiff).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose50LeftDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 50% of the Diffection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.5, LeftDiff, PeakDiff).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose50RightDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 50% of the Diffection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.5, RightDiff, PeakDiff).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose60LeftDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 60% of the Diffection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.6, LeftDiff, PeakDiff).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose60RightDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 60% of the Diffection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.6, RightDiff, PeakDiff).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose80LeftDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 80% of the Diffection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.8, LeftDiff, PeakDiff).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+function Dose80RightDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the dose at 80% of the Diffection point field size on the profile left}
+var Y:         double;
+begin
+with ProfileArr do
+   begin
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.8, RightDiff, PeakDiff).ValueY),ffFixed,4,Precision);
+   if Norm <> no_norm then Result := Result + '%'
+   end;
+end;
+
+
+{-------------------------------------------------------------------------------
  Inflection point parameters
 -------------------------------------------------------------------------------}
 function FieldInflLeft1D(ProfileArr:TSingleProfile):string;
@@ -526,99 +653,99 @@ end;
 
 
 {-------------------------------------------------------------------------------
- Dose point values
+ Dose point values relative to the inflection point
 -------------------------------------------------------------------------------}
-function Dose20Left1D(ProfileArr:TSingleProfile):string;
+function Dose20LeftInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 20% of the inflection point field size on the profile left}
 var Y:         double;
 begin
 with ProfileArr do
    begin
-   Result := FloatToStrF(Normalise(GetRelativePosValue(-0.2).ValueY),ffFixed,4,Precision);
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.2, LeftInfl, PeakInfl).ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
    end;
 end;
 
 
-function Dose20Right1D(ProfileArr:TSingleProfile):string;
+function Dose20RightInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 20% of the inflection point field size on the profile left}
 var Y:         double;
 begin
 with ProfileArr do
    begin
-   Result := FloatToStrF(Normalise(GetRelativePosValue(0.2).ValueY),ffFixed,4,Precision);
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.2, RightInfl, PeakInfl).ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
    end;
 end;
 
 
-function Dose50Left1D(ProfileArr:TSingleProfile):string;
+function Dose50LeftInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 50% of the inflection point field size on the profile left}
 var Y:         double;
 begin
 with ProfileArr do
    begin
-   Result := FloatToStrF(Normalise(GetRelativePosValue(-0.5).ValueY),ffFixed,4,Precision);
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.5, LeftInfl, PeakInfl).ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
    end;
 end;
 
 
-function Dose50Right1D(ProfileArr:TSingleProfile):string;
+function Dose50RightInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 50% of the inflection point field size on the profile left}
 var Y:         double;
 begin
 with ProfileArr do
    begin
-   Result := FloatToStrF(Normalise(GetRelativePosValue(0.5).ValueY),ffFixed,4,Precision);
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.5, RightInfl, PeakInfl).ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
    end;
 end;
 
 
-function Dose60Left1D(ProfileArr:TSingleProfile):string;
+function Dose60LeftInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 60% of the inflection point field size on the profile left}
 var Y:         double;
 begin
 with ProfileArr do
    begin
-   Result := FloatToStrF(Normalise(GetRelativePosValue(-0.6).ValueY),ffFixed,4,Precision);
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.6, LeftInfl, PeakInfl).ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
    end;
 end;
 
 
-function Dose60Right1D(ProfileArr:TSingleProfile):string;
+function Dose60RightInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 60% of the inflection point field size on the profile left}
 var Y:         double;
 begin
 with ProfileArr do
    begin
-   Result := FloatToStrF(Normalise(GetRelativePosValue(0.6).ValueY),ffFixed,4,Precision);
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.6, RightInfl, PeakInfl).ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
    end;
 end;
 
 
-function Dose80Left1D(ProfileArr:TSingleProfile):string;
+function Dose80LeftInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 80% of the inflection point field size on the profile left}
 var Y:         double;
 begin
 with ProfileArr do
    begin
-   Result := FloatToStrF(Normalise(GetRelativePosValue(-0.8).ValueY),ffFixed,4,Precision);
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.8, LeftInfl, PeakInfl).ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
    end;
 end;
 
 
-function Dose80Right1D(ProfileArr:TSingleProfile):string;
+function Dose80RightInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 80% of the inflection point field size on the profile left}
 var Y:         double;
 begin
 with ProfileArr do
    begin
-   Result := FloatToStrF(Normalise(GetRelativePosValue(0.8).ValueY),ffFixed,4,Precision);
+   Result := FloatToStrF(Normalise(GetRelPosValue(0.8, RightInfl, PeakInfl).ValueY),ffFixed,4,Precision);
    if Norm <> no_norm then Result := Result + '%'
    end;
 end;

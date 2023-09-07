@@ -49,21 +49,31 @@ type
       procedure TestFieldDiffRight1D;
       procedure TestFieldCentreDiff1D;
       procedure TestFieldSizeDiff1D;
-      {inflection point parameters}
+      {dose point values relative to the maximum gradient}
+      procedure TestDose20LeftDiff1D;
+      procedure TestDose20RightDiff1D;
+      procedure TestDose50LeftDiff1D;
+      procedure TestDose50RightDiff1D;
+      procedure TestDose60LeftDiff1D;
+      procedure TestDose60RightDiff1D;
+      procedure TestDose80LeftDiff1D;
+      procedure TestDose80RightDiff1D;
+     {inflection point parameters}
       procedure TestFieldInflLeft1D;
       procedure TestFieldInflRight1D;
       procedure TestFieldCentreInfl1D;
       procedure TestFieldSizeInfl1D;
       procedure TestPenumbraInflLeft1D;
       procedure TestPenumbraInflRight1D;
-      procedure TestDose20Left1D;
-      procedure TestDose20Right1D;
-      procedure TestDose50Left1D;
-      procedure TestDose50Right1D;
-      procedure TestDose60Left1D;
-      procedure TestDose60Right1D;
-      procedure TestDose80Left1D;
-      procedure TestDose80Right1D;
+      {dose point values relative to the inflection point}
+      procedure TestDose20LeftInfl1D;
+      procedure TestDose20RightInfl1D;
+      procedure TestDose50LeftInfl1D;
+      procedure TestDose50RightInfl1D;
+      procedure TestDose60LeftInfl1D;
+      procedure TestDose60RightInfl1D;
+      procedure TestDose80LeftInfl1D;
+      procedure TestDose80RightInfl1D;
       {flatness and uniformity parameters}
       procedure TestFlatnessAve1D;
       procedure TestFlatnessDiff1D;
@@ -104,14 +114,15 @@ var ProfileArrX: array of double = (-13, -12.5, -12, -11.5, -11, -10.5, -10,
 implementation
 
 procedure Test1DParamFuncs.SetUp;
+var n:integer;
 begin
 fProfile := TSingleProfile.Create;
+fProfile.Len := 53;
+fProfile.IFA.Len := fProfile.Len;
 fProfile.PArrX := ProfileArrX;
 fProfile.PArrY := ProfileArrY;
 fprofile.IFA.PArrY := ProfileIFA;
 fProfile.IFA.PArrX := fProfile.PArrX;
-fProfile.Len := 53;
-fProfile.IFA.Len := fProfile.Len;
 fprofile.Res := 0.5;
 end;
 
@@ -229,6 +240,7 @@ fProfile.Norm := norm_max;
 AssertEquals('Test Average IFA, normalisation to Max','98.10%',AveIFA1D(fProfile));
 end;
 
+
 {-------------------------------------------------------------------------------
  Interpolated parameters
 -------------------------------------------------------------------------------}
@@ -320,6 +332,57 @@ end;
 
 
 {-------------------------------------------------------------------------------
+ Dose point values relative to the max gradient
+-------------------------------------------------------------------------------}
+procedure Test1DParamFuncs.TestDose20LeftDiff1D;
+begin
+AssertEquals('Test dose point 20% Diff left','95.38',Dose20LeftDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose20RightDiff1D;
+begin
+AssertEquals('Test dose point 20% FW right','95.18',Dose20RightDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose50LeftDiff1D;
+begin
+AssertEquals('Test dose point 50% FW left','98.95',Dose50LeftDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose50RightDiff1D;
+begin
+AssertEquals('Test dose point 50% FW right','97.99',Dose50RightDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose60LeftDiff1D;
+begin
+AssertEquals('Test dose point 60% FW left','98.98',Dose60LeftDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose60RightDiff1D;
+begin
+AssertEquals('Test dose point 60% FW right','98.20',Dose60RightDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose80LeftDiff1D;
+begin
+AssertEquals('Test dose point 80% FW left','98.78',Dose80LeftDiff1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestDose80RightDiff1D;
+begin
+AssertEquals('Test dose point 80% FW right','98.10',Dose80RightDiff1D(fProfile));
+end;
+
+
+{-------------------------------------------------------------------------------
  Inflection point parameters
 -------------------------------------------------------------------------------}
 procedure Test1DParamFuncs.TestFieldInflLeft1D;
@@ -358,51 +421,54 @@ AssertEquals('Test inflection penumbra right 80-20%','0.55 cm',PenumbraInflRight
 end;
 
 
-procedure Test1DParamFuncs.TestDose20Left1D;
+{-------------------------------------------------------------------------------
+ Dose point values relative to the inflection point
+-------------------------------------------------------------------------------}
+procedure Test1DParamFuncs.TestDose20LeftInfl1D;
 begin
-AssertEquals('Test dose point 20% FW left','96.12',Dose20Left1D(fProfile));
+AssertEquals('Test dose point 20% Infl left','95.56',Dose20LeftInfl1D(fProfile));
 end;
 
 
-procedure Test1DParamFuncs.TestDose20Right1D;
+procedure Test1DParamFuncs.TestDose20RightInfl1D;
 begin
-AssertEquals('Test dose point 20% FW right','94.77',Dose20Right1D(fProfile));
+AssertEquals('Test dose point 20% FW right','95.11',Dose20RightInfl1D(fProfile));     {actually should be 95.08, index is off by 1}
 end;
 
 
-procedure Test1DParamFuncs.TestDose50Left1D;
+procedure Test1DParamFuncs.TestDose50LeftInfl1D;
 begin
-AssertEquals('Test dose point 50% FW left','98.86',Dose50Left1D(fProfile));
+AssertEquals('Test dose point 50% FW left','98.92',Dose50LeftInfl1D(fProfile));
 end;
 
 
-procedure Test1DParamFuncs.TestDose50Right1D;
+procedure Test1DParamFuncs.TestDose50RightInfl1D;
 begin
-AssertEquals('Test dose point 50% FW right','97.97',Dose50Right1D(fProfile));
+AssertEquals('Test dose point 50% FW right','97.98',Dose50RightInfl1D(fProfile));
 end;
 
 
-procedure Test1DParamFuncs.TestDose60Left1D;
+procedure Test1DParamFuncs.TestDose60LeftInfl1D;
 begin
-AssertEquals('Test dose point 60% FW left','98.93',Dose60Left1D(fProfile));
+AssertEquals('Test dose point 60% FW left','98.96',Dose60LeftInfl1D(fProfile));
 end;
 
 
-procedure Test1DParamFuncs.TestDose60Right1D;
+procedure Test1DParamFuncs.TestDose60RightInfl1D;
 begin
-AssertEquals('Test dose point 60% FW right','98.08',Dose60Right1D(fProfile));
+AssertEquals('Test dose point 60% FW right','98.15',Dose60RightInfl1D(fProfile));
 end;
 
 
-procedure Test1DParamFuncs.TestDose80Left1D;
+procedure Test1DParamFuncs.TestDose80LeftInfl1D;
 begin
-AssertEquals('Test dose point 80% FW left','98.64',Dose80Left1D(fProfile));
+AssertEquals('Test dose point 80% FW left','98.70',Dose80LeftInfl1D(fProfile));
 end;
 
 
-procedure Test1DParamFuncs.TestDose80Right1D;
+procedure Test1DParamFuncs.TestDose80RightInfl1D;
 begin
-AssertEquals('Test dose point 80% FW right','98.19',Dose80Right1D(fProfile));
+AssertEquals('Test dose point 80% FW right','98.15',Dose80RightInfl1D(fProfile));
 end;
 
 

@@ -473,7 +473,7 @@ end;
 
 destructor TBeam.Destroy;
 begin
-fIFA.Destroy;
+fIFA.Free;
 inherited Destroy;
 end;
 
@@ -923,6 +923,8 @@ end;
 destructor TSingleProfile.Destroy;
 begin
 IFA.Free;
+SetLength(fHPLeft,0);
+SetLength(fHPRight,0);
 inherited;
 end;
 
@@ -1017,7 +1019,7 @@ end;
 
 
 function TSingleProfile.GetFWXMPos(Value:double; D:Integer):TProfilePos;
-{Return the first point from the centre where the profile becomes less than
+{Return the first point from the centre before the profile becomes less than
 Max or Cax times Value. D gives direction Up (increment) or Down (decrement)}
 var I          :integer;
 
@@ -1066,7 +1068,7 @@ end;
 
 function TSingleProfile.GetLeftE:TProfilePos;
 {Return the value, position and index of the field left edge. The index is the
-first integer index after the field edge.}
+first integer index above the field edge.}
 begin
 {for performance only calculate if not previously calculated}
 if fLeftEdge.ValueY = 0 then
@@ -1092,7 +1094,7 @@ begin
 if fPeakFWHM.ValueY = 0 then
    begin
    fPeakFWHM.ValueX := (RightEdge.ValueX + LeftEdge.ValueX)/2;
-   fPeakFWHM.Pos := (RightEdge.Pos + LeftEdge.Pos) div 2;
+   fPeakFWHM.Pos := Centre.Pos + Round(fPeakFWHM.ValueX/Res);
    fPeakFWHM.ValueY := PArrY[fPeakFWHM.Pos];
    end;
 Result := fPeakFWHM;
@@ -1129,7 +1131,7 @@ begin
 if fPeakDiff.ValueY = 0 then
    begin
    fPeakDiff.ValueX := (RightDiff.ValueX + LeftDiff.ValueX)/2;
-   fPeakDiff.Pos := (RightDiff.Pos + LeftDiff.Pos) div 2;
+   fPeakDiff.Pos := Centre.Pos + Round(fPeakDiff.ValueX/Res);
    fPeakDiff.ValueY := PArrY[fPeakDiff.Pos];
    end;
 Result := fPeakDiff;
@@ -1227,7 +1229,7 @@ if fRightInfl.ValueY = 0 then
    begin
    fRightInfl.ValueX := InflHillFunc(HPRight);
    fRightInfl.ValueY := HillFunc(fRightInfl.ValueX,HPRight);
-   fRightInfl.Pos := round(fRightInfl.ValueX/Res) + Centre.Pos;
+   fRightInfl.Pos := round(fRightInfl.ValueX/Res) + Centre.Pos - 1;
    end;
 Result := fRightInfl;
 end;
@@ -1239,7 +1241,7 @@ begin
 if fPeakInfl.ValueY = 0 then
    begin
    fPeakInfl.ValueX := (RightInfl.ValueX + LeftInfl.ValueX)/2;
-   fPeakInfl.Pos := (RightInfl.Pos + LeftInfl.Pos) div 2;
+   fPeakInfl.Pos := Centre.Pos + Round(fPeakInfl.ValueX/Res);
    fPeakInfl.ValueY := PArrY[fPeakInfl.Pos];
    end;
 Result := fPeakInfl;
@@ -1267,14 +1269,16 @@ end;
 
 function TSingleProfile.GetRelPosValue(Value:double; Edge, Mid:TProfilePos):TProfilePos;
 {Returns the interpolated profile value at the proportion Value of the 100%
-defined by Edge.}
-var Pos:       integer;
+defined from Mid to Edge.}
+var I,
+    Pos:       integer;
 begin
-Pos := Trunc(Mid.Pos + (Mid.Pos - Edge.Pos)*Value);
-Result.ValueX := Mid.ValueX + (Mid.ValueX - Edge.ValueX)*Value;
+I := 1;
+Pos := Round(Mid.Pos - (Mid.Pos - Edge.Pos)*Value);
+Result.ValueX := Mid.ValueX - (Mid.ValueX - Edge.ValueX)*Value;
 Result.Pos := Pos;
-Result.ValueY := LReg(PArrX[Pos],PArrX[Pos - 1],PArrY[Pos],
-   PArrY[Pos - 1], Result.ValueX);
+if Result.ValueX <= Mid.ValueX then I := -1;
+Result.ValueY := LReg(PArrX[Pos],PArrX[Pos + I],PArrY[Pos],PArrY[Pos + I], Result.ValueX);
 end;
 
 
