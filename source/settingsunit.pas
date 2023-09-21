@@ -7,7 +7,7 @@ interface
 
 uses
    Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
-   ValEdit;
+   ValEdit, Grids;
 
 type
 
@@ -36,6 +36,7 @@ function SaveSettings(FileName:string):boolean;
 
 var
    SettingsForm: TSettingsForm;
+   RowsChanged : array of integer;
 
 implementation
 
@@ -67,6 +68,7 @@ if FileExists(FileName) then
    sTemp := cfg.GetValue('CentreDefinition','Peak');
    for CentreVal in TCentre do
       if CentreData[CentreVal].Name = sTemp then Centering := CentreVal;
+   TopRadius := cfg.GetExtendedValue('TopRadius',2.5);
    Result := true;
    finally
    cfg.Free;
@@ -92,6 +94,7 @@ FileName := AppendPathDelim(CfgPath) + FileName + '.xml';
    cfg.SetExtendedValue('IFAFactor',IFAFactor);
    cfg.SetValue('Precision',Precision);
    cfg.SetValue('CentreDefinition',CentreData[Centering].Name);
+   cfg.SetExtendedValue('TopRadius', TopRadius);
    Result := true;
    finally
    cfg.Free;
@@ -105,6 +108,7 @@ procedure TSettingsForm.tbExitClick(Sender: TObject);
 begin
 close;
 end;
+
 
 procedure TSettingsForm.tbAddClick(Sender: TObject);
 var OK         :boolean;
@@ -180,6 +184,16 @@ if OK and (vleSettings.FindRow('Centre definition',ARow)) then
   else
    OK := false;
 
+if OK and (vleSettings.FindRow('Top Radius',ARow)) then
+   begin
+   TopRadius := StrToFloat(vleSettings.Values['Top Radius']);
+   StatusBar.SimpleText := 'Key ' + vleSettings.Keys[ARow] + ' changed to '
+      + vleSettings.Strings.ValueFromIndex[ARow-1];
+   vleSettings.Modified := false;
+   end
+  else
+   OK := false;
+
 if not OK then StatusBar.SimpleText := 'Error, could not set key ' + vleSettings.Keys[ARow];
 end;
 
@@ -230,6 +244,11 @@ with vleSettings.ItemProps['Centre definition'] do
       PickList.Add(CentreData[CentreVal].Name);
    end;
 
+if vleSettings.FindRow('Top Radius',ARow) then
+   vleSettings.Values[vleSettings.Keys[Arow]] := FloatToStr(TopRadius)
+  else
+   vleSettings.InsertRow('Top Radius',FloatToStr(TopRadius),True);
+
 vleSettings.Modified := false;
 StatusBar.SimpleText := 'Keys will not be changed until <Save Settings> is clicked';
 end;
@@ -249,6 +268,9 @@ end;
 
 initialization
    {$I settingsunit.lrs}
+
+finalization
+SetLength(RowsChanged,0);
 
 end.
 

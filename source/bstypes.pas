@@ -233,6 +233,7 @@ var Beam         :TBeam;
     IFAFactor    :double;
     Precision    :integer = 2;
     Centering    :TCentre = detector;
+    TopRadius    :double = 2.5;
 
 implementation
 
@@ -1372,8 +1373,8 @@ end;
 function TSingleProfile.GetTop:TProfilePos;
 {Perform a second order polynomial regression on the peak 5 cm and find the max}
 var Start,
-    Stop       :integer;
-    Delta      :integer = 5;   {area in cm to perform regression on}
+    Stop,
+    Delta      :integer;
     SliceX,
     SliceY,
     B          :TPArr;
@@ -1381,7 +1382,7 @@ begin
 if fTop.Pos = 0 then
    begin
    {get segment of penumbra}
-   Delta := Round(Delta/(2*Res));
+   Delta := Round(TopRadius/Res);
    Start := PeakInfl.Pos - Delta;
    if Start < LeftInfl.Pos then
       Start := LeftInfl.Pos;    {don't go beyond field edge}
