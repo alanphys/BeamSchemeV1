@@ -77,7 +77,8 @@ type
      fLeftDiff,                {Differential field left edge}
      fRightDiff,               {Differential field right edge}
      fLeftInfl,                {Inflection point field left edge}
-     fRightInfl:TProfilePos;   {Inflection point field right edge}
+     fRightInfl,               {Inflection point field right edge}
+     fTop      :TProfilePos;   {Top of peak as given by fitted parabola}
      fHPLeft,                  {Hill parameters left edge}
      fHPRight  :TPArr;         {Hill parameters left edge}
      public
@@ -115,11 +116,11 @@ type
      function GetLeftInfl:TProfilePos;   {get left inflection point from Hill fit}
      function GetRightInfl:TProfilePos;  {get right inflection point from Hill fit}
      function GetPeakPosInfl:TProfilePos;{get centre of profile peak inflection points}
-     function GetRelativePosValue(Value:double):TProfilePos; {get dose value at relative point from peak}
-     function GetRelPosValue(Value:double; Edge, Mid:TProfilePos):TProfilePos;
+     function GetRelPosValue(Value:double; Edge, Mid:TProfilePos):TProfilePos;{get dose value at relative point from peak}
      procedure ToSeries(ProfileSeries:TLineSeries);
      function  ToText:string;
      function GetArea(Start,Stop:integer):double;
+     function GetTop:TProfilePos;        {fit parabola and get peak}
      property LeftEdge:TProfilePos read GetLeftE;
      property RightEdge:TProfilePos read GetRightE;
      property PeakFWHM:TProfilePos read GetPeakPosFWHM;
@@ -131,6 +132,7 @@ type
      property LeftInfl:TProfilePos read GetLeftInfl;
      property RightInfl:TProfilePos read GetRightInfl;
      property PeakInfl:TProfilePos read GetPeakPosInfl;
+     property Top:TProfilePos read GetTop;
      end;
 
   TBasicBeam = class
@@ -987,6 +989,9 @@ fHPRight[0] := 0.0;
 fHPRight[1] := 0.0;
 fHPRight[2] := 0.0;
 fHPRight[3] := 0.0;
+fTop.ValueY := 0.0;
+fTop.ValueX := 0.0;
+fTop.pos := 0;
 end;
 
 
@@ -1248,25 +1253,6 @@ Result := fPeakInfl;
 end;
 
 
-function TSingleProfile.GetRelativePosValue(Value:double):TProfilePos;
-{Returns the interpolated profile value at the proportion Value of the field
-size defined by the inflection point. Positive Value indicates right side of
-profile and negative the left side.}
-var Pos:       integer;
-begin
-Pos := PeakInfl.Pos + Trunc((RightInfl.Pos - LeftInfl.Pos)*Value*0.5);
-if Value > 0 then
-   Result.ValueX := RightInfl.ValueX*abs(Value)
-  else
-   Result.ValueX := LeftInfl.ValueX*abs(Value);
-Result.Pos := Pos;
-{Result.ValueY := LReg(PArrX[Pos],PArrX[Pos + 1*sign(Value)],PArrY[Pos],
-   PArrY[Pos + 1*sign(Value)], Result.ValueX);}
-Result.ValueY := LReg(PArrX[Pos],PArrX[Pos - 1],PArrY[Pos],
-   PArrY[Pos - 1], Result.ValueX);
-end;
-
-
 function TSingleProfile.GetRelPosValue(Value:double; Edge, Mid:TProfilePos):TProfilePos;
 {Returns the interpolated profile value at the proportion Value of the 100%
 defined from Mid to Edge.}
@@ -1381,6 +1367,44 @@ for I := Start to Stop do
    Result := Result + PArrY[I];
 Result := Result*abs(PArrX[Stop] - PArrX[Start]);
 end;
+
+
+function TSingleProfile.GetTop:TProfilePos;
+{Perform a second order polynomial regression on the peak 5 cm and find the max}
+var Start,
+    Stop       :integer;
+    Delta      :integer = 5;   {area in cm to perform regression on}
+    SliceX,
+    SliceY,
+    B          :TPArr;
+begin
+if fTop.Pos = 0 then
+   begin
+   {get segment of penumbra}
+   Delta := Round(Delta/(2*Res));
+   Start := PeakInfl.Pos - Delta;
+   if Start < LeftInfl.Pos then
+      Start := LeftInfl.Pos;    {don't go beyond field edge}
+   Stop := PeakInfl.Pos + Delta;
+   if Stop > RightInfl.Pos then
+      Stop := RightInfl.Pos;    {don't go beyond field edge}
+   SliceX := GetSliceX(Start,Stop);
+   SliceY := GetSliceY(Start,Stop);
+   if (SliceX <> nil) and (SliceY <> nil) then
+      begin
+      SetLength(B,3);
+      ParabolaFit(SliceX,SliceY,B);
+      fTop.ValueX := ParabolaZero(B);
+      fTop.Pos := Round(fTop.ValueX/Res) + Centre.Pos;
+      fTop.ValueY := B[0];
+      SetLength(B,0);
+      end;
+   SetLength(SliceX,0);
+   SetLength(SliceY,0);
+   end;
+Result := fTop;
+end;
+
 
 {-------------------------------------------------------------------------------
 TBeamMask

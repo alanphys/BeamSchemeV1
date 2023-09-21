@@ -47,6 +47,7 @@ type
       procedure TestNormalise_none;
       procedure TestNormalise_cax;
       procedure TestNormalise_max;
+      procedure TestTop;
    end;
 
    TestBeam= class(TTestCase)
@@ -195,6 +196,7 @@ fProfile.Len := 53;
 fProfile.PArrX := ProfileArrX;
 fProfile.PArrY := ProfileArrY;
 fProfile.Res := 0.5;
+fProfile.Norm := no_norm;
 end;
 
 procedure TestSingleProfile.TearDown;
@@ -426,9 +428,9 @@ end;
 
 procedure TestSingleProfile.TestGetRelPosValueDiff_Right;
 begin
-AssertEquals('Test left 100% Diffection value',36.68,fProfile.GetRelPosValue(1.0, fProfile.RightDiff, fProfile.PeakDiff).ValueY);
-AssertEquals('Test left 100% Diffection position',10.5,fProfile.GetRelPosValue(1.0, fProfile.RightDiff, fProfile.PeakDiff).ValueX);
-AssertEquals('Test left 100% Diffection index',47,fProfile.GetRelPosValue(1.0, fProfile.RightDiff, fProfile.PeakDiff).Pos);
+AssertEquals('Test left 100% max gradient value',36.68,fProfile.GetRelPosValue(1.0, fProfile.RightDiff, fProfile.PeakDiff).ValueY);
+AssertEquals('Test left 100% max gradient position',10.5,fProfile.GetRelPosValue(1.0, fProfile.RightDiff, fProfile.PeakDiff).ValueX);
+AssertEquals('Test left 100% max gradient index',47,fProfile.GetRelPosValue(1.0, fProfile.RightDiff, fProfile.PeakDiff).Pos);
 end;
 
 
@@ -449,6 +451,14 @@ procedure TestSingleProfile.TestNormalise_max;
 begin
 fProfile.Norm := norm_max;
 AssertEquals('Test maximum value norm max',100.0,fprofile.Normalise(fProfile.Max.ValueY));
+end;
+
+
+procedure TestSingleProfile.TestTop;
+begin
+AssertEquals('Test parabola peak value',94.3967, fprofile.Top.ValueY);
+AssertEquals('Test parabola peak position',0.599,fprofile.Top.ValueX);
+AssertEquals('Test parabola peak index',27,fprofile.Top.Pos);
 end;
 
 {-------------------------------------------------------------------------------

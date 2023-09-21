@@ -75,6 +75,7 @@ T1DParams = ({field statistics}
              field_size_infl_1D,
              pen_infl_left_1D,
              pen_infl_right_1D,
+             top_infl_1D,
              {dose point values relative to the inflection point}
              dose_20_left_infl_1D,
              dose_20_right_infl_1D,
@@ -149,6 +150,7 @@ function FieldCentreInfl1D(ProfileArr:TSingleProfile):string;
 function FieldSizeInfl1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflLeft1D(ProfileArr:TSingleProfile):string;
 function PenumbraInflRight1D(ProfileArr:TSingleProfile):string;
+function TopInfl1D(ProfileArr:TSingleProfile):string;
 {Dose point values relative to the inflection point}
 function Dose20LeftInfl1D(ProfileArr:TSingleProfile):string;
 function Dose20RightInfl1D(ProfileArr:TSingleProfile):string;
@@ -219,6 +221,7 @@ Params1D: array[cax_val_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Field Size Infl'; Func:@FieldSizeInfl1D),
    (Name:'1D Penumbra Infl Left'; Func:@PenumbraInflLeft1D),
    (Name:'1D Penumbra Infl Right'; Func:@PenumbraInflRight1D),
+   (Name:'1D Top Infl'; Func:@TopInfl1D),
    {dose point values relative to the inflection point}
    (Name:'1D Dose 20% Infl Left'; Func:@Dose20LeftInfl1D),
    (Name:'1D Dose 20% Infl Right'; Func:@Dose20RightInfl1D),
@@ -651,6 +654,14 @@ with ProfileArr do
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
+
+function TopInfl1D(ProfileArr:TSingleProfile):string;
+{Return the maximum of the peak of a FFF beam fitted by a parabola}
+var Penumbra   :double;
+begin
+with ProfileArr do
+   Result := FloatToStrF(Top.ValueX,ffFixed,4,Precision) + ' cm'
+end;
 
 {-------------------------------------------------------------------------------
  Dose point values relative to the inflection point

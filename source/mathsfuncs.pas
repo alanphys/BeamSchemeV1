@@ -38,10 +38,13 @@ function DerivHillFunc(X:double; B:TVector): double;
 function CoeffHillFunc(X1,X2,Y1,Y2:double; B:TVector): double;
 function InflHillFunc(B:TVector): double;
 procedure HillFitParams(PArrX,PArrY:TPArr; var B:TPArr);
+procedure ParabolaFit(PArrX,PArrY:TPArr; var Coeffs:TPArr);
+function ParabolaZero(Coeffs:TPArr):double;
+
 
 implementation
 
-uses math, unlfit, uhillfit, uerrors;
+uses math, unlfit, uhillfit, upolfit, uerrors;
 
 const
    MaxIter = 1000;             {maximum number of iterations for optimisation}
@@ -355,7 +358,7 @@ end;
 procedure HillFitParams(PArrX,PArrY:TPArr; var B:TPArr);
 {Perform non-linear regression on Hill function to get inflection point. Builtin
 initial estimation function of LMath is not used as it only caters for positive x values. Initial
-estimate for B is passed to ovrecome this.
+estimate for B is passed to overcome this.
 parameters:
    PArrX array of X values
    PArrY array of Y values
@@ -404,5 +407,32 @@ if N > 0 then
       end;
    end;
 end;
+
+
+procedure ParabolaFit(PArrX,PArrY:TPArr; var Coeffs:TPArr);
+{second order polynomial fit}
+var Variance   :TMatrix;       {variance-covariance matrix}
+    ErrMsg     :string;
+
+begin
+DimMatrix(Variance,3,3);
+PolFit(PArrX,PArrY,0,length(PArrX)-1,2,Coeffs,Variance);
+if MathErr <> MatOk then
+   begin
+   ErrMsg := MathErrMessage;
+   Coeffs[0] := 0;
+   Coeffs[1] := 0;
+   Coeffs[2] := 0;
+   end;
+end;
+
+
+function ParabolaZero(Coeffs:TPArr):double;
+{return the zero point of the parabola}
+begin
+Result := -Coeffs[1]/(2*Coeffs[2]);
+end;
+
+
 end.
 

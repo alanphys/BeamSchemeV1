@@ -97,6 +97,7 @@
           <Linking>
             <Debugging>
               <GenerateDebugInfo Value="False"/>
+              <DebugInfoType Value="dsDwarf2Set"/>
               <StripSymbols Value="True"/>
             </Debugging>
             <LinkSmart Value="True"/>
@@ -146,13 +147,12 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="117">
+    <Units Count="118">
       <Unit0>
         <Filename Value="beamscheme.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="36" Y="28"/>
+        <CursorPos X="21" Y="18"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -646,7 +646,7 @@
         <ComponentName Value="AboutForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="4"/>
         <CursorPos X="35" Y="17"/>
         <UsageCount Value="200"/>
@@ -789,7 +789,7 @@
         <Filename Value="source/bstypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="115"/>
+        <TopLine Value="103"/>
         <CursorPos X="15" Y="119"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
@@ -912,9 +912,10 @@
       <Unit99>
         <Filename Value="source/param1dfuncs.pas"/>
         <UnitName Value="param1Dfuncs"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="506"/>
-        <CursorPos Y="531"/>
+        <TopLine Value="635"/>
+        <CursorPos X="29" Y="660"/>
         <ExtraEditorCount Value="2"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
@@ -1026,19 +1027,17 @@
       </Unit111>
       <Unit112>
         <Filename Value="../../.lazarus/onlinepackagemanager/packages/LMath/lmSpecRegress/uhillfit.pas"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="29"/>
         <CursorPos X="28" Y="190"/>
         <UsageCount Value="49"/>
-        <Loaded Value="True"/>
       </Unit112>
       <Unit113>
         <Filename Value="../../.lazarus/onlinepackagemanager/packages/LMath/lmRegression/unlfit.pas"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="480"/>
         <CursorPos Y="510"/>
         <UsageCount Value="47"/>
-        <Loaded Value="True"/>
       </Unit113>
       <Unit114>
         <Filename Value="../../.lazarus/onlinepackagemanager/packages/LMath/lmOptimum/umarq.pas"/>
@@ -1062,11 +1061,17 @@
         <CursorPos X="10" Y="188"/>
         <UsageCount Value="7"/>
       </Unit116>
+      <Unit117>
+        <Filename Value="/usr/lib64/lazarus/components/cairocanvas/cairocanvas_pkg.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="84" Y="10"/>
+        <UsageCount Value="10"/>
+      </Unit117>
     </Units>
     <Build>
       <CleanOutputFileMask Value="*.ppu;*.ppl;*.o;*.or"/>
     </Build>
-    <JumpHistory Count="28" HistoryIndex="25">
+    <JumpHistory Count="27" HistoryIndex="26">
       <Position1>
         <Filename Value="source/importunit.pas"/>
         <Caret Line="46" Column="10" TopLine="28"/>
@@ -1172,13 +1177,9 @@
         <Caret Line="1251" Column="42" TopLine="1238"/>
       </Position26>
       <Position27>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="131" Column="15" TopLine="115"/>
+        <Filename Value="beamscheme.lpr"/>
+        <Caret Line="18" Column="21"/>
       </Position27>
-      <Position28>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="35" Column="3" TopLine="16"/>
-      </Position28>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

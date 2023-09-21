@@ -207,6 +207,7 @@ const Params: array of string = (
 '     Penumbra	',
 '          Left	0.65 cm',
 '          Right	0.55 cm',
+'     Top	0.60 cm',
 '	',
 'Dose point values	',
 '     Left 20% Infl	95.56',
@@ -530,6 +531,7 @@ const Params: array of string = (
 '     Penumbra	',
 '          Left	0.96 cm',          {DataAnalyze reports 8.73}
 '          Right	0.92 cm',  {DataAnalyze reports 7.85}
+'     Top	0.10 cm',
 '	',
 'Symmetry	',
 '     Difference	0.55%',
@@ -826,6 +828,7 @@ const Params: array of string = (
 '     Penumbra	',
 '          Left	0.56 cm',          {FastTrack reports 0.59}
 '          Right	0.55 cm',  {FastTrack reports 0.60}
+'     Top	-0.41 cm',
 '	',
 'Symmetry	',
 '     Difference	0.44%',    {FastTrack reports 0.49}
@@ -872,6 +875,7 @@ const Params: array of string = (
 '     Penumbra	',
 '          Left	0.79 cm',
 '          Right	0.88 cm',
+'     Top	0.04 cm',
 '	',
 'Symmetry	',
 '     Difference	0.68%',
@@ -1048,12 +1052,17 @@ end;
 
 
 procedure TestProtocolPylinac.TestProtocolWFF;
-{Verified from Pylinac 3.10 file 6FFF.dcm}
-{Note: Pylinac run with the following options:
-centering=Centering.GEOMETRIC_CENTER,
-normalization_method=Normalization.BEAM_CENTER
-interpolation_resolution_mm=0.01,
-edge_detection_method=Edge.Edge.INFLECTION_HILL}
+{Verified from Pylinac 3.13 file 6MV-20x20.dcm
+Python script (run in TestFiles directory):
+from pylinac import FieldAnalysis, Centering, Normalization, Edge
+fa = FieldAnalysis("6MV-20x20.dcm")
+fa.analyze(centering=Centering.GEOMETRIC_CENTER,
+           normalization_method=Normalization.BEAM_CENTER,
+           interpolation_resolution_mm=0.01,
+           edge_detection_method=Edge.INFLECTION_HILL,
+           is_FFF=True)
+fa.publish_pdf("Results.pdf")
+}
 var I          :integer;
 
 const Params: array of string = (
@@ -1064,16 +1073,17 @@ const Params: array of string = (
 '     Size	19.99 cm',         {Pylinac reports 19.98}
 '	',
 'Inflection params	',
-'     Left edge	-10.03 cm',
-'     Right edge	9.97 cm',  {Pylinac reports 19.96}
+'     Left edge	-10.03 cm',        {Pylinac report 10.04}
+'     Right edge	9.97 cm',
 '     Centre	-0.03 cm',
-'     Size	20.00 cm',         {Pylinac reports 19.98}
+'     Size	20.00 cm',         {Pylinac reports 20.02}
 '     Penumbra	',
-'          Left	0.38 cm',          {Pylinac reports 0.35}
-'          Right	0.39 cm',  {Pylinac reports 0.36}
+'          Left	0.38 cm',          {Pylinac reports 0.32}
+'          Right	0.39 cm',  {Pylinac reports 0.34}
+'     Top	0.00 cm',          {Pylinac reports 0.03}
 '	',
 'Symmetry	',
-'     Difference	0.67%',    {Pylinac reports 0.62}
+'     Difference	0.67%',    {Pylinac reports 0.756}
 '	');
 
 begin
@@ -1097,12 +1107,17 @@ end;
 
 
 procedure TestProtocolPylinac.TestProtocolFFF;
-{Verified from Pylinac 3.10 file 6FFF.dcm}
-{Note: Pylinac run with the following options:
-centering=Centering.GEOMETRIC_CENTER,
-normalization_method=Normalization.BEAM_CENTER
-interpolation_resolution_mm=0.01,
-edge_detection_method=Edge.Edge.INFLECTION_HILL}
+{Verified from Pylinac 3.13 file 6FFF.dcm
+Python script (run in TestFiles directory):
+from pylinac import FieldAnalysis, Centering, Normalization, Edge
+fa = FieldAnalysis("6FFF.dcm")
+fa.analyze(centering=Centering.GEOMETRIC_CENTER,
+           normalization_method=Normalization.BEAM_CENTER,
+           interpolation_resolution_mm=0.01,
+           edge_detection_method=Edge.INFLECTION_HILL,
+           is_FFF=True)
+fa.publish_pdf("Results.pdf")
+}
 var I          :integer;
 
 const Params: array of string = (
@@ -1120,6 +1135,7 @@ const Params: array of string = (
 '     Penumbra	',
 '          Left	0.36 cm',          {Pylinac reports 0.38}
 '          Right	0.35 cm',  {Pylinac reports 0.38}
+'     Top	0.00 cm',
 '	',
 'Symmetry	',
 '     Difference	0.41%',    {Pylinac reports 0.36}
@@ -1235,6 +1251,7 @@ const Params: array of string = (
 '     Penumbra	',
 '          Left	0.65 cm',          {BistroMath reports 0.64}
 '          Right	0.55 cm',  {BistroMath reports 0.68}
+'     Top	0.60 cm',
 '	',
 'Symmetry	',
 '     Difference	2.69%',
@@ -1284,6 +1301,7 @@ const Params: array of string = (
 '     Penumbra	',
 '          Left	0.79 cm',          {BistroMath reports 0.82}
 '          Right	0.88 cm',  {BistroMath reports 0.82}
+'     Top	0.04 cm',          {BistroMath reports 0.06}
 '	',
 'Symmetry	',
 '     Difference	0.68%',    {BistroMath reports 0.4}

@@ -12,6 +12,7 @@
 "     Penumbra",,,
 "          Left","1D Penumbra Infl Left",,
 "          Right","1D Penumbra Infl Right",,
+"     Top","1D Top Infl",,
 ,,,
 Symmetry,,,
 "     Difference","1D Symmetry Diff",,

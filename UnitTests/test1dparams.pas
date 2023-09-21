@@ -65,6 +65,7 @@ type
       procedure TestFieldSizeInfl1D;
       procedure TestPenumbraInflLeft1D;
       procedure TestPenumbraInflRight1D;
+      procedure TestTopInfl1D;
       {dose point values relative to the inflection point}
       procedure TestDose20LeftInfl1D;
       procedure TestDose20RightInfl1D;
@@ -418,6 +419,12 @@ end;
 procedure Test1DParamFuncs.TestPenumbraInflRight1D;
 begin
 AssertEquals('Test inflection penumbra right 80-20%','0.55 cm',PenumbraInflRight1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestTopInfl1D;
+begin
+AssertEquals('Test inflection top','0.60 cm',TopInfl1D(fProfile));
 end;
 
 
