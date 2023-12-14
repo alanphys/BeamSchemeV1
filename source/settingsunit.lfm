@@ -6,6 +6,7 @@ object SettingsForm: TSettingsForm
   Caption = 'Settings'
   ClientHeight = 401
   ClientWidth = 414
+  OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   LCLVersion = '2.2.6.0'
@@ -40,6 +41,10 @@ object SettingsForm: TSettingsForm
     Top = 378
     Width = 414
     Panels = <>
+    ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
+    OnDrawPanel = StatusBarDrawPanel
   end
   object vleSettings: TValueListEditor
     Left = 0

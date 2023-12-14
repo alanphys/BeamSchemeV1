@@ -26,6 +26,7 @@ type
       procedure TestMax;
       procedure TestAve;
       procedure TestMaxDiff;
+      procedure TestSlope;
       procedure TestPeakFWHM;
       procedure TestArea;
       procedure TestLeftDiff;
@@ -48,6 +49,8 @@ type
       procedure TestNormalise_cax;
       procedure TestNormalise_max;
       procedure TestTop;
+      procedure TestPeakLSlope;
+      procedure TestPeakRSlope;
    end;
 
    TestBeam= class(TTestCase)
@@ -290,6 +293,11 @@ AssertEquals('Test maximum difference', 76.76, fProfile.MaxDiff);
 end;
 
 
+procedure TestSingleProfile.TestSlope;
+begin
+AssertEquals ('Test slope',-0.0853542780748663,fProfile.GetSlope(10,43));
+end;
+
 procedure TestSingleProfile.TestPeakFWHM;
 begin
 AssertEquals('Test peak value',94.46,fProfile.PeakFWHM.ValueY);
@@ -460,6 +468,19 @@ AssertEquals('Test parabola peak value',94.3967, fprofile.Top.ValueY);
 AssertEquals('Test parabola peak position',0.599,fprofile.Top.ValueX);
 AssertEquals('Test parabola peak index',27,fprofile.Top.Pos);
 end;
+
+
+procedure TestSingleProfile.TestPeakLSlope;
+begin
+AssertEquals('Test peak left slope',-0.2189,fprofile.PeakLSlope);
+end;
+
+
+procedure TestSingleProfile.TestPeakRSlope;
+begin
+AssertEquals('Test peak left slope',0.5195,fprofile.PeakRSlope);
+end;
+
 
 {-------------------------------------------------------------------------------
 TBeam

@@ -8,7 +8,8 @@ uses
   {$IFDEF DEBUG}
   SysUtils,              //delete SysUtils if not using heaptrc
   {$ENDIF}
-  test1Dparams, testbstypes, testimport, test2dparams, testprotocols;
+  test1Dparams, testbstypes, testimport, test2dparams, testprotocols,
+testmathfuncs;
 
 {$R *.res}
 

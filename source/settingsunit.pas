@@ -16,11 +16,18 @@ type
    TSettingsForm = class(TForm)
       ImageList: TImageList;
       StatusBar: TStatusBar;
+      StatusMessages: TStringList;
       ToolBarLeft: TToolBar;
       tbAdd: TToolButton;
       ToolBarRight: TToolBar;
       tbExit: TToolButton;
       vleSettings: TValueListEditor;
+      procedure StatusBarDrawPanel(SBar: TStatusBar;Panel: TStatusPanel; const Rect: TRect);
+      procedure SErrorMsg(sError:string);
+      procedure SWarning(sWarning:string);
+      procedure SMessage(sMess:string);
+      procedure ClearStatus;
+      procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
       procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
       procedure FormCreate(Sender: TObject);
       procedure tbAddClick(Sender: TObject);
@@ -104,6 +111,52 @@ end;
 
 { TSettingsForm }
 
+procedure TSettingsForm.StatusBarDrawPanel(SBar: TStatusBar;Panel: TStatusPanel;
+   const Rect: TRect);
+begin
+with SBar.Canvas do
+   begin
+   Brush.Color := StatusBar.Color;
+   FillRect(Rect);
+   TextRect(Rect,2 + Rect.Left, 1 + Rect.Top,Panel.Text) ;
+   end;
+end;
+
+
+procedure TSettingsForm.SErrorMsg(sError:string);
+begin
+StatusBar.SimpleText := sError;
+StatusBar.Color := FaintRed;
+StatusMessages.Add(StatusBar.SimpleText);
+StatusBar.Hint := StatusMessages.Text;
+end;
+
+
+procedure TSettingsForm.SWarning(sWarning:string);
+begin
+StatusBar.SimpleText := sWarning;
+StatusBar.Color := FaintYellow;
+StatusMessages.Add(StatusBar.SimpleText);
+StatusBar.Hint := StatusMessages.Text;
+end;
+
+
+procedure TSettingsForm.SMessage(sMess:string);
+begin
+StatusBar.SimpleText := sMess;
+StatusBar.Color := FaintGreen;
+StatusMessages.Add(StatusBar.SimpleText);
+StatusBar.Hint := StatusMessages.Text;
+end;
+
+
+procedure TSettingsForm.ClearStatus;
+begin
+StatusBar.SimpleText := '';
+StatusBar.Color := clDefault;
+end;
+
+
 procedure TSettingsForm.tbExitClick(Sender: TObject);
 begin
 close;
@@ -123,8 +176,8 @@ ARow := -1;
 if vleSettings.FindRow('Default Resolution',ARow) then
    begin
    DefaultRes := 2.54/(StrToFloat(vleSettings.Values['Default Resolution']));
-   StatusBar.SimpleText := 'Key ' + vleSettings.Keys[ARow] + ' changed to '
-      + vleSettings.Strings.ValueFromIndex[ARow-1];
+   SMessage('Key ' + vleSettings.Keys[ARow] + ' changed to '
+      + vleSettings.Strings.ValueFromIndex[ARow-1]);
    vleSettings.Modified := false;
    end
   else
@@ -140,8 +193,8 @@ if OK and (vleSettings.FindRow('IFA Type',ARow)) then
          IFAType := IFAVAl;
          OK := true;
          end;
-   StatusBar.SimpleText := 'Key ' + vleSettings.Keys[ARow] + ' changed to '
-      + vleSettings.Strings.ValueFromIndex[ARow-1];
+   SMessage('Key ' + vleSettings.Keys[ARow] + ' changed to '
+      + vleSettings.Strings.ValueFromIndex[ARow-1]);
    vleSettings.Modified := false;
    end
   else
@@ -150,8 +203,8 @@ if OK and (vleSettings.FindRow('IFA Type',ARow)) then
 if OK and (vleSettings.FindRow('IFA Factor',ARow)) then
    begin
    IFAFactor := StrToFloat(vleSettings.Values['IFA Factor']);
-   StatusBar.SimpleText := 'Key ' + vleSettings.Keys[ARow] + ' changed to '
-      + vleSettings.Strings.ValueFromIndex[ARow-1];
+   SMessage('Key ' + vleSettings.Keys[ARow] + ' changed to '
+      + vleSettings.Strings.ValueFromIndex[ARow-1]);
    vleSettings.Modified := false;
    end
   else
@@ -160,8 +213,8 @@ if OK and (vleSettings.FindRow('IFA Factor',ARow)) then
 if vleSettings.FindRow('Precision',ARow) then
    begin
    Precision := StrToInt(vleSettings.Values['Precision']);
-   StatusBar.SimpleText := 'Key ' + vleSettings.Keys[ARow] + ' changed to '
-      + vleSettings.Strings.ValueFromIndex[ARow-1];
+   SMessage('Key ' + vleSettings.Keys[ARow] + ' changed to '
+      + vleSettings.Strings.ValueFromIndex[ARow-1]);
    vleSettings.Modified := false;
    end
   else
@@ -177,8 +230,8 @@ if OK and (vleSettings.FindRow('Centre definition',ARow)) then
          Centering := CentreVal;
          OK := true;
          end;
-   StatusBar.SimpleText := 'Key ' + vleSettings.Keys[ARow] + ' changed to '
-      + vleSettings.Strings.ValueFromIndex[ARow-1];
+   SMessage('Key ' + vleSettings.Keys[ARow] + ' changed to '
+      + vleSettings.Strings.ValueFromIndex[ARow-1]);
    vleSettings.Modified := false;
    end
   else
@@ -187,14 +240,14 @@ if OK and (vleSettings.FindRow('Centre definition',ARow)) then
 if OK and (vleSettings.FindRow('Top Radius',ARow)) then
    begin
    TopRadius := StrToFloat(vleSettings.Values['Top Radius']);
-   StatusBar.SimpleText := 'Key ' + vleSettings.Keys[ARow] + ' changed to '
-      + vleSettings.Strings.ValueFromIndex[ARow-1];
+   SMessage('Key ' + vleSettings.Keys[ARow] + ' changed to '
+      + vleSettings.Strings.ValueFromIndex[ARow-1]);
    vleSettings.Modified := false;
    end
   else
    OK := false;
 
-if not OK then StatusBar.SimpleText := 'Error, could not set key ' + vleSettings.Keys[ARow];
+if not OK then SErrorMsg('Error, could not set key ' + vleSettings.Keys[ARow]);
 end;
 
 
@@ -203,6 +256,7 @@ var ARow       :integer;
     IFAVal     :TIFAType;
     CentreVal  :TCentre;
 begin
+StatusMessages := TStringList.Create;
 if vleSettings.FindRow('Default Resolution',ARow) then
    vleSettings.Values[vleSettings.Keys[Arow]] := IntToStr(round(2.54/DefaultRes))
   else
@@ -250,7 +304,7 @@ if vleSettings.FindRow('Top Radius',ARow) then
    vleSettings.InsertRow('Top Radius',FloatToStr(TopRadius),True);
 
 vleSettings.Modified := false;
-StatusBar.SimpleText := 'Keys will not be changed until <Save Settings> is clicked';
+SWarning('Keys will not be changed until <Save Settings> is clicked');
 end;
 
 
@@ -266,11 +320,17 @@ if vleSettings.Modified then
    else Canclose := true;
 end;
 
+
+procedure TSettingsForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+StatusMessages.Free;
+end;
+
+
 initialization
    {$I settingsunit.lrs}
 
 finalization
 SetLength(RowsChanged,0);
-
 end.
 

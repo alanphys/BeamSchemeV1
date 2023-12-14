@@ -225,6 +225,10 @@ const Params: array of string = (
 '     Ratio	104.80%',
 '     CAX	2.40%',
 '     ICRU 72	4.67%',
+'     NCS 70	4.80%',
+'     Slope Left	-0.22/cm',
+'     Slope Right	0.52/cm',
+'     Slope Ratio	42.17%',
 '     90/50	95.76%',
 '	',
 'Symmetry	',
@@ -235,7 +239,6 @@ const Params: array of string = (
 '	',
 'Deviation	',
 '     Ratio	104.80%',
-'     Difference	4.80%',
 '     MAX/CAX	4.80%',
 '	');
 
@@ -535,6 +538,11 @@ const Params: array of string = (
 '	',
 'Symmetry	',
 '     Difference	0.55%',
+'	',
+'Flatness	',
+'     Slope Left	-0.04/cm',
+'     Slope Right	0.24/cm',
+'     Slope Ratio	16.29%',
 '	');
 
 begin
@@ -832,6 +840,11 @@ const Params: array of string = (
 '	',
 'Symmetry	',
 '     Difference	0.44%',    {FastTrack reports 0.49}
+'	',
+'Flatness	',
+'     Slope Left	111.49/cm',
+'     Slope Right	294.19/cm',
+'     Slope Ratio	37.90%',
 '	');
 
 begin
@@ -879,6 +892,11 @@ const Params: array of string = (
 '	',
 'Symmetry	',
 '     Difference	0.68%',
+'	',
+'Flatness	',
+'     Slope Left	3.33%/cm',
+'     Slope Right	-3.11%/cm',
+'     Slope Ratio	107.05%',
 '	');
 
 begin
@@ -1084,6 +1102,11 @@ const Params: array of string = (
 '	',
 'Symmetry	',
 '     Difference	0.67%',    {Pylinac reports 0.756}
+'	',
+'Flatness	',
+'     Slope Left	-0.26%/cm',
+'     Slope Right	0.34%/cm',
+'     Slope Ratio	77.64%',
 '	');
 
 begin
@@ -1139,6 +1162,11 @@ const Params: array of string = (
 '	',
 'Symmetry	',
 '     Difference	0.41%',    {Pylinac reports 0.36}
+'	',
+'Flatness	',
+'     Slope Left	2.93%/cm',
+'     Slope Right	-2.93%/cm',
+'     Slope Ratio	100.06%',
 '	');
 
 begin
@@ -1255,6 +1283,11 @@ const Params: array of string = (
 '	',
 'Symmetry	',
 '     Difference	2.69%',
+'	',
+'Flatness	',
+'     Slope Left	-0.22/cm',
+'     Slope Right	0.52/cm',
+'     Slope Ratio	42.17%',
 '	');
 
 begin
@@ -1305,6 +1338,11 @@ const Params: array of string = (
 '	',
 'Symmetry	',
 '     Difference	0.68%',    {BistroMath reports 0.4}
+'	',
+'Flatness	',
+'     Slope Left	405.97/cm',
+'     Slope Right	-379.24/cm',
+'     Slope Ratio	107.05%',
 '	');
 
 begin

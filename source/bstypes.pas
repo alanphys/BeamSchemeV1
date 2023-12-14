@@ -60,6 +60,7 @@ type
      function GetMax:TProfilePos;   {get maximum value and position}
      function GetAverage:double;    {get average value}
      function GetMaxDiff:double;    {get maximum symmetric difference}
+     function GetSlope(Start, Stop:integer):double;
      property Centre:TProfilePos read GetCentre;
      property Min:TProfilePos read GetMin;
      property Max:TProfilePos read GetMax;
@@ -81,6 +82,8 @@ type
      fTop      :TProfilePos;   {Top of peak as given by fitted parabola}
      fHPLeft,                  {Hill parameters left edge}
      fHPRight  :TPArr;         {Hill parameters left edge}
+     fLPeakSlope,              {Left peak slope}
+     fRPeakSlope:double;       {Right peak slope}
      public
      TopRight,                 {top right corner of wide profile}
      TopLeft,                  {top left corner of wide profile}
@@ -121,6 +124,8 @@ type
      function  ToText:string;
      function GetArea(Start,Stop:integer):double;
      function GetTop:TProfilePos;        {fit parabola and get peak}
+     function GetPeakLSlope:double;      {get peak left slope}
+     function GetPeakRSlope:double;      {get peak right slope}
      property LeftEdge:TProfilePos read GetLeftE;
      property RightEdge:TProfilePos read GetRightE;
      property PeakFWHM:TProfilePos read GetPeakPosFWHM;
@@ -133,6 +138,8 @@ type
      property RightInfl:TProfilePos read GetRightInfl;
      property PeakInfl:TProfilePos read GetPeakPosInfl;
      property Top:TProfilePos read GetTop;
+     property PeakLSlope:double read GetPeakLSlope;
+     property PeakRSlope:double read GetPeakRSlope;
      end;
 
   TBasicBeam = class
@@ -912,6 +919,19 @@ Result := fMaxDiff;
 end;
 
 
+function TBasicProfile.GetSlope(Start, Stop:integer):double;
+var SliceX,
+    SliceY,
+    B          :TPArr;
+begin
+SetLength(B,2);
+SliceX := GetSliceX(Start,Stop);
+SliceY := GetSliceY(Start,Stop);
+LinReg(SliceX,SliceY,B);
+Result := B[1];
+end;
+
+
 {-------------------------------------------------------------------------------
 TSingleProfile
 -------------------------------------------------------------------------------}
@@ -993,6 +1013,8 @@ fHPRight[3] := 0.0;
 fTop.ValueY := 0.0;
 fTop.ValueX := 0.0;
 fTop.pos := 0;
+fLPeakSlope := 0.0;
+fRPeakSlope := 0.0;
 end;
 
 
@@ -1405,6 +1427,51 @@ if fTop.Pos = 0 then
    end;
 Result := fTop;
 end;
+
+
+function TSingleProfile.GetPeakLSlope:double;
+{Get the slope of a straight line to the points between 25% and 80% of the
+field size on the left side of the profile. Use the inflection point for the
+field width for low res profiles (<500 points) and use the max gradient for
+high res profiles (>500 points)}
+var Start,
+    Stop       :integer;
+begin
+if Len < 500 then
+   begin
+   Start := GetRelPosValue(0.80,LeftInfl,PeakInfl).Pos;
+   Stop := GetRelPosValue(0.25,LeftInfl,PeakInfl).Pos;
+   end
+  else
+   begin
+   Start := GetRelPosValue(0.80,LeftDiff,PeakDiff).Pos;
+   Stop := GetRelPosValue(0.25,LeftDiff,PeakDiff).Pos;
+   end;
+Result := GetSlope(Start,Stop);
+end;
+
+
+function TSingleProfile.GetPeakRSlope:double;
+{Get the slope of a straight line to the points between 25% and 80% of the
+field size on the left side of the profile. Use the inflection point for the
+field width for low res profiles (<500 points) and use the max gradient for
+high res profiles (>500 points)}
+var Start,
+    Stop       :integer;
+begin
+if Len < 500 then
+   begin
+   Start := GetRelPosValue(0.25,RightInfl,PeakInfl).Pos;
+   Stop := GetRelPosValue(0.80,RightInfl,PeakInfl).Pos;
+   end
+  else
+   begin
+   Start := GetRelPosValue(0.25,RightDiff,PeakDiff).Pos;
+   Stop := GetRelPosValue(0.80,RightDiff,PeakDiff).Pos;
+   end;
+Result := GetSlope(Start,Stop);
+end;
+
 
 
 {-------------------------------------------------------------------------------

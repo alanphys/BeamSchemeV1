@@ -12,7 +12,7 @@ object BSForm: TBSForm
   OnClose = FormClose
   OnCreate = FormCreate
   OnResize = FormResize
-  LCLVersion = '2.2.2.0'
+  LCLVersion = '2.2.6.0'
   object pBeam: TPanel
     Left = 0
     Height = 308

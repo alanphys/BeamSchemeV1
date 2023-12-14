@@ -91,7 +91,11 @@ T1DParams = ({field statistics}
              flat_ratio_1D,
              flat_cax_1D,
              uniformity_ave_1D,
+             uniformity_cax_1D,
              flat_9050_1D,
+             peak_slope_left_1D,
+             peak_slope_right_1D,
+             peak_slope_ratio_1D,
              {symmetry}
              sym_ratio_1D,
              sym_diff_1D,
@@ -99,7 +103,6 @@ T1DParams = ({field statistics}
              sym_area_1D,
              {deviation}
              dev_ratio_1D,
-             dev_diff_1D,
              dev_cax_1D,
              {miscellaneous}
              no_func_1D);
@@ -166,7 +169,11 @@ function FlatnessDiff1D(ProfileArr:TSingleProfile):string;
 function FlatnessRatio1D(ProfileArr:TSingleProfile):string;
 function FlatnessCAX1D(ProfileArr:TSingleProfile):string;
 function UniformityAve1D(ProfileArr:TSingleProfile):string;
+function UniformityDiff1D(ProfileArr:TSingleProfile):string;
 function Flatness90501D(ProfileArr:TSingleProfile):string;
+function PeakSlopeLeft1D(ProfileArr:TSingleProfile):string;
+function PeakSlopeRight1D(ProfileArr:TSingleProfile):string;
+function PeakSlopeRatio1D(PRofileArr:TSingleProfile):string;
 {symmetry}
 function SymmetryRatio1D(ProfileArr:TSingleProfile):string;
 function SymmetryDiff1D(ProfileArr:TSingleProfile):string;
@@ -174,7 +181,6 @@ function SymmetryAve1D(ProfileArr:TSingleProfile):string;
 function SymmetryArea1D(ProfileArr:TSingleProfile):string;
 {deviation}
 function DeviationRatio1D(ProfileArr:TSingleProfile):string;
-function DeviationDiff1D(ProfileArr:TSingleProfile):string;
 function DeviationCAX1D(ProfileArr:TSingleProfile):string;
 {miscellaneous}
 function NoFunc1D(ProfileArr:TSingleProfile):string;
@@ -237,7 +243,11 @@ Params1D: array[cax_val_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Flatness Ratio'; Func:@FlatnessRatio1D),
    (Name:'1D Flatness CAX'; Func:@FlatnessCAX1D),
    (Name:'1D Uniformity ICRU'; Func:@UniformityAve1D),
+   (Name:'1D Uniformity NCS'; Func:@UniformityDiff1D),
    (Name:'1D Flatness 9050'; Func:@Flatness90501D),
+   (Name:'1D Peak Slope Left'; Func:@PeakSlopeLeft1D),
+   (Name:'1D Peak Slope Right'; Func:@PeakSlopeRight1D),
+   (Name:'1D Peak Slope Ratio'; Func:@PeakSlopeRatio1D),
    {symmetry}
    (Name:'1D Symmetry Ratio'; Func:@SymmetryRatio1D),
    (Name:'1D Symmetry Diff'; Func:@SymmetryDiff1D),
@@ -245,7 +255,6 @@ Params1D: array[cax_val_1D..no_func_1D] of T1DParamFuncs = (
    (Name:'1D Symmetry Area'; Func:@SymmetryArea1D),
    {deviation}
    (Name:'1D Deviation Ratio'; Func:@DeviationRatio1D),
-   (Name:'1D Deviation Diff'; Func:@DeviationDiff1D),
    (Name:'1D Deviation CAX'; Func:@DeviationCAX1D),
    {miscellaneous}
    (Name:'1D No Function'; Func:@NoFunc1D));
@@ -808,6 +817,20 @@ Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
 end;
 
 
+function UniformityDiff1D(ProfileArr:TSingleProfile):string;
+{Returns the maximum difference between the max and the min
+of the IFA normalised to CAX according to NCS 70 eq 3-5.
+max(|Dmax - CAX|, |Dmin - CAX|)*100/CAX}
+var Dev        :double;
+begin
+with ProfileArr do
+   begin
+   Dev := math.max(abs(IFA.Min.ValueY - Centre.ValueY),abs(IFA.Max.ValueY - Centre.ValueY));
+   Result := FloatToStrF(100*Dev/Centre.ValueY,ffFixed,4,Precision) + '%';
+   end;
+end;
+
+
 function Flatness90501D(ProfileArr:TSingleProfile):string;
 {Returns the ratio of the length of the 90% isodose over the length of the 50% isodose,
 with the dose normalized at 100% at beam center.}
@@ -817,6 +840,35 @@ with ProfileArr do
    Flat9050 := 100*(GetFWXMPos(0.9,1).ValueX - GetFWXMPos(0.9,-1).ValueX)/
       (RightEdge.ValueX - LeftEdge.ValueX);
 Result := FloatToStrF(Flat9050,ffFixed,4,Precision) + '%';
+end;
+
+
+function PeakSlopeLeft1D(ProfileArr:TSingleProfile):string;
+begin
+with ProfileArr do
+   case Norm of
+   no_norm: Result := FloatToStrF(PeakLSlope,ffFixed,4,Precision) + '/cm';
+   norm_cax: Result := FloatToStrF(100*PeakLSlope/Centre.ValueY,ffFixed,4,Precision) + '%/cm';
+   norm_max: Result := FloatToStrF(100*PeakLSlope/Max.ValueY,ffFixed,4,Precision) + '%/cm';
+   end;
+end;
+
+
+function PeakSlopeRight1D(ProfileArr:TSingleProfile):string;
+begin
+with ProfileArr do
+   case Norm of
+   no_norm: Result := FloatToStrF(PeakRSlope,ffFixed,4,Precision) + '/cm';
+   norm_cax: Result := FloatToStrF(100*PeakRSlope/Centre.ValueY,ffFixed,4,Precision) + '%/cm';
+   norm_max: Result := FloatToStrF(100*PeakRSlope/Max.ValueY,ffFixed,4,Precision) + '%/cm';
+   end;
+end;
+
+
+function PeakSlopeRatio1D(PRofileArr:TSingleProfile):string;
+begin
+with ProfileArr do
+   Result := FloatToStrF(100*abs(PeakLSlope/PeakRSlope),ffFixed,4,Precision) + '%';
 end;
 
 
@@ -906,17 +958,6 @@ function DeviationRatio1D(ProfileArr:TSingleProfile):string;
 begin
 with ProfileArr do
 Result := FloatToStrF(100*IFA.Max.ValueY/Centre.ValueY,ffFixed,4,Precision) + '%';
-end;
-
-
-function DeviationDiff1D(ProfileArr:TSingleProfile):string;
-var Dev        :double;
-begin
-with ProfileArr do
-   begin
-   Dev := math.max(abs(IFA.Min.ValueY - Centre.ValueY),abs(IFA.Max.ValueY - Centre.ValueY));
-   Result := FloatToStrF(100*Dev/Centre.ValueY,ffFixed,4,Precision) + '%';
-   end;
 end;
 
 

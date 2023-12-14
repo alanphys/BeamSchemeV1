@@ -178,7 +178,8 @@ unit bsunit;
             fix protocol save errors
             fix memory leak in buildprotocol
             fix crash on protocol edit exit
- Version 1.00 released 7/2/2023}
+ Version 1.00 released 7/2/2023
+ 22/9/2023  add status history to settings unit}
 
 
 {$mode objfpc}{$H+}
@@ -849,8 +850,9 @@ YProfile.ShowPoints := ShowPoints;
 
 if not HelpServer.Listen(3880) then
    begin
-   BSMessage('Error starting help server. Online help may not be available. ');
-   end;
+   BSWarning('Error starting help server. Online help may not be available. ');
+   end
+  else BSMessage('BeamScheme initialised correctly.');
 end;
 
 

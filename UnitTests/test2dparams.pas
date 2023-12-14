@@ -49,6 +49,8 @@ uses importunit, param2Dfuncs;
 procedure Test2DParamFuncs.SetUp;
 begin
 fBeam := TBeam.Create;
+IFAType := Proportional;
+IFAFactor := 0.8;
 MapCheckOpen('../TestFiles/2-Sep-2011-A.txt',fBeam);
 end;
 

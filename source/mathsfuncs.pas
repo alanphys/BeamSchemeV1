@@ -25,6 +25,7 @@ T2DValuePos = record
 
 function LReg(X1,X2,Y1,Y2,X:double):double;
 function ILReg(X1,X2,Y1,Y2,Y:double):double;
+procedure LinReg(PArrX,PArrY:TPArr; var Coeffs:TPArr);
 function MaxPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 function MaxPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):T2DValuePos;
 function MinPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
@@ -44,13 +45,14 @@ function ParabolaZero(Coeffs:TPArr):double;
 
 implementation
 
-uses math, unlfit, uhillfit, upolfit, uerrors;
+uses math, ulinfit, unlfit, uhillfit, upolfit, uerrors;
 
 const
    MaxIter = 1000;             {maximum number of iterations for optimisation}
    Tol = 1.0E-4;               {required precision}
 
 function LReg(X1,X2,Y1,Y2,X:double):double;
+{Two point linear regression, given X return Y}
 var m,c:       double;
 begin
 if X1 <> X2 then m := (Y2 - Y1)/(X2 - X1) else m := 1E6;
@@ -60,6 +62,7 @@ end;
 
 
 function ILReg(X1,X2,Y1,Y2,Y:double):double;
+{Two point inverse linear regression, given Y return X}
 var m,c:       double;
 begin
 if X1 <> X2 then m := (Y2 - Y1)/(X2 - X1) else m := 1E6;
@@ -68,26 +71,48 @@ if m <> 0 then ILReg := (Y - c)/m else ILREG := 1E6;
 end;
 
 
+procedure LinReg(PArrX,PArrY:TPArr; var Coeffs:TPArr);
+{second order polynomial fit}
+var Variance   :TMatrix;       {variance-covariance matrix}
+    ErrMsg     :string;
+
+begin
+DimMatrix(Variance,2,2);
+LinFit(PArrX,PArrY,0,length(PArrX)-1,Coeffs,Variance);
+if MathErr <> MatOk then
+   begin
+   ErrMsg := MathErrMessage;
+   Coeffs[0] := 0;
+   Coeffs[1] := 0;
+   end;
+end;
+
+
 function MaxPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 {find the maximum and its location ignoring Nans. Limits are from and including
 LRow up to but not including URow. Can search from either end.}
-var I,
-    Tmp       :integer;
+var I         :integer;
 begin
 Result.Val := 0;
 Result.Pos := 0;
-if URow < LRow then     {swap URow and LRow}
-   begin
-   Tmp := URow;
-   URow := LRow;
-   LRow := Tmp;
-   end;
-for I:=LRow to URow - 1 do
-   if not IsNan(BeamArr[I]) and (BeamArr[I] > Result.Val) then
+if URow < LRow then
+   for I:=LRow - 1 downto URow do
       begin
-      Result.Val := BeamArr[I];
-      Result.Pos := I;
-      end;
+      if not IsNan(BeamArr[I]) and (BeamArr[I] > Result.Val) then
+         begin
+         Result.Val := BeamArr[I];
+         Result.Pos := I;
+         end;
+      end
+  else
+   begin
+   for I:=LRow to URow - 1 do
+      if not IsNan(BeamArr[I]) and (BeamArr[I] > Result.Val) then
+         begin
+         Result.Val := BeamArr[I];
+         Result.Pos := I;
+         end;
+   end;
 end;
 
 
@@ -113,22 +138,27 @@ end;
 function MinPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 {find the minimum and its location ignoring Nans. Limits are from and including
 low value, up to but not including high value. Can search from either end.}
-var I,
-    Tmp       :integer;
+var I          :integer;
 begin
 Result.Val := MaxDouble;
 Result.Pos := 0;
-if URow < LRow then     {swap URow and LRow}
-   begin
-   Tmp := URow;
-   URow := LRow;
-   LRow := Tmp;
-   end;
-for I:=LRow to URow - 1 do
-   if not IsNan(BeamArr[I]) and (BeamArr[I] < Result.Val) then
+if URow < LRow then
+   for I:=LRow - 1 downto URow do
       begin
-      Result.Val := BeamArr[I];
-      Result.Pos := I;
+      if not IsNan(BeamArr[I]) and (BeamArr[I] < Result.Val) then
+         begin
+         Result.Val := BeamArr[I];
+         Result.Pos := I;
+         end;
+      end
+  else
+   for I:=LRow to URow - 1 do
+      begin
+      if not IsNan(BeamArr[I]) and (BeamArr[I] < Result.Val) then
+         begin
+         Result.Val := BeamArr[I];
+         Result.Pos := I;
+         end;
       end;
 end;
 
@@ -337,7 +367,7 @@ end;
 
 
 function CoeffHillFunc(X1,X2,Y1,Y2:double; B:TVector): double;
-{calculates Hill coefficient using given X and Y.
+{estimates Hill coefficient using given X and Y.
 parameters:
    B[0] high limit
    B[1] low limit

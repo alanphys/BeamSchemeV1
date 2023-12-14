@@ -17,3 +17,8 @@
 Symmetry,,,
 "     Difference","1D Symmetry Diff",,
 ,,,
+Flatness,,,
+"     Slope Left","1D Peak Slope Left",,
+"     Slope Right","1D Peak Slope Right",,
+"     Slope Ratio","1D Peak Slope Ratio",,
+,,,

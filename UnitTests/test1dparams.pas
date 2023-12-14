@@ -81,16 +81,20 @@ type
       procedure TestFlatnessRatio1D;
       procedure TestFlatnessCAX1D;
       procedure TestUniformityAve1D;
+      procedure TestUniformityDiff1D;
       procedure TestFlatness90501D;
-      {symmetry parameters}
+      procedure TestPeakSlopeLeft1D;
+      procedure TestPeakSlopeRight1D;
+      procedure TestPeakSlopeRatio1D;
+     {symmetry parameters}
       procedure TestSymmetryRatio1D;
       procedure TestSymmetryDiff1D;
       procedure TestSymmetryArea1D_Odd;
       procedure TestSymmetryArea1D_Even;
       {deviation parameters}
       procedure TestDeviationRatio1D;
-      procedure TestDeviationDiff1D;
       procedure TestDeviationCAX1D;
+      {miscellaneous}
       procedure TestNoFunc1D;
    end;
 
@@ -115,7 +119,6 @@ var ProfileArrX: array of double = (-13, -12.5, -12, -11.5, -11, -10.5, -10,
 implementation
 
 procedure Test1DParamFuncs.SetUp;
-var n:integer;
 begin
 fProfile := TSingleProfile.Create;
 fProfile.Len := 53;
@@ -513,9 +516,33 @@ AssertEquals('Test uniformity ICRU','4.67%',UniformityAve1D(fProfile));
 end;
 
 
+procedure Test1DParamFuncs.TestUniformityDiff1D;
+begin
+AssertEquals('Test uniformity NCS 70','4.80%',UniformityDiff1D(fProfile));
+end;
+
+
 procedure Test1DParamFuncs.TestFlatness90501D;
 begin
 AssertEquals('Test flatness left 90-50%','95.76%',Flatness90501D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestPeakSlopeLeft1D;
+begin
+AssertEquals('Test peak left slope','-0.22/cm',PeakSlopeLeft1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestPeakSlopeRight1D;
+begin
+AssertEquals('Test peak right slope','0.52/cm',PeakSlopeRight1D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestPeakSlopeRatio1D;
+begin
+AssertEquals('Test peak right slope','42.14%',PeakSlopeRatio1D(fProfile));
 end;
 
 
@@ -555,12 +582,6 @@ end;
 procedure Test1DParamFuncs.TestDeviationRatio1D;
 begin
 AssertEquals('Test deviation ratio','104.80%',DeviationRatio1D(fProfile));
-end;
-
-
-procedure Test1DParamFuncs.TestDeviationDiff1D;
-begin
-AssertEquals('Test deviation difference','4.80%',DeviationDiff1D(fProfile));
 end;
 
 
