@@ -182,7 +182,8 @@ unit bsunit;
  22/9/2023  add status history to settings unit
  28/9/2023  add test unit for maths funcs
  14/12/2023 add top and peak slope to FFF params
- 18/12/2023 look for config file in program dir as well}
+ 18/12/2023 look for config file in program dir as well
+            remove web server for help}
 
 
 {$mode objfpc}{$H+}
@@ -192,8 +193,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Menus,
   ExtCtrls, Buttons, TAGraph, TASeries, TATools, StdCtrls, Clipbrd,
-  IntfGraphics, Spin, ComCtrls, LazHelpHTML, Grids, Tracker2, lNetComponents,
-  lwebserver, bstypes;
+  IntfGraphics, Spin, ComCtrls, LazHelpHTML, Grids, Tracker2, bstypes;
 
   { TBSForm }
 
@@ -208,7 +208,6 @@ type
    cXprof: TLabel;
    HTMLBrowserHelpViewer: THTMLBrowserHelpViewer;
    HTMLHelpDatabase: THTMLHelpDatabase;
-   HelpServer: TLHTTPServerComponent;
    ImageList: TImageList;
    Label7: TLabel;
    miShowPoints: TMenuItem;
@@ -377,9 +376,6 @@ type
     { private declarations }
  public
     { public declarations }
-   FileHandler: TFileHandler;
-   CGIHandler: TCGIHandler;
-   PHPCGIHandler: TPHPFastCGIHandler;
    end;
 
 var
@@ -646,9 +642,6 @@ end;
 procedure TBSForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
 SaveSettings('BSSettings');
-FileHandler.Free;
-CGIHandler.Free;
-PHPCGIHandler.Free;
 StatusMessages.Free;
 end;
 
@@ -819,43 +812,12 @@ StatusMessages := TStringList.Create;
 sExePath := ExtractFilePath(Application.ExeName);
 SetCurrentDir(sExePath);
 
-{start web server for online help}
-FileHandler := TFileHandler.Create;
-FileHandler.MimeTypeFile := sExePath + 'html' + DirectorySeparator + 'mime.types';
-FileHandler.DocumentRoot := sExePath + 'html';
-
-CGIHandler := TCGIHandler.Create;
-CGIHandler.FCGIRoot := sExePath + 'html' + DirectorySeparator + 'cgi-bin';
-CGIHandler.FDocumentRoot := sExePath + 'html' + DirectorySeparator + 'cgi-bin';
-CGIHandler.FEnvPath := sExePath + 'html' + DirectorySeparator + 'cgi-bin';
-CGIHandler.FScriptPathPrefix := 'cgi-bin' + DirectorySeparator;
-
-PHPCGIHandler := TPHPFastCGIHandler.Create;
-PHPCGIHandler.Host := 'localhost';
-PHPCGIHandler.Port := 4665;
-PHPCGIHandler.AppEnv := 'PHP_FCGI_CHILDREN=5:PHP_FCGI_MAX_REQUESTS=10000';
-PHPCGIHandler.AppName := 'php-cgi.exe';
-PHPCGIHandler.EnvPath := sExePath + 'html' + DirectorySeparator + 'cgi-bin';
-
-HelpServer.RegisterHandler(FileHandler);
-HelpServer.RegisterHandler(CGIHandler);
-
-FileHandler.DirIndexList.Add('BSHelp.html');
-FileHandler.DirIndexList.Add('index.htm');
-FileHandler.DirIndexList.Add('index.php');
-FileHandler.DirIndexList.Add('index.cgi');
-FileHandler.RegisterHandler(PHPCGIHandler);
-
 BuildProtocolList;
 LoadProtocol;
 XProfile.ShowPoints := ShowPoints;
 YProfile.ShowPoints := ShowPoints;
 
-if not HelpServer.Listen(3880) then
-   begin
-   BSWarning('Error starting help server. Online help may not be available. ');
-   end
-  else BSMessage('BeamScheme initialised correctly.');
+BSMessage('BeamScheme initialised correctly.');
 end;
 
 

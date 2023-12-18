@@ -54,7 +54,7 @@ There are three normalisation modes. None, CAX or maximum. Normalisation places 
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
 
 Version 1.01
-FFF parameters according to NCS-70 have been included. Extensive testing of the maths functions has been added. Additional protocol validation has been added.
+FFF parameters according to NCS-70 have been included. Extensive testing of the maths functions has been added. Additional protocol validation has been added. The help web server has been removed. Help is now served directly from file. This version can be run from a single directory such as a usb disk.
 
 Version 1.00
 BeamScheme v1.00 is virtually a complete rewrite of BeamScheme featuring a new parameter calculation engine. The code has been extensively modularised making it easy to add new parameters. New algorithms have been implemented with individual parameter calculation. Extensive unit testing has been implemented. The GUI has been updated. The expression parser has been dropped and all parameters are calculated in the code. Efficiency is achieved by only calculating needed parameters.
@@ -280,3 +280,4 @@ Version 1.00 released 7/2/2023}
 28/9/2023  add test unit for maths funcs
 14/12/2023 add top and peak slope to FFF params
 18/12/2023 look for config file in program dir as well
+           remove web server for help

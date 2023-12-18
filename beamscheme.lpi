@@ -15,7 +15,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="125"/>
+      <BuildNr Value="127"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="Yenzakahle Medical Physics Inc"/>
     </VersionInfo>
@@ -148,12 +148,12 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="118">
+    <Units Count="120">
       <Unit0>
         <Filename Value="beamscheme.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="21" Y="18"/>
+        <CursorPos X="36" Y="27"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -164,8 +164,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="164"/>
-        <CursorPos X="57" Y="185"/>
+        <TopLine Value="174"/>
+        <CursorPos X="39" Y="186"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -984,9 +984,9 @@
         <Filename Value="../../.lazarus/onlinepackagemanager/packages/lnet/lazaruspackage/lclnet.pas"/>
         <UnitName Value="LCLNet"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="51"/>
+        <TopLine Value="42"/>
         <CursorPos X="48" Y="78"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="10"/>
       </Unit106>
       <Unit107>
         <Filename Value="/usr/lib64/lazarus/lcl/interfaces/qt5/qtwinapi.inc"/>
@@ -1068,6 +1068,20 @@
         <CursorPos X="84" Y="10"/>
         <UsageCount Value="9"/>
       </Unit117>
+      <Unit118>
+        <Filename Value="../../.lazarus/onlinepackagemanager/packages/lnet/lib/lhttp.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="595"/>
+        <CursorPos Y="612"/>
+        <UsageCount Value="10"/>
+      </Unit118>
+      <Unit119>
+        <Filename Value="../../.lazarus/onlinepackagemanager/packages/lnet/lib/lwebserver.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="155"/>
+        <CursorPos X="3" Y="172"/>
+        <UsageCount Value="10"/>
+      </Unit119>
     </Units>
     <Build>
       <CleanOutputFileMask Value="*.ppu;*.ppl;*.o;*.or"/>
@@ -1075,123 +1089,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="282" TopLine="248"/>
+        <Caret Line="230" Column="19" TopLine="211"/>
       </Position1>
       <Position2>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="28" TopLine="13"/>
+        <Caret Line="162" Column="52" TopLine="133"/>
       </Position2>
       <Position3>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="767" TopLine="435"/>
+        <Filename Value="source/settingsunit.pas"/>
+        <Caret Line="314" Column="22" TopLine="281"/>
       </Position3>
       <Position4>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="644" TopLine="621"/>
+        <Filename Value="source/settingsunit.pas"/>
+        <Caret Line="296" Column="30" TopLine="288"/>
       </Position4>
       <Position5>
-        <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="108" TopLine="102"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="645" TopLine="592"/>
       </Position5>
       <Position6>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="230" Column="19" TopLine="211"/>
+        <Caret Line="25" Column="17" TopLine="7"/>
       </Position6>
       <Position7>
-        <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="162" Column="52" TopLine="133"/>
+        <Filename Value="source/param1dfuncs.pas"/>
+        <Caret Line="859" TopLine="832"/>
       </Position7>
       <Position8>
-        <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="314" Column="22" TopLine="281"/>
+        <Filename Value="source/param1dfuncs.pas"/>
+        <Caret Line="861" Column="4" TopLine="832"/>
       </Position8>
       <Position9>
-        <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="296" Column="30" TopLine="288"/>
+        <Filename Value="source/param1dfuncs.pas"/>
+        <Caret Line="851" Column="32" TopLine="832"/>
       </Position9>
       <Position10>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="645" TopLine="592"/>
+        <Filename Value="source/param1dfuncs.pas"/>
+        <Caret Line="863" Column="56" TopLine="834"/>
       </Position10>
       <Position11>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="25" Column="17" TopLine="7"/>
+        <Caret Line="62" TopLine="56"/>
       </Position11>
       <Position12>
-        <Filename Value="source/param1dfuncs.pas"/>
-        <Caret Line="859" TopLine="832"/>
+        <Filename Value="source/settingsunit.pas"/>
+        <Caret Line="63" TopLine="56"/>
       </Position12>
       <Position13>
-        <Filename Value="source/param1dfuncs.pas"/>
-        <Caret Line="861" Column="4" TopLine="832"/>
+        <Filename Value="source/settingsunit.pas"/>
+        <Caret Line="101" Column="29" TopLine="91"/>
       </Position13>
       <Position14>
-        <Filename Value="source/param1dfuncs.pas"/>
-        <Caret Line="851" Column="32" TopLine="832"/>
+        <Filename Value="source/settingsunit.pas"/>
+        <Caret Line="62" TopLine="56"/>
       </Position14>
       <Position15>
-        <Filename Value="source/param1dfuncs.pas"/>
-        <Caret Line="863" Column="56" TopLine="834"/>
+        <Filename Value="source/settingsunit.pas"/>
+        <Caret Line="63" TopLine="56"/>
       </Position15>
       <Position16>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="62" TopLine="56"/>
+        <Caret Line="64" TopLine="56"/>
       </Position16>
       <Position17>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="63" TopLine="56"/>
+        <Caret Line="80" Column="30" TopLine="68"/>
       </Position17>
       <Position18>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="101" Column="29" TopLine="91"/>
+        <Caret Line="63" TopLine="46"/>
       </Position18>
       <Position19>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="62" TopLine="56"/>
+        <Caret Line="64" TopLine="46"/>
       </Position19>
       <Position20>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="63" TopLine="56"/>
+        <Caret Line="74" TopLine="46"/>
       </Position20>
       <Position21>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="64" TopLine="56"/>
+        <Caret Line="75" TopLine="47"/>
       </Position21>
       <Position22>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="80" Column="30" TopLine="68"/>
+        <Caret Line="76" TopLine="48"/>
       </Position22>
       <Position23>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="63" TopLine="46"/>
+        <Caret Line="77" TopLine="49"/>
       </Position23>
       <Position24>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="64" TopLine="46"/>
+        <Caret Line="78" TopLine="50"/>
       </Position24>
       <Position25>
         <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="74" TopLine="46"/>
+        <Caret Line="79" TopLine="51"/>
       </Position25>
       <Position26>
-        <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="75" TopLine="47"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="180" Column="25" TopLine="164"/>
       </Position26>
       <Position27>
-        <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="76" TopLine="48"/>
+        <Filename Value="beamscheme.lpr"/>
+        <Caret Line="18" Column="21"/>
       </Position27>
       <Position28>
-        <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="77" TopLine="49"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="180" Column="25" TopLine="816"/>
       </Position28>
       <Position29>
-        <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="78" TopLine="50"/>
+        <Filename Value="beamscheme.lpr"/>
+        <Caret Line="27"/>
       </Position29>
       <Position30>
-        <Filename Value="source/settingsunit.pas"/>
-        <Caret Line="79" TopLine="51"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="378" TopLine="361"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

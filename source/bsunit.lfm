@@ -1449,7 +1449,7 @@ object BSForm: TBSForm
     Top = 186
   end
   object HTMLHelpDatabase: THTMLHelpDatabase
-    BaseURL = 'http://127.0.0.1:3880/'
+    BaseURL = 'file://html'
     AutoRegister = True
     KeywordPrefix = 'HTML/'
     Left = 146
@@ -1460,12 +1460,6 @@ object BSForm: TBSForm
     AutoRegister = True
     Left = 146
     Top = 121
-  end
-  object HelpServer: TLHTTPServerComponent
-    Port = 3880
-    Timeout = 0
-    Left = 145
-    Top = 186
   end
   object pmContext: TPopupMenu
     OnPopup = pmContextPopup
