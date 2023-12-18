@@ -47,25 +47,33 @@ var
 
 implementation
 
-uses bstypes, laz2_XMLCfg, LazFileUtils;
+uses bstypes, laz2_XMLCfg, LazFileUtils, FileUtil;
 
 function LoadSettings(FileName:string):boolean;
 var cfg        :TXMLConfig;
     IFAVal     :TIFAType;
     CentreVal  :TCentre;
     CfgPath,
+    FName,
     sTemp      :string;
 begin
 Result := false;
-{$ifdef WINDOWS}
-CfgPath := GetAppConfigDir(true);
-{$else}
-CfgPath := GetAppConfigDir(false);
-{$endif}
-FileName := AppendPathDelim(CfgPath) + FileName + '.xml';
-if FileExists(FileName) then
+{look first for settings file in program dir}
+CfgPath := ProgramDirectory;
+FName := AppendPathDelim(CfgPath) + FileName + '.xml';
+if not FileExists(FName) then
+   {if nothing in program dir look in config dir}
+   begin
+   {$ifdef WINDOWS}
+   CfgPath := GetAppConfigDir(true);
+   {$else}
+   CfgPath := GetAppConfigDir(false);
+   {$endif}
+   FName := AppendPathDelim(CfgPath) + FileName + '.xml';
+   end;
+if FileExists(FName) then
    try
-   cfg := TXMLConfig.Create(FileName);
+   cfg := TXMLConfig.Create(FName);
    DefaultRes := 2.54/cfg.GetValue('DefaultResolution', 75);
    sTemp := cfg.GetValue('IFAType','Proportional');
    for IFAVal in TIFAType do
@@ -85,17 +93,25 @@ end;
 
 function SaveSettings(FileName:string):boolean;
 var cfg        :TXMLConfig;
-    CfgPath    :string;
+    CfgPath,
+    FName      :string;
 begin
 Result := false;
-{$ifdef WINDOWS}
-CfgPath := GetAppConfigDir(true);
-{$else}
-CfgPath := GetAppConfigDir(false);
-{$endif}
-FileName := AppendPathDelim(CfgPath) + FileName + '.xml';
-   try
-   cfg := TXMLConfig.Create(FileName);
+{look first for settings file in program dir}
+CfgPath := ProgramDirectory;
+FName := AppendPathDelim(CfgPath) + FileName + '.xml';
+if not FileExists(FName) then
+   {if nothing in program dir look in config dir}
+   begin
+   {$ifdef WINDOWS}
+   CfgPath := GetAppConfigDir(true);
+   {$else}
+   CfgPath := GetAppConfigDir(false);
+   {$endif}
+   FName := AppendPathDelim(CfgPath) + FileName + '.xml';
+   end;
+try
+   cfg := TXMLConfig.Create(FName);
    cfg.SetValue('DefaultResolution',round(2.54/DefaultRes));
    cfg.SetValue('IFAType',IFAData[IFAType].Name);
    cfg.SetExtendedValue('IFAFactor',IFAFactor);

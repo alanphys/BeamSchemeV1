@@ -1,9 +1,9 @@
-BeamScheme Readme file (c) 2008-2023 AC Chamberlain
+BeamScheme Readme file (c) 2008-2024 AC Chamberlain
 
 1) Introduction
 Welcome to BeamScheme
 
-BeamScheme is an analysis tool for 2D datasets. It will assist you in extracting 1D profiles from 2D datasets and can calculate over 60 different parameters. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, Eclipse, XiO, BrainLab, DICOM, jpg, etc.
+BeamScheme is an analysis tool for 2D datasets. It will assist you in extracting 1D profiles from 2D datasets and can calculate over 90 different parameters. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, Eclipse, XiO, BrainLab, DICOM, jpg, etc.
 
 Parameters include field size, field centre, penumbra, flatness and symmetry. FFF beams are supported with both maximum slope and sigmoid fit parameters available. Profiles can be taken at any angle, offset or thickness. Profiles can be exported to a text file or clipboard for further processing. Results can be exported to PDF.
 
@@ -17,7 +17,7 @@ BeamScheme V1.00 is not compatible with previous versions of BeamScheme. While i
 
 To install BeamScheme run the BSSetup.exe file.
 
-Alternatively extract the files manually and copy into a directory of your choosing.
+From version 1.01 BeamScheme features a USB disk install where the files can be extracted to a directory of your choosing and run.
 
 4) Use
 Run the program by double clicking the desktop icon, selecting the "BeamScheme" menu option or double clicking the BeamScheme.exe file in Windows explorer
@@ -52,6 +52,9 @@ There are three normalisation modes. None, CAX or maximum. Normalisation places 
 
 9) Release notes
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
+
+Version 1.01
+FFF parameters according to NCS-70 have been included. Extensive testing of the maths functions has been added. Additional protocol validation has been added.
 
 Version 1.00
 BeamScheme v1.00 is virtually a complete rewrite of BeamScheme featuring a new parameter calculation engine. The code has been extensively modularised making it easy to add new parameters. New algorithms have been implemented with individual parameter calculation. Extensive unit testing has been implemented. The GUI has been updated. The expression parser has been dropped and all parameters are calculated in the code. Efficiency is achieved by only calculating needed parameters.
@@ -267,9 +270,13 @@ Version 0.5 released 25/10/2019
 3/2/2023   update help
 6/2/2023   fix config directory creation
            fix formatting issues in Windows}
- 7/2/2023  fix protocol save path under Windows
+7/2/2023   fix protocol save path under Windows
            change protocol dir from exe or program config to both
            fix protocol save errors
            fix memory leak in buildprotocol
            fix crash on protocol edit exit
 Version 1.00 released 7/2/2023}
+22/9/2023  add status history to settings unit
+28/9/2023  add test unit for maths funcs
+14/12/2023 add top and peak slope to FFF params
+18/12/2023 look for config file in program dir as well

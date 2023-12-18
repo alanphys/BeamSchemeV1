@@ -179,7 +179,10 @@ unit bsunit;
             fix memory leak in buildprotocol
             fix crash on protocol edit exit
  Version 1.00 released 7/2/2023
- 22/9/2023  add status history to settings unit}
+ 22/9/2023  add status history to settings unit
+ 28/9/2023  add test unit for maths funcs
+ 14/12/2023 add top and peak slope to FFF params
+ 18/12/2023 look for config file in program dir as well}
 
 
 {$mode objfpc}{$H+}
