@@ -1,0 +1,10 @@
+.. index::
+   single: Parameters; 1D Dose 20% Diff Left
+
+1D Dose 20% Diff Left
+=====================
+
+Returns the dose at 20% of the :ref:`maximum gradient<1D Field Size Diff>` field size on the profile left.
+
+**Protocol invocation name**: 1D Dose 20% Diff Left
+

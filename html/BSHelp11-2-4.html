@@ -1,23 +1,25 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Inflection Point Parameters &#8212; BeamScheme 1.00 documentation</title>
+    <title>Inflection Point Parameters &#8212; BeamScheme 1.01 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/nature.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="1D Left Infl" href="BSHelp11-2-4-1.html" />
-    <link rel="prev" title="1D Field Size Diff" href="BSHelp11-2-3-4.html" /> 
+    <link rel="prev" title="1D Dose 80% Diff Right" href="BSHelp11-2-3-14.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,9 +31,9 @@
           <a href="BSHelp11-2-4-1.html" title="1D Left Infl"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="BSHelp11-2-3-4.html" title="1D Field Size Diff"
+          <a href="BSHelp11-2-3-14.html" title="1D Dose 80% Diff Right"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.01 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" accesskey="U">1D Parameters</a> &#187;</li>
@@ -45,7 +47,7 @@
           <div class="body" role="main">
             
   <section id="inflection-point-parameters">
-<span id="index-0"></span><h1>Inflection Point Parameters<a class="headerlink" href="#inflection-point-parameters" title="Permalink to this headline">¶</a></h1>
+<span id="index-0"></span><h1>Inflection Point Parameters<a class="headerlink" href="#inflection-point-parameters" title="Permalink to this heading">¶</a></h1>
 <p>For FFF beams the standard interpolated or dose level parameters do not give good results. The field edge of FFF beams is defined at the inflection point of the penumbra. For low resolution measuring devices like 2D arrays this can be quite inaccurate. Therefore a sigmoid model is fitted to the penumbra using a Hill function:</p>
 <div class="math notranslate nohighlight">
 \[f(x) = A + \cfrac {B - A} {1 + \left (\cfrac {C} {x} \right)^D}\]</div>
@@ -74,14 +76,15 @@
 <li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-4.html">1D Field Size Infl</a></li>
 <li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-5.html">1D Penumbra Infl Left</a></li>
 <li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-6.html">1D Penumbra Infl Right</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-7.html">1D Dose 20% FW Left</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-8.html">1D Dose 20% FW Right</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-9.html">1D Dose 50% FW Left</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-10.html">1D Dose 50% FW Right</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-11.html">1D Dose 60% FW Left</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-12.html">1D Dose 60% FW Right</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-13.html">1D Dose 80% FW Left</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-14.html">1D Dose 80% FW Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-15.html">1D Top Infl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-7.html">1D Dose 20% Infl Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-8.html">1D Dose 20% Infl Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-9.html">1D Dose 50% Infl Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-10.html">1D Dose 50% Infl Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-11.html">1D Dose 60% Infl Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-12.html">1D Dose 60% Infl Right</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-13.html">1D Dose 80% Infl Left</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSHelp11-2-4-14.html">1D Dose 80% Infl Right</a></li>
 </ul>
 </div>
 </section>
@@ -95,8 +98,8 @@
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="BSHelp11-2-3-4.html"
-                          title="previous chapter">1D Field Size Diff</a></p>
+    <p class="topless"><a href="BSHelp11-2-3-14.html"
+                          title="previous chapter">1D Dose 80% Diff Right</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
@@ -119,7 +122,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -134,9 +137,9 @@
           <a href="BSHelp11-2-4-1.html" title="1D Left Infl"
              >next</a> |</li>
         <li class="right" >
-          <a href="BSHelp11-2-3-4.html" title="1D Field Size Diff"
+          <a href="BSHelp11-2-3-14.html" title="1D Dose 80% Diff Right"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.01 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp11.html" >Parameters</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="BSHelp11-2.html" >1D Parameters</a> &#187;</li>
@@ -144,8 +147,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, AC Chamberlain.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+        &#169; Copyright 2024, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

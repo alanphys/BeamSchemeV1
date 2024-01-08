@@ -35,6 +35,7 @@ The algorithm selects 20 points around the maximum slope in the penumbra. For hi
    BSHelp11-2-4-4.rst
    BSHelp11-2-4-5.rst
    BSHelp11-2-4-6.rst
+   BSHelp11-2-4-15.rst
    BSHelp11-2-4-7.rst
    BSHelp11-2-4-8.rst
    BSHelp11-2-4-9.rst

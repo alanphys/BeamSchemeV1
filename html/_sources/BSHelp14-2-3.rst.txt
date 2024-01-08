@@ -21,4 +21,4 @@ The electron profile parameters are the same as the photon profile parameters.
 
 **Flattened field**
 
-BeamScheme uses 80% of the :ref:`field size <1D Field Size 50>` as the flattened area.
+The flattend field is defined by the :ref:`In Field Area`.

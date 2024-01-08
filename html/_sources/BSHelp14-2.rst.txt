@@ -20,3 +20,4 @@ The available predefined protocols are:
    BSHelp14-2-6.rst
    BSHelp14-2-7.rst
    BSHelp14-2-8.rst
+   BSHelp14-2-10.rst

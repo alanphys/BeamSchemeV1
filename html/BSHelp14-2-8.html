@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>FFF &#8212; BeamScheme 1.00 documentation</title>
+    <title>FFF-LoRes &#8212; BeamScheme 1.01 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/nature.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Errors and trouble shooting" href="BSHelp12.html" />
+    <link rel="next" title="FFF-HiRes" href="BSHelp14-2-10.html" />
     <link rel="prev" title="Varian" href="BSHelp14-2-7.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -25,15 +27,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="BSHelp12.html" title="Errors and trouble shooting"
+          <a href="BSHelp14-2-10.html" title="FFF-HiRes"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="BSHelp14-2-7.html" title="Varian"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.01 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp14.html" >Protocols</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp14-2.html" accesskey="U">Defined protocols</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">FFF</a></li> 
+        <li class="nav-item nav-item-this"><a href="">FFF-LoRes</a></li> 
       </ul>
     </div>  
 
@@ -42,8 +44,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="fff">
-<span id="index-0"></span><h1>FFF<a class="headerlink" href="#fff" title="Permalink to this headline">¶</a></h1>
+  <section id="fff-lores">
+<span id="index-0"></span><h1>FFF-LoRes<a class="headerlink" href="#fff-lores" title="Permalink to this heading">¶</a></h1>
+<p>This protocol is recommended for low resolution devices such as 2D arrays.</p>
 <p><strong>Photon Profile Parameters</strong></p>
 <p>FFF parameters only apply to photon beams:</p>
 <div class="toctree-wrapper compound">
@@ -55,11 +58,14 @@
 <li><p><a class="reference internal" href="BSHelp11-2-4-4.html#d-field-size-infl"><span class="std std-ref">Field Size</span></a></p></li>
 <li><p><a class="reference internal" href="BSHelp11-2-4-5.html#d-penumbra-infl-left"><span class="std std-ref">Penumbra 80%-20% Left</span></a></p></li>
 <li><p><a class="reference internal" href="BSHelp11-2-4-5.html#d-penumbra-infl-left"><span class="std std-ref">Penumbra 80%-20% Left</span></a></p></li>
-<li><p><cite>Penumbra Slope</cite></p></li>
+<li><p><a class="reference internal" href="BSHelp11-2-4-15.html#d-top-infl"><span class="std std-ref">Top position</span></a></p></li>
 <li><p><a class="reference internal" href="BSHelp11-2-6-4.html#d-symmetry-area"><span class="std std-ref">Area Symmetry</span></a></p></li>
+<li><p><a class="reference internal" href="BSHelp11-2-5-8.html#d-peak-slope-left"><span class="std std-ref">Peak Slope Left</span></a></p></li>
+<li><p><a class="reference internal" href="BSHelp11-2-5-9.html#d-peak-slope-right"><span class="std std-ref">Peak Slope Right</span></a></p></li>
+<li><p><a class="reference internal" href="BSHelp11-2-5-10.html#d-peak-slope-ratio"><span class="std std-ref">Peak Slope Ratio</span></a></p></li>
 </ul>
 <p><strong>Flattened field</strong></p>
-<p>BeamScheme uses 80% of the <a class="reference internal" href="BSHelp11-2-2-4.html#d-field-size-50"><span class="std std-ref">field size</span></a> as the flattened area.</p>
+<p>FFF beams use the concept of <a class="reference internal" href="BSHelp9-2.html#in-field-area"><span class="std std-ref">In Field Area</span></a> which is primarily used for the <a class="reference internal" href="BSHelp11-2-6-4.html#d-symmetry-area"><span class="std std-ref">Area Symmetry</span></a> and <a class="reference internal" href="BSHelp11-2-5-10.html#d-peak-slope-ratio"><span class="std std-ref">Peak Slope</span></a> calculations.</p>
 </section>
 
 
@@ -76,8 +82,8 @@
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="BSHelp12.html"
-                          title="next chapter">Errors and trouble shooting</a></p>
+    <p class="topless"><a href="BSHelp14-2-10.html"
+                          title="next chapter">FFF-HiRes</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -95,7 +101,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -107,20 +113,20 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="BSHelp12.html" title="Errors and trouble shooting"
+          <a href="BSHelp14-2-10.html" title="FFF-HiRes"
              >next</a> |</li>
         <li class="right" >
           <a href="BSHelp14-2-7.html" title="Varian"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.01 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp14.html" >Protocols</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="BSHelp14-2.html" >Defined protocols</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">FFF</a></li> 
+        <li class="nav-item nav-item-this"><a href="">FFF-LoRes</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, AC Chamberlain.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+        &#169; Copyright 2024, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

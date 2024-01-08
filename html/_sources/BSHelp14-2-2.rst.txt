@@ -29,10 +29,10 @@ The defined electron parameters are:
 *  :ref:`Penumbra 80%-20% Right<1D Penumbra 8020 Right>`
 *  :ref:`Maximum Dose Ratio<1D Symmetry Ratio>`
 *  :ref:`Flatness L90/L50<1D Flatness 9050>`
-*  :ref:`Maximum Variation<1D Deviation Diff>`
+*  :ref:`Maximum Variation<1D Uniformity NCS>`
 
 .. Need to check electron deviation
 
 **Flattened field**
 
-BeamScheme uses 80% of the :ref:`field size <1D Field Size 50>` as the flattened area.
+The flattend field is defined by the :ref:`In Field Area`.

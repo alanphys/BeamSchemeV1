@@ -31,7 +31,7 @@ Windows can be maximised and restored by clicking the arrow in the top right han
 5) Validation
 BeamScheme features extensive internal and external validation against commercial and open source software. Please see the unit tests directory for more information.
 
-6)Notes on using 2D Array files
+6) Notes on using 2D Array files
 For correct field sizes the detector plane of the 2D array must be at 100cm SSD.
 
 There will be small differences between the flatness and symmetry reported by BeamScheme and your 2D Array. This is due to differences in the algorithms. The differences should not be more than 0.05%.
@@ -89,8 +89,6 @@ Profiles can now be positioned by clicking on the image with the mouse.
 
 10) Known issues
 Windows does not automatically focus the control under the mouse cursor therefore the context sensitive help may return the wrong help page.
-
-FFF parameters are partially implemented.
 
 11) History
 22/07/2008 version 0.1
@@ -254,7 +252,7 @@ Version 0.5 released 25/10/2019
 9/3/2022   add show/hide profile points
            add peak params to TSingleProfile, refactor
 14/3/2022  fix window limit on normalise to centre
-2/6/2022   add relative centering to peak and absolute to detector to IFA}
+2/6/2022   add relative centering to peak and absolute to detector to IFA
 24/6/2022  make maxposnan bidirectional, add differential params
 20/7/2022  add sigmoid function and params
 16/8/2022  fix infinite loop error with small floats, add rescale
@@ -269,15 +267,17 @@ Version 0.5 released 25/10/2019
            fix Invert toggle
 3/2/2023   update help
 6/2/2023   fix config directory creation
-           fix formatting issues in Windows}
+           fix formatting issues in Windows
 7/2/2023   fix protocol save path under Windows
            change protocol dir from exe or program config to both
            fix protocol save errors
            fix memory leak in buildprotocol
            fix crash on protocol edit exit
-Version 1.00 released 7/2/2023}
+Version 1.00 released 7/2/2023
 22/9/2023  add status history to settings unit
 28/9/2023  add test unit for maths funcs
 14/12/2023 add top and peak slope to FFF params
 18/12/2023 look for config file in program dir as well
            remove web server for help
+ 5/1/2024  fix max pos 1D param
+           fix behaviour on invalid protocol

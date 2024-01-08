@@ -182,7 +182,7 @@ end;
 
 procedure Test1DParamFuncs.TestMaxPos1D;
 begin
-AssertEquals('Test Max position','-6.50cm',MaxPos1D(fProfile));
+AssertEquals('Test Max position','-6.50 cm',MaxPos1D(fProfile));
 end;
 
 

@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>FFF algorithms &#8212; BeamScheme 1.00 documentation</title>
+    <title>FFF algorithms &#8212; BeamScheme 1.01 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/nature.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="In Field Area" href="BSHelp9-2.html" />
@@ -30,7 +32,7 @@
         <li class="right" >
           <a href="BSHelp10.html" title="Diagonal/Skew Profiles"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.01 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" accesskey="U">Algorithms</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">FFF algorithms</a></li> 
       </ul>
@@ -42,7 +44,7 @@
           <div class="body" role="main">
             
   <section id="fff-algorithms">
-<span id="index-0"></span><h1>FFF algorithms<a class="headerlink" href="#fff-algorithms" title="Permalink to this headline">¶</a></h1>
+<span id="index-0"></span><h1>FFF algorithms<a class="headerlink" href="#fff-algorithms" title="Permalink to this heading">¶</a></h1>
 <p>For FFF beams the standard interpolated or dose level parameters do not give good results. FFF fields are sharply peaked and the FWHM (50% dose level) is not a good indicator of the collimator field size. For FFF beams the inflection point (the point where the slope of the penumbra is greatest) of the penumbra has been proposed to represent the field edge.</p>
 <p>While the maximum slope of the penumbra can be calculated directly by <a class="reference internal" href="BSHelp11-2-3.html#d-differential-parameters"><span class="std std-ref">differentiation</span></a> this can be quite inaccurate for low resolution detectors such as 2D arrays and the recommended method is to fit a sigmoid or Hill function to the penumbra data and determine the inflection point of the function.</p>
 <p>This is described under <a class="reference internal" href="BSHelp11-2-4.html#inflection-point-parameters"><span class="std std-ref">Inflection Point Parameters</span></a></p>
@@ -81,7 +83,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -98,14 +100,14 @@
         <li class="right" >
           <a href="BSHelp10.html" title="Diagonal/Skew Profiles"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.01 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">FFF algorithms</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, AC Chamberlain.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+        &#169; Copyright 2024, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

@@ -15,4 +15,8 @@ Available flatness and uniformity parameters are:
    BSHelp11-2-5-3.rst
    BSHelp11-2-5-4.rst
    BSHelp11-2-5-5.rst
+   BSHelp11-2-5-7.rst
    BSHelp11-2-5-6.rst
+   BSHelp11-2-5-8.rst
+   BSHelp11-2-5-9.rst
+   BSHelp11-2-5-10.rst

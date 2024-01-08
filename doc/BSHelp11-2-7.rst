@@ -11,5 +11,4 @@ Available deviation parameters are:
    :maxdepth: 1
 
    BSHelp11-2-7-1.rst
-   BSHelp11-2-7-2.rst
    BSHelp11-2-7-3.rst

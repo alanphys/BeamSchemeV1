@@ -14,3 +14,11 @@ Available differential parameters are:
    BSHelp11-2-3-2.rst
    BSHelp11-2-3-3.rst
    BSHelp11-2-3-4.rst
+   BSHelp11-2-3-7.rst
+   BSHelp11-2-3-8.rst
+   BSHelp11-2-3-9.rst
+   BSHelp11-2-3-10.rst
+   BSHelp11-2-3-11.rst
+   BSHelp11-2-3-12.rst
+   BSHelp11-2-3-13.rst
+   BSHelp11-2-3-14.rst

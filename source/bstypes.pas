@@ -1428,7 +1428,7 @@ if fTop.Pos = 0 then
 Result := fTop;
 end;
 
-
+{TODO: change to use IFA}
 function TSingleProfile.GetPeakLSlope:double;
 {Get the slope of a straight line to the points between 25% and 80% of the
 field size on the left side of the profile. Use the inflection point for the
@@ -1451,6 +1451,7 @@ Result := GetSlope(Start,Stop);
 end;
 
 
+{TODO: change to use IFA}
 function TSingleProfile.GetPeakRSlope:double;
 {Get the slope of a straight line to the points between 25% and 80% of the
 field size on the left side of the profile. Use the inflection point for the

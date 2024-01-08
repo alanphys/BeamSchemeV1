@@ -10,6 +10,4 @@ Doug Gregor and Curtis Carpenter for DTrackbar.
 
 TAChart written by Luís Rodrigues, Philippe Martinole, Alexander Klenin.
 
-Lightweight Networking Library (lNet) written by Ales Katona and Micha Nelissen.
-
 LMath derived from DMath by Viatcheslav Nesterov (2020). DMath written by Jean Debord.

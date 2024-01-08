@@ -4,7 +4,7 @@
 Introduction
 ============
 
-BeamScheme is an analysis tool for 2D datasets. It will assist you in extracting 1D profiles from 2D datasets and can calculate over 60 different parameters. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, Eclipse, XiO, BrainLab, DICOM, jpg, etc.
+BeamScheme is an analysis tool for 2D datasets. It will assist you in extracting 1D profiles from 2D datasets and can calculate over 90 different parameters. BeamScheme can open various image and 2D array file formats such as SNC MapCheck, PTW 720, IBA Matrix and StarTrack, Eclipse, XiO, BrainLab, DICOM, jpg, etc.
 
 Parameters include field size, field centre, penumbra, flatness and symmetry. FFF beams are supported with both maximum slope and sigmoid fit parameters available. Profiles can be taken at any angle, offset or thickness. Profiles can be exported to a text file or clipboard for further processing. Results can be exported to PDF.
 

@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Parameters &#8212; BeamScheme 1.00 documentation</title>
+    <title>Parameters &#8212; BeamScheme 1.01 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/nature.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2D Parameters" href="BSHelp11-1.html" />
@@ -30,7 +32,7 @@
         <li class="right" >
           <a href="BSHelp9-3.html" title="Normalisation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.01 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" accesskey="U">Algorithms</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Parameters</a></li> 
       </ul>
@@ -42,7 +44,7 @@
           <div class="body" role="main">
             
   <section id="parameters">
-<span id="index-0"></span><h1>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h1>
+<span id="index-0"></span><h1>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h1>
 <p>BeamScheme v1.00+ features a completely rewritten parameter calculation engine.  Previously a linear search algorithm was used to calculate a series of base parameters from which the other parameters were derived. This was very efficient for single processors but encountered problems with non-linear parameters such as sigmoid fitting and could not be multithreaded for modern multiprocessor computers.</p>
 <p>BeamScheme now calculates each parameter separately. This creates a very modular design and makes it easy to add new parameters. Where parameters calculations rely on other parameters the previous results are stored so parameters are only calculated once. Efficiencies are achieved by only calculating the parameters required by a <a class="reference internal" href="BSHelp14.html#protocols"><span class="std std-ref">protocol</span></a>.</p>
 <p>Calculation of 2D parameters is now possible. The same modular approach is used.</p>
@@ -108,7 +110,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -125,14 +127,14 @@
         <li class="right" >
           <a href="BSHelp9-3.html" title="Normalisation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.00 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="BSHelp.html">BeamScheme 1.01 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="BSHelp9.html" >Algorithms</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Parameters</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2023, AC Chamberlain.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+        &#169; Copyright 2024, AC Chamberlain.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

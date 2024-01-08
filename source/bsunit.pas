@@ -183,7 +183,9 @@ unit bsunit;
  28/9/2023  add test unit for maths funcs
  14/12/2023 add top and peak slope to FFF params
  18/12/2023 look for config file in program dir as well
-            remove web server for help}
+            remove web server for help
+ 5/1/2024   fix max pos 1D param
+            fix behaviour on invalid protocol}
 
 
 {$mode objfpc}{$H+}
@@ -338,7 +340,7 @@ type
    procedure DTrackBarChange(Sender: TObject);
    procedure DTrackBarClick(Sender: TObject);
    procedure BuildProtocolList;
-   procedure LoadProtocol;
+   function  LoadProtocol:boolean;
    procedure FormCreate(Sender: TObject);
    function FormHelp(Command: Word; Data: PtrInt; var CallHelp: Boolean): Boolean;
    procedure FormResize(Sender: TObject);
@@ -613,10 +615,12 @@ if ProtName <> '' then
          BuildProtocolList;
          if cbProtocol.Items.IndexOf(ProtName) >= 0 then
                cbProtocol.ItemIndex := cbProtocol.Items.IndexOf(ProtName);
-         LoadProtocol;
-         Show2DResults(Beam);
-         seXAngleChange(Self);
-         seYAngleChange(Self);
+         if LoadProtocol then
+            begin
+            Show2DResults(Beam);
+            seXAngleChange(Self);
+            seYAngleChange(Self);
+            end;
          Editing := false;
          except
          on E:Exception do
@@ -632,10 +636,12 @@ end;
 procedure TBSForm.cbProtocolChange(Sender: TObject);
 begin
 ClearStatus;
-LoadProtocol;
-Show2DResults(Beam);
-seXAngleChange(Self);
-seYAngleChange(Self);
+if LoadProtocol then
+   begin
+   Show2DResults(Beam);
+   seXAngleChange(Self);
+   seYAngleChange(Self);
+   end;
 end;
 
 
@@ -693,10 +699,12 @@ sgResults.Options := sgResults.Options - [goEditing];
 sgResults.HelpKeyword := 'HTML/BSHelp8-4.html';
 Panel8.HelpKeyword := 'HTML/BSHelp8-4.html';
 Editing := false;
-LoadProtocol;                  {reload to wipe changes}
-Show2DResults(Beam);
-seXAngleChange(Self);
-seYAngleChange(Self);
+if LoadProtocol then                  {reload to wipe changes}
+   begin
+   Show2DResults(Beam);
+   seXAngleChange(Self);
+   seYAngleChange(Self);
+   end;
 end;
 
 
@@ -766,12 +774,14 @@ if cbProtocol.Items.Count > 0 then
 end;
 
 
-procedure TBSForm.LoadProtocol;
+function TBSForm.LoadProtocol:Boolean;
 var FileName,
     sExePath,
     sProtPath  :string;
 
 begin
+Result := false;
+sgResults.Clean;
 if (cbProtocol.Items.Count > 0) and not Editing then
    begin
    {first look in exe dir}
@@ -791,6 +801,7 @@ if (cbProtocol.Items.Count > 0) and not Editing then
       end;
    try
       sgResults.LoadFromCSVFile(FileName,',',false);
+      Result := true;
    except
       on E:Exception do
          BSErrorMsg('Could not load protocol file');
@@ -812,12 +823,11 @@ StatusMessages := TStringList.Create;
 sExePath := ExtractFilePath(Application.ExeName);
 SetCurrentDir(sExePath);
 
-BuildProtocolList;
-LoadProtocol;
 XProfile.ShowPoints := ShowPoints;
 YProfile.ShowPoints := ShowPoints;
 
-BSMessage('BeamScheme initialised correctly.');
+BuildProtocolList;
+if LoadProtocol then BSMessage('BeamScheme initialised correctly.');
 end;
 
 

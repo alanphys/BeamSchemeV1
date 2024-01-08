@@ -297,7 +297,7 @@ this is by definition 100%}
 begin
 with ProfileArr do
    begin
-   Result := FloatToStrF(Normalise(Max.ValueX),ffFixed,4,Precision) +'cm';
+   Result := FloatToStrF(Max.ValueX,ffFixed,4,Precision) +' cm';
    end;
 end;
 

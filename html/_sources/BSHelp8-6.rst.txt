@@ -16,6 +16,7 @@ BeamScheme has a highly extendible settings module. Here default behavior for th
    BSHelp8-6-3.rst
    BSHelp8-6-4.rst
    BSHelp8-6-5.rst
+   BSHelp8-6-6.rst
 
 |Note| If you change a setting remember to save it before exiting the settings module. Exiting without saving will discard the changed setting.
 

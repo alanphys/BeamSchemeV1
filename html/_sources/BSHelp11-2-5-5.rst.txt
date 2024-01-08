@@ -5,10 +5,10 @@
 1D Uniformity ICRU
 ==================
 
-This is the normalised average between the maximum and minimum profile values taken over the :ref:`in field area<In Field Area>` (IFA) normalised to the average of the IFA:
+This is the normalised average between the maximum and minimum profile values taken over the :ref:`in field area<In Field Area>` (IFA) normalised to the average of the IFA as defined by ICRU 72 eq 3.2:
 
-.. math:: \cfrac {100} {ave} \cdot \cfrac {max + min} {2}
-   
+.. math:: {100} \cdot \cfrac {max - min} {ave}
+
 Where *max* and *min* are the profile maximum and minimum respectively and *ave* is the average of the profile values in the IFA.
 
 **Protocol invocation name**: 1D Uniformity ICRU

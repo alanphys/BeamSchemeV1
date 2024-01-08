@@ -1,0 +1,17 @@
+
+.. index:: 
+   single: Parameters; 1D Peak Slope Ratio
+
+1D Peak Slope Ratio
+===================
+
+The ratio of the :ref:`left peak slope<1D Peak Slope left>` to the :ref:`right peak slope<1D Peak Slope Right>`
+
+.. math::  {100} \cdot \cfrac {left} {right}
+
+
+**Protocol invocation name**: 1D Peak Slope Ratio
+
+|Note| The peak slope ratio may be affected by the selection of the :ref:`In Field Area`.
+
+.. |Note| image:: _static/Note.png

@@ -1,0 +1,16 @@
+
+.. index:: 
+   single: Parameters; 1D Top Infl
+
+1D Top Infl
+===========
+
+The top or peak position of a FFF field is estimated by fitting a parabola (2nd order polynomial):
+
+.. math:: y = ax^2 + bx + c
+
+over the central :ref:`Top Radius` of the profile peak. The peak position is determined where the tangent to the parabola is zero.
+
+.. math:: x = - \cfrac {b} {2a}
+
+**Protocol invocation name**: 1D Top Infl

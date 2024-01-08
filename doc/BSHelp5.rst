@@ -12,3 +12,4 @@ Installing the Beam Scheme is simple, but if you are concerned that you cannot d
    BSHelp5-1.rst
    BSHelp5-2.rst
    BSHelp5-3.rst
+   BSHelp5-4.rst

@@ -63,6 +63,15 @@ The predefined protocol All contains every parameter implemented in BeamScheme. 
      * :ref:`Right edge<1D Right Diff>`
      * :ref:`Centre<1D Field Centre Diff>`
      * :ref:`Size<1D Field Size Diff>`
+     * :ref:`Dose 20% left<1D Dose 20% Diff Left>`
+     * :ref:`Dose 20% right<1D Dose 20% Diff Right>`
+     * :ref:`Dose 50% left<1D Dose 50% Diff Left>`
+     * :ref:`Dose 50% right<1D Dose 50% Diff Right>`
+     * :ref:`Dose 60% left<1D Dose 60% Diff Left>`
+     * :ref:`Dose 60% right<1D Dose 60% Diff Right>`
+     * :ref:`Dose 80% left<1D Dose 80% Diff Left>`
+     * :ref:`Dose 80% right<1D Dose 80% Diff Right>`
+
 
 * Inflection params
      * :ref:`Left edge<1D Left Infl>`
@@ -72,16 +81,15 @@ The predefined protocol All contains every parameter implemented in BeamScheme. 
      * Penumbra
           * :ref:`Left<1D Penumbra Infl Left>`
           * :ref:`Right<1D Penumbra Infl Right>`
+     * :ref:`Dose 20% left<1D Dose 20% Infl Left>`
+     * :ref:`Dose 20% right<1D Dose 20% Infl Right>`
+     * :ref:`Dose 50% left<1D Dose 50% Infl Left>`
+     * :ref:`Dose 50% right<1D Dose 50% Infl Right>`
+     * :ref:`Dose 60% left<1D Dose 60% Infl Left>`
+     * :ref:`Dose 60% right<1D Dose 60% Infl Right>`
+     * :ref:`Dose 80% left<1D Dose 80% Infl Left>`
+     * :ref:`Dose 80% right<1D Dose 80% Infl Right>`
 
-* Dose point values
-     * :ref:`Left 20% FW<1D Dose 20% FW Left>`
-     * :ref:`Right 20% FW<1D Dose 20% FW Right>`
-     * :ref:`Left 50% FW<1D Dose 50% FW Left>`
-     * :ref:`Right 50% FW<1D Dose 50% FW Right>`
-     * :ref:`Left 60% FW<1D Dose 60% FW Left>`
-     * :ref:`Right 60% FW<1D Dose 60% FW Right>`
-     * :ref:`Left 80% FW<1D Dose 80% FW Left>`
-     * :ref:`Right 80% FW<1D Dose 80% FW Right>`
 
 * Flatness
      * :ref:`Average<1D Flatness Ave>`
@@ -89,7 +97,11 @@ The predefined protocol All contains every parameter implemented in BeamScheme. 
      * :ref:`Ratio<1D Flatness Ratio>`
      * :ref:`CAX<1D Flatness CAX>`
      * :ref:`ICRU 72<1D Uniformity ICRU>`
+     * :ref:`NCS-70<1D Uniformity NCS>`
      * :ref:`90/50<1D Flatness 9050>`
+     * :ref:`Peak Slope Left<1D Peak Slope Left>`
+     * :ref:`Peak Slope Right<1D Peak Slope Right>`
+     * :ref:`Peak Slope Ratio<1D Peak Slope Ratio>`
 
 * Symmetry
      * :ref:`Ratio<1D Symmetry Ratio>`
@@ -99,11 +111,10 @@ The predefined protocol All contains every parameter implemented in BeamScheme. 
 
 * Deviation
      * :ref:`Ratio<1D Deviation Ratio>`
-     * :ref:`Difference<1D Deviation Diff>`
      * :ref:`MAX/CAX<1D Deviation CAX>`
 
 
 
 **Flattened field**
 
-BeamScheme uses 80% of the :ref:`field size <1D Field Size 50>` as the flattened area.
+The flattend field is defined by the :ref:`In Field Area`.
