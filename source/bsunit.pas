@@ -1038,7 +1038,8 @@ var MouseXY:   TPoint;
     Theta,
     Phi,
     Scale,
-    AR:        double;         {Aspect ratio}
+    CAR,                       {control aspect ratio}
+    IAR:        double;        {image aspect ratio}
 
 begin
 pBeam.SetFocus;
@@ -1047,22 +1048,15 @@ if iBeam.Picture.Bitmap.Height > 0 then
    MouseXY := iBeam.ScreenToControl(Mouse.CursorPos);
    BMPH := iBeam.Picture.Bitmap.Height;
    BMPW := iBeam.Picture.Bitmap.Width;
-   AR := BMPW/BMPH;
-   if iBeam.Height <= iBeam.Width then
-      Scale := iBeam.Height
+   IAR := BMPW/BMPH;
+   CAR := iBeam.Width/iBeam.Height;
+   if IAR > CAR then
+      Scale := BMPW/iBeam.Width
      else
-      Scale := iBeam.Width;
+      Scale := BMPH/iBeam.Height;
 
-   if AR >= 1 then
-      begin
-      PY := (Beam.Rows div 2) - MouseXY.Y*(Beam.Rows/Scale)*AR;
-      PX := MouseXY.X*((Beam.Cols)/Scale) - ((Beam.Cols) div 2);
-      end
-     else
-      begin
-      PY := (Beam.Rows div 2) - MouseXY.Y*(Beam.Rows/Scale);
-      PX := MouseXY.X*((Beam.Cols)/Scale)/AR - ((Beam.Cols) div 2);
-      end;
+   PY := (BMPH div 2) - MouseXY.Y*Scale;
+   PX := MouseXY.X*Scale - ((BMPW) div 2);
 
    R := sqrt(PX*PX + PY*PY);
    Theta := arctan2(PX,PY);
