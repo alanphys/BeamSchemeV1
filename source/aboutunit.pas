@@ -61,16 +61,18 @@ end; {getappversionstring}
 { TAboutForm }
 
 procedure TAboutForm.FormCreate(Sender: TObject);
+var FontName   :string;
 begin
 Caption := 'BeamScheme version ' + GetAppVersionString(True,2,True,True);
+{$IF Defined(LINUX)}
+FontName := 'Liberation Mono';
+{$ELSEIF Defined(WINDOWS)}
+FontName := 'Courier New';
+{$ELSE}
+FontName := 'Courier';
+{$ENDIF}
 try
-   {$IF Defined(LINUX)}
-   mAbout.Font.Name := 'Monospace';
-   {$ELSEIF Defined(WINDOWS)}
-   mAbout.Font.Name := 'Courier New';
-   {$ELSE}
-   mAbout.Font.Name := 'Courier';
-   {$ENDIF}
+   mAbout.Font.Name := FontName;
    mAbout.Lines.LoadFromFile('readme.txt');
    except
    on E:Exception do
@@ -78,13 +80,7 @@ try
    end;
 
 try
-   {$IF Defined(LINUX)}
-   mLicence.Font.Name := 'Monospace';
-   {$ELSEIF Defined(WINDOWS)}
-   mLicence.Font.Name := 'Courier New';
-   {$ELSE}
-   mLicence.Font.Name := 'Courier';
-   {$ENDIF}
+   mLicence.Font.Name := FontName;
    mLicence.Lines.LoadFromFile('licence.txt');
    except
    on E:Exception do
@@ -92,13 +88,7 @@ try
    end;
 
 try
-   {$IF Defined(LINUX)}
-   mCredits.Font.Name := 'Monospace';
-   {$ELSEIF Defined(WINDOWS)}
-   mCredits.Font.Name := 'Courier New';
-   {$ELSE}
-   mCredits.Font.Name := 'Courier';
-   {$ENDIF}
+   mCredits.Font.Name := FontName;
    mCredits.Lines.LoadFromFile('credits.txt');
    except
    on E:Exception do

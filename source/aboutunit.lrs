@@ -1,23 +1,23 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TAboutForm','FORMDATA',[
-  'TPF0'#10'TAboutForm'#9'AboutForm'#4'Left'#3#154#8#6'Height'#3#252#0#3'Top'#2
-  +'p'#5'Width'#3#174#1#7'Caption'#6#5'About'#12'ClientHeight'#3#252#0#11'Clien'
-  +'tWidth'#3#174#1#8'OnCreate'#7#10'FormCreate'#10'LCLVersion'#6#7'2.2.0.4'#0
-  +#12'TPageControl'#11'PageControl'#4'Left'#2#0#6'Height'#3#252#0#3'Top'#2#0#5
-  +'Width'#3#174#1#10'ActivePage'#7#9'TabSheet1'#5'Align'#7#8'alClient'#10'Pare'
-  +'ntFont'#8#8'TabIndex'#2#0#8'TabOrder'#2#0#0#9'TTabSheet'#9'TabSheet1'#7'Cap'
-  +'tion'#6#5'About'#12'ClientHeight'#3#218#0#11'ClientWidth'#3#170#1#10'Parent'
-  +'Font'#8#0#5'TMemo'#6'mAbout'#4'Left'#2#0#6'Height'#3#218#0#3'Top'#2#0#5'Wid'
-  +'th'#3#170#1#5'Align'#7#8'alClient'#9'Font.Name'#6#9'Monospace'#10'ParentFon'
-  +'t'#8#10'ScrollBars'#7#14'ssAutoVertical'#8'TabOrder'#2#0#0#0#0#9'TTabSheet'
-  +#9'TabSheet2'#7'Caption'#6#7'Licence'#12'ClientHeight'#3#218#0#11'ClientWidt'
-  +'h'#3#170#1#10'ParentFont'#8#0#5'TMemo'#8'mLicence'#4'Left'#2#0#6'Height'#3
-  +#218#0#3'Top'#2#0#5'Width'#3#170#1#5'Align'#7#8'alClient'#9'Font.Name'#6#9'M'
-  +'onospace'#10'ParentFont'#8#10'ScrollBars'#7#14'ssAutoVertical'#8'TabOrder'#2
-  +#0#0#0#0#9'TTabSheet'#9'TabSheet3'#7'Caption'#6#7'Credits'#12'ClientHeight'#3
-  +#218#0#11'ClientWidth'#3#170#1#10'ParentFont'#8#0#5'TMemo'#8'mCredits'#4'Lef'
-  +'t'#2#0#6'Height'#3#218#0#3'Top'#2#0#5'Width'#3#170#1#5'Align'#7#8'alClient'
-  +#9'Font.Name'#6#9'Monospace'#10'ParentFont'#8#10'ScrollBars'#7#14'ssAutoVert'
-  +'ical'#8'TabOrder'#2#0#0#0#0#0#0
+  'TPF0'#10'TAboutForm'#9'AboutForm'#4'Left'#3#154#8#6'Height'#3'z'#1#3'Top'#2
+  +'p'#5'Width'#3#133#2#7'Caption'#6#5'About'#12'ClientHeight'#3'z'#1#11'Client'
+  +'Width'#3#133#2#13'DesignTimePPI'#3#144#0#8'OnCreate'#7#10'FormCreate'#10'LC'
+  +'LVersion'#6#7'2.2.6.0'#0#12'TPageControl'#11'PageControl'#4'Left'#2#0#6'Hei'
+  +'ght'#3'z'#1#3'Top'#2#0#5'Width'#3#133#2#10'ActivePage'#7#9'TabSheet1'#5'Ali'
+  +'gn'#7#8'alClient'#10'ParentFont'#8#8'TabIndex'#2#0#8'TabOrder'#2#0#0#9'TTab'
+  +'Sheet'#9'TabSheet1'#7'Caption'#6#5'About'#12'ClientHeight'#3'Q'#1#11'Client'
+  +'Width'#3#129#2#10'ParentFont'#8#0#5'TMemo'#6'mAbout'#4'Left'#2#0#6'Height'#3
+  +'Q'#1#3'Top'#2#0#5'Width'#3#129#2#5'Align'#7#8'alClient'#9'Font.Name'#6#9'Mo'
+  +'nospace'#10'ParentFont'#8#10'ScrollBars'#7#14'ssAutoVertical'#8'TabOrder'#2
+  +#0#0#0#0#9'TTabSheet'#9'TabSheet2'#7'Caption'#6#7'Licence'#12'ClientHeight'#3
+  +'Q'#1#11'ClientWidth'#3#129#2#10'ParentFont'#8#0#5'TMemo'#8'mLicence'#4'Left'
+  +#2#0#6'Height'#3'Q'#1#3'Top'#2#0#5'Width'#3#129#2#5'Align'#7#8'alClient'#9'F'
+  +'ont.Name'#6#9'Monospace'#10'ParentFont'#8#10'ScrollBars'#7#14'ssAutoVertica'
+  +'l'#8'TabOrder'#2#0#0#0#0#9'TTabSheet'#9'TabSheet3'#7'Caption'#6#7'Credits'
+  +#12'ClientHeight'#3'Q'#1#11'ClientWidth'#3#129#2#10'ParentFont'#8#0#5'TMemo'
+  +#8'mCredits'#4'Left'#2#0#6'Height'#3'Q'#1#3'Top'#2#0#5'Width'#3#129#2#5'Alig'
+  +'n'#7#8'alClient'#9'Font.Name'#6#9'Monospace'#10'ParentFont'#8#10'ScrollBars'
+  +#7#14'ssAutoVertical'#8'TabOrder'#2#0#0#0#0#0#0
 ]);
