@@ -24,6 +24,7 @@ begin
      DeleteFile('heap.trc');
   SetHeapTraceOutput('heap.trc');
   {$ENDIF}
+   Application.Scaled:=True;
    Application.Title:='BeamScheme';
   Application.Initialize;
   Application.CreateForm(TBSForm, BSForm);

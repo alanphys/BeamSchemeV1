@@ -8,6 +8,7 @@
         <CompatibilityMode Value="True"/>
       </Flags>
       <Title Value="BeamScheme"/>
+      <Scaled Value="True"/>
       <Icon Value="0"/>
     </General>
     <VersionInfo>
@@ -153,7 +154,7 @@
         <Filename Value="beamscheme.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="36" Y="27"/>
+        <CursorPos X="36" Y="28"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
