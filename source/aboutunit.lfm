@@ -1,19 +1,18 @@
 object AboutForm: TAboutForm
-  Left = 2202
-  Height = 378
-  Top = 112
-  Width = 645
+  Left = 742
+  Height = 251
+  Top = 419
+  Width = 430
   Caption = 'About'
-  ClientHeight = 378
-  ClientWidth = 645
-  DesignTimePPI = 144
+  ClientHeight = 251
+  ClientWidth = 430
   OnCreate = FormCreate
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.4.0.0'
   object PageControl: TPageControl
     Left = 0
-    Height = 378
+    Height = 251
     Top = 0
-    Width = 645
+    Width = 430
     ActivePage = TabSheet1
     Align = alClient
     ParentFont = False
@@ -21,14 +20,14 @@ object AboutForm: TAboutForm
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'About'
-      ClientHeight = 337
-      ClientWidth = 641
+      ClientHeight = 216
+      ClientWidth = 424
       ParentFont = False
       object mAbout: TMemo
         Left = 0
-        Height = 337
+        Height = 216
         Top = 0
-        Width = 641
+        Width = 424
         Align = alClient
         Font.Name = 'Monospace'
         ParentFont = False
@@ -38,14 +37,14 @@ object AboutForm: TAboutForm
     end
     object TabSheet2: TTabSheet
       Caption = 'Licence'
-      ClientHeight = 337
-      ClientWidth = 641
+      ClientHeight = 216
+      ClientWidth = 424
       ParentFont = False
       object mLicence: TMemo
         Left = 0
-        Height = 337
+        Height = 216
         Top = 0
-        Width = 641
+        Width = 424
         Align = alClient
         Font.Name = 'Monospace'
         ParentFont = False
@@ -55,14 +54,14 @@ object AboutForm: TAboutForm
     end
     object TabSheet3: TTabSheet
       Caption = 'Credits'
-      ClientHeight = 337
-      ClientWidth = 641
+      ClientHeight = 216
+      ClientWidth = 424
       ParentFont = False
       object mCredits: TMemo
         Left = 0
-        Height = 337
+        Height = 216
         Top = 0
-        Width = 641
+        Width = 424
         Align = alClient
         Font.Name = 'Monospace'
         ParentFont = False

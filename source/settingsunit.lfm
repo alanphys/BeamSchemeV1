@@ -1,7 +1,7 @@
 object SettingsForm: TSettingsForm
-  Left = 2507
+  Left = 751
   Height = 401
-  Top = 310
+  Top = 338
   Width = 414
   Caption = 'Settings'
   ClientHeight = 401
@@ -9,7 +9,7 @@ object SettingsForm: TSettingsForm
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.4.0.0'
   object ToolBarLeft: TToolBar
     Left = 0
     Height = 36
@@ -67,7 +67,7 @@ object SettingsForm: TSettingsForm
     )
     ColWidths = (
       200
-      210
+      214
     )
   end
   object ToolBarRight: TToolBar

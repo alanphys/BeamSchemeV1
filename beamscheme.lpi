@@ -16,7 +16,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="131"/>
+      <BuildNr Value="132"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="Yenzakahle Medical Physics Inc"/>
     </VersionInfo>
@@ -80,7 +80,7 @@
           <SearchPaths>
             <IncludeFiles Value="$(FPCSrcDir)/packages/fcl-pdf/src"/>
             <OtherUnitFiles Value="source"/>
-            <UnitOutputDirectory Value="source"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
             <SyntaxOptions>
@@ -124,39 +124,35 @@
         <Mode0 Name="default"/>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="7">
+    <RequiredPackages Count="6">
       <Item1>
         <PackageName Value="LMath"/>
       </Item1>
       <Item2>
-        <PackageName Value="lnetvisual"/>
+        <PackageName Value="TAChartPrint"/>
       </Item2>
       <Item3>
-        <PackageName Value="TAChartPrint"/>
+        <PackageName Value="DTrackBar"/>
       </Item3>
       <Item4>
-        <PackageName Value="DTrackBar"/>
-      </Item4>
-      <Item5>
         <PackageName Value="LCLBase"/>
         <MinVersion Major="1" Release="1" Valid="True"/>
-      </Item5>
-      <Item6>
+      </Item4>
+      <Item5>
         <PackageName Value="TAChartLazarusPkg"/>
         <MinVersion Valid="True"/>
-      </Item6>
-      <Item7>
+      </Item5>
+      <Item6>
         <PackageName Value="LCL"/>
-      </Item7>
+      </Item6>
     </RequiredPackages>
-    <Units Count="120">
+    <Units Count="121">
       <Unit0>
         <Filename Value="beamscheme.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <CursorPos X="36" Y="28"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="170" Y="28"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="source/bsunit.pas"/>
@@ -337,7 +333,7 @@
         <TopLine Value="418"/>
         <CursorPos X="371" Y="422"/>
         <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="None"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
       </Unit25>
       <Unit26>
         <Filename Value="../Tracker/Tracker2.pas"/>
@@ -364,7 +360,7 @@
         <TopLine Value="368"/>
         <CursorPos X="278" Y="387"/>
         <UsageCount Value="7"/>
-        <DefaultSyntaxHighlighter Value="None"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
       </Unit30>
       <Unit31>
         <Filename Value="mpunit.lfm"/>
@@ -378,13 +374,13 @@
         <TopLine Value="567"/>
         <CursorPos X="9" Y="105"/>
         <UsageCount Value="7"/>
-        <DefaultSyntaxHighlighter Value="None"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
       </Unit32>
       <Unit33>
         <Filename Value="14-Feb-2008-A.txt"/>
         <TopLine Value="62"/>
         <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="None"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
       </Unit33>
       <Unit34>
         <Filename Value="/usr/lib/lazarus/components/tachart/tatools.pas"/>
@@ -398,7 +394,7 @@
         <TopLine Value="386"/>
         <CursorPos X="30" Y="5"/>
         <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="None"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
       </Unit35>
       <Unit36>
         <Filename Value="/usr/lib/lazarus/lcl/include/canvas.inc"/>
@@ -648,9 +644,8 @@
         <ComponentName Value="AboutForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="8"/>
-        <TopLine Value="65"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="49"/>
         <CursorPos X="30" Y="68"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -791,7 +786,7 @@
       <Unit88>
         <Filename Value="source/bstypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="1310"/>
         <CursorPos X="30" Y="1328"/>
         <ExtraEditorCount Value="1"/>
@@ -815,9 +810,10 @@
       <Unit90>
         <Filename Value="source/param2dfuncs.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
-        <TopLine Value="227"/>
-        <CursorPos X="79" Y="81"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="81"/>
+        <CursorPos X="22" Y="81"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit90>
@@ -837,9 +833,9 @@
       <Unit93>
         <Filename Value="source/mathsfuncs.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="258"/>
-        <CursorPos X="62" Y="455"/>
+        <CursorPos X="19" Y="455"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
@@ -853,7 +849,7 @@
       <Unit94>
         <Filename Value="source/importunit.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <TopLine Value="679"/>
         <CursorPos Y="692"/>
         <ExtraEditorCount Value="1"/>
@@ -872,9 +868,9 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="52"/>
-        <CursorPos X="39" Y="69"/>
+        <CursorPos X="11" Y="69"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
@@ -915,9 +911,9 @@
       <Unit99>
         <Filename Value="source/param1dfuncs.pas"/>
         <UnitName Value="param1Dfuncs"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="179"/>
-        <CursorPos X="61" Y="245"/>
+        <CursorPos X="55" Y="245"/>
         <ExtraEditorCount Value="2"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
@@ -1083,6 +1079,12 @@
         <CursorPos X="3" Y="172"/>
         <UsageCount Value="9"/>
       </Unit119>
+      <Unit120>
+        <Filename Value="../../.lazarus/onlinepackagemanager/packages/LMath/lmPlotter/uplot.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="6" Y="10"/>
+        <UsageCount Value="10"/>
+      </Unit120>
     </Units>
     <Build>
       <CleanOutputFileMask Value="*.ppu;*.ppl;*.o;*.or"/>
@@ -1090,107 +1092,107 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="342" Column="14" TopLine="325"/>
+        <Caret Line="193" Column="32" TopLine="179"/>
       </Position1>
       <Position2>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="193" Column="32" TopLine="179"/>
+        <Caret Line="1050" Column="2" TopLine="1044"/>
       </Position2>
       <Position3>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1050" Column="2" TopLine="1044"/>
+        <Caret Line="1054" TopLine="1047"/>
       </Position3>
       <Position4>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1054" TopLine="1047"/>
+        <Caret Line="1056" TopLine="1047"/>
       </Position4>
       <Position5>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1056" TopLine="1047"/>
+        <Caret Line="1058" TopLine="1047"/>
       </Position5>
       <Position6>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" TopLine="1047"/>
+        <Caret Line="1050" Column="8" TopLine="1044"/>
       </Position6>
       <Position7>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1050" Column="8" TopLine="1044"/>
+        <Caret Line="1051" TopLine="1044"/>
       </Position7>
       <Position8>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1051" TopLine="1044"/>
+        <Caret Line="1052" TopLine="1044"/>
       </Position8>
       <Position9>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1052" TopLine="1044"/>
+        <Caret Line="1056" TopLine="1044"/>
       </Position9>
       <Position10>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1056" TopLine="1044"/>
+        <Caret Line="1058" TopLine="1044"/>
       </Position10>
       <Position11>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" TopLine="1044"/>
+        <Caret Line="1059" TopLine="1044"/>
       </Position11>
       <Position12>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1059" TopLine="1044"/>
+        <Caret Line="1067" TopLine="1044"/>
       </Position12>
       <Position13>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1067" TopLine="1044"/>
+        <Caret Line="1068" TopLine="1044"/>
       </Position13>
       <Position14>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1068" TopLine="1044"/>
+        <Caret Line="1050" Column="8" TopLine="1044"/>
       </Position14>
       <Position15>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1050" Column="8" TopLine="1044"/>
+        <Caret Line="1051" TopLine="1044"/>
       </Position15>
       <Position16>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1051" TopLine="1044"/>
+        <Caret Line="1052" TopLine="1044"/>
       </Position16>
       <Position17>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1052" TopLine="1044"/>
+        <Caret Line="1056" TopLine="1044"/>
       </Position17>
       <Position18>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1056" TopLine="1044"/>
+        <Caret Line="1058" TopLine="1044"/>
       </Position18>
       <Position19>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" TopLine="1044"/>
+        <Caret Line="1059" TopLine="1044"/>
       </Position19>
       <Position20>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1059" TopLine="1044"/>
+        <Caret Line="1067" TopLine="1044"/>
       </Position20>
       <Position21>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1067" TopLine="1044"/>
+        <Caret Line="1050" TopLine="1044"/>
       </Position21>
       <Position22>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1050" TopLine="1044"/>
+        <Caret Line="1051" TopLine="1044"/>
       </Position22>
       <Position23>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1051" TopLine="1044"/>
+        <Caret Line="1052" TopLine="1044"/>
       </Position23>
       <Position24>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1052" TopLine="1044"/>
+        <Caret Line="1056" TopLine="1044"/>
       </Position24>
       <Position25>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1056" TopLine="1044"/>
+        <Caret Line="1058" TopLine="1044"/>
       </Position25>
       <Position26>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" TopLine="1044"/>
+        <Caret Line="1383" Column="9" TopLine="1372"/>
       </Position26>
       <Position27>
         <Filename Value="source/bsunit.pas"/>
@@ -1198,15 +1200,15 @@
       </Position27>
       <Position28>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1383" Column="9" TopLine="1372"/>
+        <Caret Line="1058" Column="25" TopLine="1043"/>
       </Position28>
       <Position29>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" Column="25" TopLine="1043"/>
+        <Caret Line="1036" Column="29" TopLine="1033"/>
       </Position29>
       <Position30>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1036" Column="29" TopLine="1033"/>
+        <Caret Line="818" TopLine="813"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

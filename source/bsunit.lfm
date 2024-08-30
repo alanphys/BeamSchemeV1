@@ -1,18 +1,18 @@
 object BSForm: TBSForm
-  Left = 2226
+  Left = 596
   Height = 718
-  Top = 64
-  Width = 664
+  Top = 175
+  Width = 663
   HorzScrollBar.Page = 737
   VertScrollBar.Page = 755
   Caption = 'Beam Scheme'
-  ClientHeight = 688
-  ClientWidth = 664
+  ClientHeight = 718
+  ClientWidth = 663
   Menu = MainMenu
   OnClose = FormClose
   OnCreate = FormCreate
   OnResize = FormResize
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.4.0.0'
   object pBeam: TPanel
     Left = 0
     Height = 308
@@ -48,6 +48,7 @@ object BSForm: TBSForm
       ClientHeight = 20
       ClientWidth = 328
       Color = clInactiveCaption
+      ParentBackground = False
       ParentColor = False
       ParentFont = False
       TabOrder = 0
@@ -312,6 +313,7 @@ object BSForm: TBSForm
       ClientHeight = 20
       ClientWidth = 328
       Color = clInactiveCaption
+      ParentBackground = False
       ParentColor = False
       ParentFont = False
       TabOrder = 1
@@ -618,6 +620,7 @@ object BSForm: TBSForm
       ClientHeight = 20
       ClientWidth = 328
       Color = clInactiveCaption
+      ParentBackground = False
       ParentColor = False
       ParentFont = False
       TabOrder = 2
@@ -752,6 +755,7 @@ object BSForm: TBSForm
       ClientHeight = 20
       ClientWidth = 328
       Color = clInactiveCaption
+      ParentBackground = False
       ParentColor = False
       ParentFont = False
       TabOrder = 0
@@ -895,12 +899,12 @@ object BSForm: TBSForm
         HelpKeyword = 'HTML/BSHelp14.html'
         AutoSize = False
         ItemHeight = 18
-        OnEditingDone = cbProtocolChange
-        OnSelect = cbProtocolChange
         ParentFont = False
         Sorted = True
         Style = csDropDownList
         TabOrder = 0
+        OnEditingDone = cbProtocolChange
+        OnSelect = cbProtocolChange
       end
       object sbSaveP: TSpeedButton
         Left = 227
@@ -1132,8 +1136,8 @@ object BSForm: TBSForm
   object StatusBar: TStatusBar
     Left = 0
     Height = 23
-    Top = 665
-    Width = 664
+    Top = 695
+    Width = 663
     Panels = <>
     ParentFont = False
     ParentShowHint = False

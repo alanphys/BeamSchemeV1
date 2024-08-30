@@ -17,6 +17,7 @@ beamscheme
 Results/
 backup/
 _build/
+lib/
 
 #files to include
 !References/*.pdf
