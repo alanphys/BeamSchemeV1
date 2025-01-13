@@ -768,7 +768,14 @@ cbProtocol.Items.Assign(ProtList);
 cbProtocol.ItemIndex := 0;
 ProtList.Free;
 if cbProtocol.Items.Count > 0 then
-   cbProtocol.ItemIndex := cbProtocol.Items.IndexOf('Default')
+   begin
+   cbProtocol.ItemIndex := cbProtocol.Items.IndexOf('Default');
+   if cbProtocol.ItemIndex < 0 then
+     begin
+     cbProtocol.ItemIndex := 0;
+     BSWarning('Default protocol not found, selecting first available.');
+     end;
+   end
   else
    BSErrorMsg('No protocol definition files found. Please create a file.');
 end;

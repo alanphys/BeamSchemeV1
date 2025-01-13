@@ -660,7 +660,7 @@ var I,J,K,                     {loop iterators}
     PLen,
     LimX,
     LimY       :longint;
-    X,Y,
+    CPX,CPY,
     MidX,
     MidY,
     XInc,
@@ -673,12 +673,12 @@ var I,J,K,                     {loop iterators}
     Stop       :TPoint;
     DLine      :TRect;
 
-procedure AddPoint(var P,pIFA:double; X,Y:double; LimX,LimY,DTBPL,DTBPU:longint);
+procedure AddPoint(var P,pIFA:double; APX,APY:double; LimX,LimY,DTBPL,DTBPU:longint);
 var I,J        :longint;
     Z          :double;
 begin
-I := round(Y);
-J := round(X);
+I := round(APY);
+J := round(APX);
 if (J >= 0) and (J < LimX) and (I >= 0) and (I < LimY) then
    begin
    Z := Data[I,J];
@@ -693,32 +693,34 @@ if (J >= 0) and (J < LimX) and (I >= 0) and (I < LimY) then
      else
       if pIFA = 0 then pIFA := NaN;
    end;
- end;
+end;
 
 procedure AddWideProfile(var ProfY,pIFA:double; aX,aY,aXInc,aYInc:double; pWidth:integer);
 var L          :longint;
     WNX,
     WNY,
     WPX,
-    WPY        :double;
+    WPY:double;
 
 begin
+SetExceptionMask(GetExceptionMask + [exInvalidOp]); {have to do this for weird windows bug}
 WNX := aX;
 WNY := aY;
 WPX := aX;
 WPY := aY;
 for L:=1 to pWidth do
    begin
+   {add negative profile}
    WNX := WNX + aYInc;     {increments are inverted because slope is}
    WNY := WNY - aXInc;     {perpendicular to profile}
-   WPX := WPX - aYInc;
-   WPY := WPY + aXInc;
-   {add negative profile}
    AddPoint(ProfY,pIFA,WNX,WNY,LimX,LimY,DTBPL,DTBPU);
 
    {add positive profile}
+   WPX := WPX - aYInc;
+   WPY := WPY + aXInc;
    AddPoint(ProfY,pIFA,WPX,WPY,LimX,LimY,DTBPL,DTBPU);
    end;
+SetExceptionMask(GetExceptionMask - [exInvalidOp]); {restore exception}
 end;
 
 begin
@@ -740,11 +742,13 @@ Stop := DLine.BottomRight;
 Plen := round(sqrt(sqr(Stop.X - Start.X)+ sqr(Stop.Y - Start.Y)));
 ProfileArr.Len := PLen + 1;
 ProfileArr.IFA.Len := ProfileArr.Len;
+
 Setlength(ProfileArr.PArrX,ProfileArr.Len);
 Setlength(ProfileArr.PArrY,ProfileArr.Len);
 SetLength(ProfileArr.IFA.PArrY,ProfileArr.Len);
-X := Start.X;
-Y := Start.Y;
+
+CPX := Start.X;
+CPY := Start.Y;
 I := Start.Y;
 J := Start.X;
 XInc := (Stop.X - Start.X)/PLen;
@@ -753,26 +757,26 @@ MidP := sqrt(sqr((Stop.X - Start.X)*XRes) + sqr((Stop.Y - Start.Y)*YRes))/2;
 K:= 0;
 
 {Add first point}
-ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*XRes) + sqr((Y - Start.Y)*YRes)) - MidP;
-AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],X,Y,LimX,LimY,DTBPL,DTBPU);
+ProfileArr.PArrX[K] := sqrt(sqr((CPX - Start.X)*XRes) + sqr((CPY - Start.Y)*YRes)) - MidP;
+AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],CPX,CPY,LimX,LimY,DTBPL,DTBPU);
 
 {add wide profile}
 if ProfileArr.PrevW > 0 then
-   AddWideProfile(ProfileArr.ParrY[K],ProfileArr.IFA.PArrY[K],X,Y,XInc,YInc,ProfileArr.PrevW);
+   AddWideProfile(ProfileArr.ParrY[K],ProfileArr.IFA.PArrY[K],CPX,CPY,XInc,YInc,ProfileArr.PrevW);
 
 {add rest of points}
 repeat
-   X := X + XInc;
-   Y := Y + YInc;
-   I := Round(Y);
-   J := Round(X);
+   CPX := CPX + XInc;
+   CPY := CPY + YInc;
+   I := Round(CPY);
+   J := Round(CPX);
    Inc(K);
-   ProfileArr.PArrX[K] := sqrt(sqr((X - Start.X)*XRes) + sqr((Y - Start.Y)*YRes)) - MidP;
-   AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],X,Y,LimX,LimY,DTBPL,DTBPU);
+   ProfileArr.PArrX[K] := sqrt(sqr((CPX - Start.X)*XRes) + sqr((CPY - Start.Y)*YRes)) - MidP;
+   AddPoint(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],CPX,CPY,LimX,LimY,DTBPL,DTBPU);
 
    {add wide profiles}
    if ProfileArr.PrevW > 0 then
-      AddWideProfile(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],X,Y,XInc,YInc,ProfileArr.PrevW);
+      AddWideProfile(ProfileArr.PArrY[K],ProfileArr.IFA.PArrY[K],CPX,CPY,XInc,YInc,ProfileArr.PrevW);
    until (I = Stop.Y) and (J = Stop.X);
 ProfileArr.Norm := Norm;
 ProfileArr.Res := ProfileArr.PArrX[1] - ProfileArr.PArrX[0];

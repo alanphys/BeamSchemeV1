@@ -37,8 +37,8 @@ object SettingsForm: TSettingsForm
   end
   object StatusBar: TStatusBar
     Left = 0
-    Height = 23
-    Top = 378
+    Height = 28
+    Top = 373
     Width = 414
     Panels = <>
     ParentColor = False
@@ -49,7 +49,7 @@ object SettingsForm: TSettingsForm
   object vleSettings: TValueListEditor
     Left = 0
     Height = 338
-    Top = 40
+    Top = 35
     Width = 414
     Align = alBottom
     DefaultColWidth = 200
@@ -67,7 +67,7 @@ object SettingsForm: TSettingsForm
     )
     ColWidths = (
       200
-      214
+      210
     )
   end
   object ToolBarRight: TToolBar

@@ -16,7 +16,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="132"/>
+      <BuildNr Value="133"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="Yenzakahle Medical Physics Inc"/>
     </VersionInfo>
@@ -99,6 +99,7 @@
           <Linking>
             <Debugging>
               <GenerateDebugInfo Value="False"/>
+              <RunWithoutDebug Value="True"/>
               <DebugInfoType Value="dsDwarf2Set"/>
               <StripSymbols Value="True"/>
             </Debugging>
@@ -160,7 +161,7 @@
         <ComponentName Value="BSForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="813"/>
+        <TopLine Value="1332"/>
         <CursorPos Y="818"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -786,9 +787,10 @@
       <Unit88>
         <Filename Value="source/bstypes.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="1310"/>
-        <CursorPos X="30" Y="1328"/>
+        <TopLine Value="654"/>
+        <CursorPos X="14" Y="681"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
@@ -810,7 +812,6 @@
       <Unit90>
         <Filename Value="source/param2dfuncs.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <TopLine Value="81"/>
         <CursorPos X="22" Y="81"/>
@@ -1089,7 +1090,7 @@
     <Build>
       <CleanOutputFileMask Value="*.ppu;*.ppl;*.o;*.or"/>
     </Build>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="source/bsunit.pas"/>
         <Caret Line="193" Column="32" TopLine="179"/>
@@ -1206,10 +1207,6 @@
         <Filename Value="source/bsunit.pas"/>
         <Caret Line="1036" Column="29" TopLine="1033"/>
       </Position29>
-      <Position30>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="818" TopLine="813"/>
-      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

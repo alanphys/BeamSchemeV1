@@ -108,6 +108,7 @@ if not FileExists(FName) then
    {$else}
    CfgPath := GetAppConfigDir(false);
    {$endif}
+   if not DirectoryExists(CfgPath) then CreateDir(CfgPath);
    FName := AppendPathDelim(CfgPath) + FileName + '.xml';
    end;
 try
