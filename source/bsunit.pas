@@ -185,7 +185,12 @@ unit bsunit;
  18/12/2023 look for config file in program dir as well
             remove web server for help
  5/1/2024   fix max pos 1D param
-            fix behaviour on invalid protocol}
+            fix behaviour on invalid protocol
+ 11/4/2024  fix profile move on image click
+ 2/5/2024   refactor about unit
+            enable high dpi awareness
+ 13/1/2025  fix windows floating point exception
+            fix exit crash if settings dir does not exist}
 
 
 {$mode objfpc}{$H+}

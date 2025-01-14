@@ -53,6 +53,9 @@ There are three normalisation modes. None, CAX or maximum. Normalisation places 
 9) Release notes
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
 
+Version 1.02
+Documentation is now listed on ReadTheDocs. High DPI awareness is enabled.
+
 Version 1.01
 FFF parameters according to NCS-70 have been included. Extensive testing of the maths functions has been added. Additional protocol validation has been added. The help web server has been removed. Help is now served directly from file. This version can be run from a single directory such as a usb disk.
 
@@ -279,5 +282,12 @@ Version 1.00 released 7/2/2023
 14/12/2023 add top and peak slope to FFF params
 18/12/2023 look for config file in program dir as well
            remove web server for help
- 5/1/2024  fix max pos 1D param
+5/1/2024   fix max pos 1D param
            fix behaviour on invalid protocol
+Version 1.01 released 8//1/2024
+11/4/2024  fix profile move on image click
+2/5/2024   refactor about unit
+           enable high dpi awareness
+13/1/2025  fix windows floating point exception
+           fix exit crash if settings dir does not exist
+Version 1.02 released 14/1/2024
