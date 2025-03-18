@@ -162,6 +162,7 @@ const Params: array of string = (
 '2D Uniformity	',
 '     Uniformity NCS	5.86%',
 '     Uniformity ICRU	5.80%',
+'     Uniformity Integral	2.93%',
 '	',
 '2D Symmetry	',
 '     Symmetry	2.59%',
