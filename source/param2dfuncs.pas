@@ -52,6 +52,7 @@ T2DParams = (cax_val_2D,
              uniformity_ncs_2D,
              uniformity_icru_2D,
              uniformity_integral_2D,
+             uniformity_differential_2D,
              symmetry_2D,
              no_func_2D);
 
@@ -80,6 +81,7 @@ function YSize2D(BeamArr:Tbeam):string;
 function UniformityCAX2D(BeamArr:TBeam):string;
 function UniformityAve2D(BeamArr:TBeam):string;
 function UniformityIntegral2D(BeamArr:TBeam):string;
+function UniformityDifferential2D(BeamArr:TBeam):string;
 {symmetry parameters}
 function SymmetryAve2D(BeamArr:TBeam):string;
 {miscellaneous}
@@ -104,12 +106,13 @@ Params2D: array[cax_val_2D..no_func_2D] of T2DParamFuncs = (
    (Name:'2D Uniformity NCS-70'; Func:@UniformityCAX2D),
    (Name:'2D Uniformity ICRU 72'; Func:@UniformityAve2D),
    (Name:'2D Uniformity Integral'; Func:@UniformityIntegral2D),
+   (Name:'2D Uniformity Differential'; Func:@UniformityDifferential2D),
    (Name:'2D Symmetry NCS-70'; Func:@SymmetryAve2D),
    (Name:'2D No Function'; Func:@NoFunc2D));
 
 implementation
 
-uses math;
+uses math, mathsfuncs;
 
 {-------------------------------------------------------------------------------
  Parameter calculation functions
@@ -261,8 +264,8 @@ end;
 
 function UniformityIntegral2D(BeamArr:TBeam):string;
 {Returns the maximum difference between the max and the min
-of the IFA normalised to the average of the IFA according to ICRU 72 eq 3.2.
-(Dmax - Dmin)*100/Ave}
+of the IFA normalised to the average of the IFA according to IAEA Pub 1394
+sec 2.3.3 (Dmax - Dmin)*100/(Dmax+Dmin)}
 var BMax,
     BMin,
     Ave        :double;
@@ -270,6 +273,47 @@ begin
 BMax := BeamArr.IFA.Max;
 BMin := BeamArr.IFA.Min;
 Result := FloatToStrF((BMax - BMin)*100/(BMax + BMin),ffFixed,4,Precision) + '%';
+end;
+
+
+function UniformityDifferential2D(BeamArr:TBeam):string;
+{As for UniformityIntegral2D but applied to 5x1 pixel subset scanned across
+rows and columns}
+var I,J,K      :integer;
+    DmaxRow,
+    DminRow,
+    DmaxCol,
+    DminCol    :T1DValuePos;
+    UniRow,
+    UniCol,
+    UniMax     :double;
+    DiffArrRow,
+    DiffArrCol :TPArr;
+    aIFA       :TBeamData;
+
+begin
+UniMax := 0;
+SetLength(DiffArrRow,5);
+SetLength(DiffArrCol,5);
+aIFA := BeamArr.IFA.Data;
+for I:=0 to BeamArr.Rows - 5 do
+   for J:=0 to BeamArr.Cols - 5 do
+      begin
+      for K:=0 to 4 do
+         begin
+         DiffArrRow[K] := aIFA[I + K,J];
+         DiffArrCol[K] := aIFA[I,J + K];
+         end;
+      DmaxRow := MaxPosNan(DiffArrRow,0,4);
+      DminRow := MinPosNan(DiffArrRow,0,4);
+      DmaxCol := MaxPosNan(DiffArrCol,0,4);
+      DminCol := MinPosNan(DiffArrCol,0,4);
+      UniRow := (DmaxRow.Val - DminRow.Val)/(DmaxRow.Val + DminRow.Val);
+      UniCol := (DmaxCol.Val - DminCol.Val)/(DmaxCol.Val + DminCol.Val);
+      if UniRow > UniMax then UniMax := UniRow;
+      if Unicol > UniMax then UniMax := UniCol;
+      end;
+Result := FloatToStrF(UniMax*100,ffFixed,4,Precision) + '%';
 end;
 
 

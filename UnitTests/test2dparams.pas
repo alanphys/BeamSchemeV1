@@ -32,6 +32,7 @@ type
       procedure TestUniformityCAX2D;
       procedure TestUniformityAve2D;
       procedure TestUniformityIntegral2D;
+      procedure TestUniformityDifferential2D;
       procedure TestSymmetryAve2D; //validate this
       procedure TestCoMVal2D;
       procedure TestCoMScaled2D;
@@ -163,6 +164,12 @@ end;
 procedure Test2DParamFuncs.TestUniformityIntegral2D;
 begin
 AssertEquals('Test uniformity Integral','2.93%',UniformityIntegral2D(fBeam));
+end;
+
+
+procedure Test2DParamFuncs.TestUniformityDifferential2D;
+begin
+AssertEquals('Test uniformity Integral','1.44%',UniformityDifferential2D(fBeam));
 end;
 
 
