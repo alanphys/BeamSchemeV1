@@ -12,6 +12,7 @@
 *.pdf
 *.lps
 beamscheme
+TestBeamScheme
 
 # directories to ignore
 Results/
