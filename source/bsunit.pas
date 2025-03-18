@@ -641,7 +641,7 @@ end;
 procedure TBSForm.cbProtocolChange(Sender: TObject);
 begin
 ClearStatus;
-if LoadProtocol then
+if not Editing and LoadProtocol then
    begin
    Show2DResults(Beam);
    seXAngleChange(Self);
