@@ -51,6 +51,7 @@ T2DParams = (cax_val_2D,
              y_size_2D,
              uniformity_ncs_2D,
              uniformity_icru_2D,
+             uniformity_integral_2D,
              symmetry_2D,
              no_func_2D);
 
@@ -78,6 +79,7 @@ function YSize2D(BeamArr:Tbeam):string;
 {flatness and uniformity parameters}
 function UniformityCAX2D(BeamArr:TBeam):string;
 function UniformityAve2D(BeamArr:TBeam):string;
+function UniformityIntegral2D(BeamArr:TBeam):string;
 {symmetry parameters}
 function SymmetryAve2D(BeamArr:TBeam):string;
 {miscellaneous}
@@ -101,6 +103,7 @@ Params2D: array[cax_val_2D..no_func_2D] of T2DParamFuncs = (
    (Name:'2D Y Size'; Func:@YSize2D),
    (Name:'2D Uniformity NCS-70'; Func:@UniformityCAX2D),
    (Name:'2D Uniformity ICRU 72'; Func:@UniformityAve2D),
+   (Name:'2D Uniformity Integral'; Func:@UniformityIntegral2D),
    (Name:'2D Symmetry NCS-70'; Func:@SymmetryAve2D),
    (Name:'2D No Function'; Func:@NoFunc2D));
 
@@ -253,6 +256,20 @@ BMax := BeamArr.IFA.Max;
 BMin := BeamArr.IFA.Min;
 Ave := BeamArr.IFA.Ave;
 Result := FloatToStrF((BMax - BMin)*100/Ave,ffFixed,4,Precision) + '%';
+end;
+
+
+function UniformityIntegral2D(BeamArr:TBeam):string;
+{Returns the maximum difference between the max and the min
+of the IFA normalised to the average of the IFA according to ICRU 72 eq 3.2.
+(Dmax - Dmin)*100/Ave}
+var BMax,
+    BMin,
+    Ave        :double;
+begin
+BMax := BeamArr.IFA.Max;
+BMin := BeamArr.IFA.Min;
+Result := FloatToStrF((BMax - BMin)*100/(BMax + BMin),ffFixed,4,Precision) + '%';
 end;
 
 
