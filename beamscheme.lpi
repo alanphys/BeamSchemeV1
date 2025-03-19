@@ -16,7 +16,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="133"/>
+      <BuildNr Value="135"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="Yenzakahle Medical Physics Inc"/>
     </VersionInfo>
@@ -29,12 +29,12 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="/home/alanphys/Programs/BeamSchemeV1/beamscheme"/>
+            <Filename Value="$(ProjPath)/beamscheme"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(FPCSrcDir)/packages/fcl-pdf/src"/>
             <OtherUnitFiles Value="/usr/share/fpcsrc/packages/fcl-extra/src/;source"/>
-            <UnitOutputDirectory Value="source"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
             <SyntaxOptions>
@@ -79,7 +79,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(FPCSrcDir)/packages/fcl-pdf/src"/>
-            <OtherUnitFiles Value="source"/>
+            <OtherUnitFiles Value="/usr/share/fpcsrc/packages/fcl-extra/src/;source"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -161,8 +161,9 @@
         <ComponentName Value="BSForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="629"/>
-        <CursorPos X="20" Y="644"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="154"/>
+        <CursorPos X="40" Y="172"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -811,7 +812,6 @@
       <Unit90>
         <Filename Value="source/param2dfuncs.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <TopLine Value="285"/>
         <CursorPos X="71" Y="312"/>
@@ -1090,127 +1090,123 @@
     <Build>
       <CleanOutputFileMask Value="*.ppu;*.ppl;*.o;*.or"/>
     </Build>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" TopLine="1044"/>
+        <Caret Line="1067" TopLine="1044"/>
       </Position1>
       <Position2>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1059" TopLine="1044"/>
+        <Caret Line="1050" TopLine="1044"/>
       </Position2>
       <Position3>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1067" TopLine="1044"/>
+        <Caret Line="1051" TopLine="1044"/>
       </Position3>
       <Position4>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1068" TopLine="1044"/>
+        <Caret Line="1052" TopLine="1044"/>
       </Position4>
       <Position5>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1050" Column="8" TopLine="1044"/>
+        <Caret Line="1056" TopLine="1044"/>
       </Position5>
       <Position6>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1051" TopLine="1044"/>
+        <Caret Line="1058" TopLine="1044"/>
       </Position6>
       <Position7>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1052" TopLine="1044"/>
+        <Caret Line="1383" Column="9" TopLine="1372"/>
       </Position7>
       <Position8>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1056" TopLine="1044"/>
+        <Caret Line="1383" Column="9" TopLine="1372"/>
       </Position8>
       <Position9>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" TopLine="1044"/>
+        <Caret Line="1058" Column="25" TopLine="1043"/>
       </Position9>
       <Position10>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1059" TopLine="1044"/>
+        <Caret Line="1036" Column="29" TopLine="1033"/>
       </Position10>
       <Position11>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1067" TopLine="1044"/>
+        <Caret Line="643" TopLine="515"/>
       </Position11>
       <Position12>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1050" TopLine="1044"/>
+        <Caret Line="1087" TopLine="1079"/>
       </Position12>
       <Position13>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1051" TopLine="1044"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="304" TopLine="271"/>
       </Position13>
       <Position14>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1052" TopLine="1044"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="103" Column="32" TopLine="61"/>
       </Position14>
       <Position15>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1056" TopLine="1044"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="55" Column="41" TopLine="29"/>
       </Position15>
       <Position16>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" TopLine="1044"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="286" Column="18" TopLine="276"/>
       </Position16>
       <Position17>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1383" Column="9" TopLine="1372"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="295" Column="25" TopLine="269"/>
       </Position17>
       <Position18>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1383" Column="9" TopLine="1372"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="296" Column="49" TopLine="284"/>
       </Position18>
       <Position19>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" Column="25" TopLine="1043"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="305" Column="28" TopLine="289"/>
       </Position19>
       <Position20>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1036" Column="29" TopLine="1033"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="311" Column="50" TopLine="279"/>
       </Position20>
       <Position21>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="643" TopLine="515"/>
+        <Caret Line="644" Column="20" TopLine="629"/>
       </Position21>
       <Position22>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1087" TopLine="1079"/>
+        <Caret Line="707" Column="16" TopLine="656"/>
       </Position22>
       <Position23>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="304" TopLine="271"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="614" Column="63" TopLine="584"/>
       </Position23>
       <Position24>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="103" Column="32" TopLine="61"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="623" TopLine="584"/>
       </Position24>
       <Position25>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="55" Column="41" TopLine="29"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="794" TopLine="766"/>
       </Position25>
       <Position26>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="286" Column="18" TopLine="276"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="795" TopLine="766"/>
       </Position26>
       <Position27>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="295" Column="25" TopLine="269"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="796" TopLine="766"/>
       </Position27>
       <Position28>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="296" Column="49" TopLine="284"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="797" TopLine="766"/>
       </Position28>
       <Position29>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="305" Column="28" TopLine="289"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="823" TopLine="797"/>
       </Position29>
-      <Position30>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="311" Column="50" TopLine="279"/>
-      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

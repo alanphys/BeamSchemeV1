@@ -291,3 +291,4 @@ Version 1.01 released 8//1/2024
 13/1/2025  fix windows floating point exception
            fix exit crash if settings dir does not exist
 Version 1.02 released 14/1/2024
+19/3/2025  fix protocol display on exit

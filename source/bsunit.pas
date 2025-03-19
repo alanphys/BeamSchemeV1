@@ -167,7 +167,7 @@ unit bsunit;
  7/11/2022  fix infinite loop for small dynamic range images
  8/11/2022  add penumbra for sigmoid function
  15/11/2022 add normalise function to TSingleProfile and refactor
- 16/11/2022 fix TSingleProfile.Res initalisation and range check errors
+ 16/11/2022 fix TSingleProfile.Res initialisation and range check errors
             add dose points
  13/1/2023  add ShowPoints to View menu
             fix dangling ShowParameters in View menu
@@ -190,7 +190,8 @@ unit bsunit;
  2/5/2024   refactor about unit
             enable high dpi awareness
  13/1/2025  fix windows floating point exception
-            fix exit crash if settings dir does not exist}
+            fix exit crash if settings dir does not exist
+ 19/3/2025  fix protocol display on exit}
 
 
 {$mode objfpc}{$H+}
@@ -620,13 +621,13 @@ if ProtName <> '' then
          BuildProtocolList;
          if cbProtocol.Items.IndexOf(ProtName) >= 0 then
                cbProtocol.ItemIndex := cbProtocol.Items.IndexOf(ProtName);
+         Editing := false;
          if LoadProtocol then
             begin
             Show2DResults(Beam);
             seXAngleChange(Self);
             seYAngleChange(Self);
             end;
-         Editing := false;
          except
          on E:Exception do
             BSErrorMsg('Could not save protocol.');
