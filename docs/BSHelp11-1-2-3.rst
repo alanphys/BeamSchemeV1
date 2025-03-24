@@ -1,0 +1,16 @@
+.. index:: Parameters; 2D Uniformity Integral
+
+2D Uniformity Integral
+======================
+
+Returns the maximum difference between the max and the min of the :ref:`In Field Area` normalised to the sum of the min and max according to IAEA pub 1394 section 2.3.3 eq 2.
+
+.. math:: {\cfrac {(max-min)} {(max+min)}} \cdot {100}
+
+Where *max* and *min* are the IFA maximum and minimum respectively and *ave* is the average value of the IFA.
+
+**Protocol invocation name**: 2D Uniformity Integral
+
+|Note| The *max* and *min* may be affected by the set window levels. No smoothing or pixel summation is done.
+
+.. |Note| image:: _static/Note.png

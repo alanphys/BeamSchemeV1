@@ -12,3 +12,5 @@ Available flatness and uniformity paremeters are:
 
    BSHelp11-1-2-1.rst
    BSHelp11-1-2-2.rst
+   BSHelp11-1-2-3.rst
+   BSHelp11-1-2-4.rst
