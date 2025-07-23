@@ -191,7 +191,9 @@ unit bsunit;
             enable high dpi awareness
  13/1/2025  fix windows floating point exception
             fix exit crash if settings dir does not exist
- 19/3/2025  fix protocol display on exit}
+ 19/3/2025  fix protocol display on exit
+ 23/7/2025  fix various divide by zero
+            fix integer overflow in DTrackBar}
 
 
 {$mode objfpc}{$H+}
@@ -338,7 +340,7 @@ type
    procedure BSWarning(sWarning:string);
    procedure BSMessage(sMess:string);
    procedure ClearStatus;
-   procedure Display(BMax,Bmin:integer);
+   procedure DisplayAll;
    procedure ChartToolsetXDataPointHintToolHint(ATool: TDataPointHintTool;
       const APoint: TPoint; var AHint: String);
    procedure ChartToolsetYDataPointHintToolHint(ATool: TDataPointHintTool;
@@ -894,11 +896,11 @@ AHint := '(' +
 end;
 
 
-procedure TBSForm.Display(BMax,BMin:integer);
+procedure TBSForm.DisplayAll;
 begin
 if Length(Beam.Data) > 0 then
    begin
-   Beam.Display(iBeam.Picture.Bitmap,BMax,BMin);
+   Beam.Display(iBeam.Picture.Bitmap,DTrackBar.PositionU,DTrackBar.PositionL);
    if ShowParams and (Length(Beam.IFA.Data) > 0) then Beam.DisplayIFA(iBeam.Picture.Bitmap);
    if Beam.Scale <> 1 then
       begin
@@ -1017,7 +1019,7 @@ if OpenDialog.Execute then
       {display beam}
       Safe := true;
       ClearStatus;
-      Display(BMax,BMin);
+      DisplayAll;
       Dummy := OpenDialog.FileName;
       cImage.Hint := Dummy;
       cImage.ShowHint := True;
@@ -1143,7 +1145,7 @@ tbInvert.Down := Invert;
 XPArr.ResetCoords;
 YPArr.ResetCoords;
 Beam.Invert;
-Display(DTrackBar.PositionU,DTrackBar.PositionL);
+DisplayAll;
 end;
 
 
@@ -1158,7 +1160,7 @@ if tbNormCax.Down then
 DTrackBar.Max := round(Beam.Max);
 DTrackBar.PositionU := round(Beam.Max);
 Beam.Norm := Normalisation;
-Display(DTrackBar.PositionU,DTrackBar.PositionL);
+DisplayAll;
 end;
 
 
@@ -1173,7 +1175,7 @@ if tbNormMax.Down then
 DTrackBar.Max := round(Beam.Max);
 DTrackBar.PositionU := round(Beam.Max);
 Beam.Norm := Normalisation;
-Display(DTrackBar.PositionU,DTrackBar.PositionL);
+DisplayAll;
 end;
 
 
@@ -1184,7 +1186,7 @@ XPArr.ResetCoords;
 YPArr.ResetCoords;
 if Length(Beam.Data) > 0 then Beam.CentreData
    else BSErrorMsg('No file open!');
-Display(DTrackBar.PositionU,DTrackBar.PositionL);
+DisplayAll;
 end;
 
 
@@ -1464,7 +1466,7 @@ YPArr.ResetCoords;
 ShowParams := not ShowParams;
 tbShowParams.Down := ShowParams;
 miShowP.Checked := ShowParams;
-Display(DTrackBar.PositionU,DTrackBar.PositionL);
+DisplayAll;
 end;
 
 

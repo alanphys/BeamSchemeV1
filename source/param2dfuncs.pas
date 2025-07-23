@@ -308,8 +308,14 @@ for I:=0 to BeamArr.Rows - 5 do
       DminRow := MinPosNan(DiffArrRow,0,4);
       DmaxCol := MaxPosNan(DiffArrCol,0,4);
       DminCol := MinPosNan(DiffArrCol,0,4);
-      UniRow := (DmaxRow.Val - DminRow.Val)/(DmaxRow.Val + DminRow.Val);
-      UniCol := (DmaxCol.Val - DminCol.Val)/(DmaxCol.Val + DminCol.Val);
+      if (DmaxRow.Val > 0) and (DMinRow.Val > 0) then
+         UniRow := (DmaxRow.Val - DminRow.Val)/(DmaxRow.Val + DminRow.Val)
+        else
+         UniRow := 0;
+      if (DmaxCol.Val > 0) and (DminCol.Val > 0) then
+         UniCol := (DmaxCol.Val - DminCol.Val)/(DmaxCol.Val + DminCol.Val)
+        else
+         UniCol := 0;
       if UniRow > UniMax then UniMax := UniRow;
       if Unicol > UniMax then UniMax := UniCol;
       end;

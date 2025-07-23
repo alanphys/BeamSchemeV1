@@ -5,7 +5,7 @@ unit testmathfuncs;
 interface
 
 uses
-   Classes, SysUtils, fpcunit, testutils, testregistry;
+   Classes, SysUtils, fpcunit, math, testutils, testregistry;
 
 type
 
@@ -17,10 +17,12 @@ type
       procedure TestLReg;
       procedure TestILReg;
       procedure TestLinReg;
-      procedure TestMaxPosNan;
-      procedure TestMaxPosNanInv;
-      procedure TestMinPosNan;
-      procedure TestMinPosNanInv;
+      procedure TestMaxPosNaN;
+      procedure TestMaxPosNaNInv;
+      procedure TestMaxPosNaNNaN;
+      procedure TestMinPosNaN;
+      procedure TestMinPosNaNInv;
+      procedure TestMinPosNaNNan;
       procedure TestHillFit;
       procedure TestHillCoeffs;
       procedure TestInvHillFunc;
@@ -31,7 +33,7 @@ type
 
 var ArrX :array of double = (20, 40, 60, 80, 100, 120, 140, 160, 180, 200);
     ArrY :array of double = (1.03, 0.99, 0.82, 0.59, 0.48, 0.33, 0.23, 0.17, 0.19, 0.17);
-
+    ArrNaN:array of double = (NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN);
 
 implementation
 
@@ -70,41 +72,59 @@ AssertEquals('Multi point linear regression slope',-0.0054,Coeffs[1]);
 end;
 
 
-procedure TestMathsFuncs.TestMaxPosNan;
+procedure TestMathsFuncs.TestMaxPosNaN;
 var MaxPos     :T1DValuePos;
 begin
-MaxPos := MaxPosNan(ArrY,0,Length(ArrY));
+MaxPos := MaxPosNaN(ArrY,0,Length(ArrY));
 AssertEquals('Max value',1.03,MaxPos.Val);
 AssertEquals('Max position',0,MaxPos.Pos);
 end;
 
 
-procedure TestMathsFuncs.TestMaxPosNanInv;
-{test MaxPosNan with bounds inverted}
+procedure TestMathsFuncs.TestMaxPosNaNInv;
+{test MaxPosNaN with bounds inverted}
 var MaxPos     :T1DValuePos;
 begin
-MaxPos := MaxPosNan(ArrY,Length(ArrY),0);
+MaxPos := MaxPosNaN(ArrY,Length(ArrY),0);
 AssertEquals('Max value',1.03,MaxPos.Val);
 AssertEquals('Max position',0,MaxPos.Pos);
 end;
 
 
-procedure TestMathsFuncs.TestMinPosNan;
+procedure TestMathsFuncs.TestMaxPosNaNNaN;
+var MaxPos     :T1DValuePos;
+begin
+MaxPos := MaxPosNaN(ArrNaN,0,Length(ArrNaN));
+AssertEquals('Max value',0,MaxPos.Val);
+AssertEquals('Max position',0,MaxPos.Pos);
+end;
+
+
+procedure TestMathsFuncs.TestMinPosNaN;
 var MinPos     :T1DValuePos;
 begin
-MinPos := MinPosNan(ArrY,0,Length(ArrY));
+MinPos := MinPosNaN(ArrY,0,Length(ArrY));
 AssertEquals('Min value',0.17,MinPos.Val);
 AssertEquals('Min position',7,MinPos.Pos);
 end;
 
 
-procedure TestMathsFuncs.TestMinPosNanInv;
-{test MinPosNan with bounds inverted}
+procedure TestMathsFuncs.TestMinPosNaNInv;
+{test MinPosNaN with bounds inverted}
 var MinPos     :T1DValuePos;
 begin
-MinPos := MinPosNan(ArrY,Length(ArrY),0);
+MinPos := MinPosNaN(ArrY,Length(ArrY),0);
 AssertEquals('Min value',0.17,MinPos.Val);
 AssertEquals('Min position',9,MinPos.Pos);
+end;
+
+
+procedure TestMathsFuncs.TestMinPosNaNNan;
+var MinPos     :T1DValuePos;
+begin
+MinPos := MinPosNaN(ArrNaN,0,Length(ArrNaN));
+AssertEquals('Min position',0,MinPos.Pos);
+AssertEquals('Min value',Integer.MaxValue,MinPos.Val);
 end;
 
 
@@ -114,7 +134,7 @@ begin
 SetLength(Coeffs,4);
 Coeffs[0] := ArrY[0];
 Coeffs[1] := ArrY[High(ArrY)];
-Coeffs[2] := ArrX[MinPosNan(Diff(ArrY),0,Length(ArrY)-1).Pos];
+Coeffs[2] := ArrX[MinPosNaN(Diff(ArrY),0,Length(ArrY)-1).Pos];
 AssertEquals('Estimate Hill Coefficient',3.2093,CoeffHillFunc(60,80,0.82,0.59, Coeffs));
 end;
 

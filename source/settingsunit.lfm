@@ -1,24 +1,25 @@
 object SettingsForm: TSettingsForm
-  Left = 751
-  Height = 401
-  Top = 338
-  Width = 414
+  Left = 752
+  Height = 603
+  Top = 340
+  Width = 622
   Caption = 'Settings'
-  ClientHeight = 401
-  ClientWidth = 414
+  ClientHeight = 603
+  ClientWidth = 622
+  DesignTimePPI = 144
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   LCLVersion = '3.4.0.0'
   object ToolBarLeft: TToolBar
     Left = 0
-    Height = 36
+    Height = 54
     Top = 0
-    Width = 37
+    Width = 55
     Align = alNone
     AutoSize = True
-    ButtonHeight = 36
-    ButtonWidth = 36
+    ButtonHeight = 54
+    ButtonWidth = 54
     Caption = 'ToolBarLeft'
     EdgeInner = esNone
     EdgeOuter = esNone
@@ -37,9 +38,9 @@ object SettingsForm: TSettingsForm
   end
   object StatusBar: TStatusBar
     Left = 0
-    Height = 28
-    Top = 373
-    Width = 414
+    Height = 36
+    Top = 567
+    Width = 622
     Panels = <>
     ParentColor = False
     ParentShowHint = False
@@ -48,11 +49,11 @@ object SettingsForm: TSettingsForm
   end
   object vleSettings: TValueListEditor
     Left = 0
-    Height = 338
-    Top = 35
-    Width = 414
+    Height = 507
+    Top = 60
+    Width = 622
     Align = alBottom
-    DefaultColWidth = 200
+    DefaultColWidth = 300
     FixedCols = 0
     RowCount = 7
     TabOrder = 2
@@ -66,19 +67,19 @@ object SettingsForm: TSettingsForm
       'Top Radius=2.5'
     )
     ColWidths = (
-      200
-      210
+      300
+      318
     )
   end
   object ToolBarRight: TToolBar
-    Left = 373
-    Height = 36
+    Left = 560
+    Height = 54
     Top = 0
-    Width = 37
+    Width = 55
     Align = alNone
     AutoSize = True
-    ButtonHeight = 36
-    ButtonWidth = 36
+    ButtonHeight = 54
+    ButtonWidth = 54
     Caption = 'ToolBarRight'
     EdgeInner = esNone
     EdgeOuter = esNone
@@ -98,8 +99,8 @@ object SettingsForm: TSettingsForm
   object ImageList: TImageList
     Height = 32
     Width = 32
-    Left = 361
-    Top = 328
+    Left = 542
+    Top = 492
     Bitmap = {
       4C7A020000002000000020000000710D00000000000078DACD98095454D71D87
       E79CB6E9499A364BD5264D7A6CD3342676CBD2D41835CABE0D0CFB301B5B1014

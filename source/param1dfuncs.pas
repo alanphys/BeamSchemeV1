@@ -812,8 +812,10 @@ of the IFA normalised to the average of the IFA according to ICRU 72 eq 3.2.
 (Dmax - Dmin)*100/Ave}
 begin
 with ProfileArr do
-Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
-   IFA.Ave,ffFixed,4,Precision) + '%';
+if IFA.Ave > 0 then Result := FloatToStrF(100*(IFA.Max.ValueY - IFA.Min.ValueY)/
+   IFA.Ave,ffFixed,4,Precision) + '%'
+  else
+   Result := '0.0%';
 end;
 
 
@@ -834,12 +836,20 @@ end;
 function Flatness90501D(ProfileArr:TSingleProfile):string;
 {Returns the ratio of the length of the 90% isodose over the length of the 50% isodose,
 with the dose normalized at 100% at beam center.}
-var Flat9050   :double;
+var Diff,
+    Flat9050   :double;
 begin
 with ProfileArr do
-   Flat9050 := 100*(GetFWXMPos(0.9,1).ValueX - GetFWXMPos(0.9,-1).ValueX)/
-      (RightEdge.ValueX - LeftEdge.ValueX);
-Result := FloatToStrF(Flat9050,ffFixed,4,Precision) + '%';
+   begin
+   Diff := RightEdge.ValueX - LeftEdge.ValueX;
+   if Diff <> 0 then
+      begin
+      Flat9050 := 100*(GetFWXMPos(0.9,1).ValueX - GetFWXMPos(0.9,-1).ValueX)/Diff;
+      Result := FloatToStrF(Flat9050,ffFixed,4,Precision) + '%';
+      end
+     else
+      Result := '0%';
+   end;
 end;
 
 
@@ -868,7 +878,10 @@ end;
 function PeakSlopeRatio1D(PRofileArr:TSingleProfile):string;
 begin
 with ProfileArr do
-   Result := FloatToStrF(100*abs(PeakLSlope/PeakRSlope),ffFixed,4,Precision) + '%';
+   if PeakRSlope <> 0 then
+      Result := FloatToStrF(100*abs(PeakLSlope/PeakRSlope),ffFixed,4,Precision) + '%'
+     else
+      Result := '0.0';
 end;
 
 
@@ -905,7 +918,10 @@ function SymmetryAve1D(ProfileArr:TSingleProfile):string;
 {max symmetric difference over IFA according to NCS-70 eq 3-6.
 max(abs(D(x,y) - D(-x,-y)))*100/Dave}
 begin
-Result := FloatToStrF(100*ProfileArr.IFA.MaxDiff/ProfileArr.IFA.Ave,ffFixed,4,Precision) + '%';
+if ProfileArr.IFA.Ave > 0 then
+   Result := FloatToStrF(100*ProfileArr.IFA.MaxDiff/ProfileArr.IFA.Ave,ffFixed,4,Precision) + '%'
+  else
+   Result := '0.0%';
 end;
 
 

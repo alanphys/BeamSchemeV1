@@ -16,16 +16,19 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="135"/>
+      <BuildNr Value="137"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="Yenzakahle Medical Physics Inc"/>
     </VersionInfo>
     <MacroValues Count="1">
-      <Macro1 Name="LCLWidgetType" Value="qt5"/>
+      <Macro1 Name="LCLWidgetType" Value="qt6"/>
     </MacroValues>
     <BuildModes Count="3" Active="Release">
       <Item1 Name="default" Default="True"/>
       <Item2 Name="Debug">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="qt6"/>
+        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -72,6 +75,9 @@
         </CompilerOptions>
       </Item2>
       <Item3 Name="Release">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="qt6"/>
+        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -113,7 +119,7 @@
         </CompilerOptions>
       </Item3>
       <SharedMatrixOptions Count="1">
-        <Item1 ID="058648199351" Modes="default" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
+        <Item1 ID="839933801061" Modes="Release,Debug,default" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt6"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -147,7 +153,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="121">
+    <Units Count="122">
       <Unit0>
         <Filename Value="beamscheme.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -162,8 +168,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="154"/>
-        <CursorPos X="40" Y="172"/>
+        <TopLine Value="166"/>
+        <CursorPos X="5" Y="185"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -630,7 +636,7 @@
         <TopLine Value="44"/>
         <CursorPos Y="66"/>
         <UsageCount Value="5"/>
-        <DefaultSyntaxHighlighter Value="C++"/>
+        <DefaultSyntaxHighlighter Value="C_2B_2B"/>
       </Unit68>
       <Unit69>
         <Filename Value="/usr/lib64/lazarus/lcl/interfaces/qt5/cbindings/src/qapplication_c.cpp"/>
@@ -638,7 +644,7 @@
         <TopLine Value="223"/>
         <CursorPos Y="244"/>
         <UsageCount Value="5"/>
-        <DefaultSyntaxHighlighter Value="C++"/>
+        <DefaultSyntaxHighlighter Value="C_2B_2B"/>
       </Unit69>
       <Unit70>
         <Filename Value="source/aboutunit.pas"/>
@@ -688,7 +694,7 @@
         <EditorIndex Value="-1"/>
         <CursorPos X="72" Y="14"/>
         <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="C++"/>
+        <DefaultSyntaxHighlighter Value="C_2B_2B"/>
       </Unit75>
       <Unit76>
         <Filename Value="/usr/lib64/lazarus/lcl/interfaces/qt5/cbindings/src/qcoreapplication_c.cpp"/>
@@ -696,7 +702,7 @@
         <TopLine Value="220"/>
         <CursorPos Y="258"/>
         <UsageCount Value="5"/>
-        <DefaultSyntaxHighlighter Value="C++"/>
+        <DefaultSyntaxHighlighter Value="C_2B_2B"/>
       </Unit76>
       <Unit77>
         <Filename Value="/usr/lib64/lazarus/lcl/interfaces/qt5/qt5.pas"/>
@@ -740,7 +746,7 @@
         <TopLine Value="813"/>
         <CursorPos Y="834"/>
         <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="C++"/>
+        <DefaultSyntaxHighlighter Value="C_2B_2B"/>
       </Unit82>
       <Unit83>
         <Filename Value="../../Downloads/SVN/lazarus/components/tachart/tagraph.pas"/>
@@ -789,8 +795,8 @@
         <Filename Value="source/bstypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="26"/>
-        <CursorPos X="10" Y="179"/>
+        <TopLine Value="295"/>
+        <CursorPos X="29" Y="349"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
@@ -1086,127 +1092,138 @@
         <CursorPos X="6" Y="10"/>
         <UsageCount Value="10"/>
       </Unit120>
+      <Unit121>
+        <Filename Value="/usr/share/lazarus/lcl/include/promptdialog.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="793"/>
+        <CursorPos X="20" Y="814"/>
+        <UsageCount Value="10"/>
+      </Unit121>
     </Units>
     <Build>
       <CleanOutputFileMask Value="*.ppu;*.ppl;*.o;*.or"/>
     </Build>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1067" TopLine="1044"/>
+        <Caret Line="1052" TopLine="1044"/>
       </Position1>
       <Position2>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1050" TopLine="1044"/>
+        <Caret Line="1056" TopLine="1044"/>
       </Position2>
       <Position3>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1051" TopLine="1044"/>
+        <Caret Line="1058" TopLine="1044"/>
       </Position3>
       <Position4>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1052" TopLine="1044"/>
+        <Caret Line="1383" Column="9" TopLine="1372"/>
       </Position4>
       <Position5>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1056" TopLine="1044"/>
+        <Caret Line="1383" Column="9" TopLine="1372"/>
       </Position5>
       <Position6>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" TopLine="1044"/>
+        <Caret Line="1058" Column="25" TopLine="1043"/>
       </Position6>
       <Position7>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1383" Column="9" TopLine="1372"/>
+        <Caret Line="1036" Column="29" TopLine="1033"/>
       </Position7>
       <Position8>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1383" Column="9" TopLine="1372"/>
+        <Caret Line="643" TopLine="515"/>
       </Position8>
       <Position9>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1058" Column="25" TopLine="1043"/>
+        <Caret Line="1087" TopLine="1079"/>
       </Position9>
       <Position10>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1036" Column="29" TopLine="1033"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="304" TopLine="271"/>
       </Position10>
       <Position11>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="643" TopLine="515"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="103" Column="32" TopLine="61"/>
       </Position11>
       <Position12>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1087" TopLine="1079"/>
+        <Filename Value="source/param2dfuncs.pas"/>
+        <Caret Line="55" Column="41" TopLine="29"/>
       </Position12>
       <Position13>
         <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="304" TopLine="271"/>
+        <Caret Line="286" Column="18" TopLine="276"/>
       </Position13>
       <Position14>
         <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="103" Column="32" TopLine="61"/>
+        <Caret Line="295" Column="25" TopLine="269"/>
       </Position14>
       <Position15>
         <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="55" Column="41" TopLine="29"/>
+        <Caret Line="296" Column="49" TopLine="284"/>
       </Position15>
       <Position16>
         <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="286" Column="18" TopLine="276"/>
+        <Caret Line="305" Column="28" TopLine="289"/>
       </Position16>
       <Position17>
         <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="295" Column="25" TopLine="269"/>
+        <Caret Line="311" Column="50" TopLine="279"/>
       </Position17>
       <Position18>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="296" Column="49" TopLine="284"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="644" Column="20" TopLine="629"/>
       </Position18>
       <Position19>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="305" Column="28" TopLine="289"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="707" Column="16" TopLine="656"/>
       </Position19>
       <Position20>
-        <Filename Value="source/param2dfuncs.pas"/>
-        <Caret Line="311" Column="50" TopLine="279"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="614" Column="63" TopLine="584"/>
       </Position20>
       <Position21>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="644" Column="20" TopLine="629"/>
+        <Caret Line="623" TopLine="584"/>
       </Position21>
       <Position22>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="707" Column="16" TopLine="656"/>
+        <Caret Line="794" TopLine="766"/>
       </Position22>
       <Position23>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="614" Column="63" TopLine="584"/>
+        <Caret Line="795" TopLine="766"/>
       </Position23>
       <Position24>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="623" TopLine="584"/>
+        <Caret Line="796" TopLine="766"/>
       </Position24>
       <Position25>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="794" TopLine="766"/>
+        <Caret Line="797" TopLine="766"/>
       </Position25>
       <Position26>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="795" TopLine="766"/>
+        <Caret Line="823" TopLine="797"/>
       </Position26>
       <Position27>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="796" TopLine="766"/>
+        <Filename Value="source/bstypes.pas"/>
+        <Caret Line="725" Column="34" TopLine="696"/>
       </Position27>
       <Position28>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="797" TopLine="766"/>
+        <Caret Line="184" Column="37" TopLine="154"/>
       </Position28>
       <Position29>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="823" TopLine="797"/>
+        <Caret Line="861" TopLine="859"/>
       </Position29>
+      <Position30>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="191" Column="48" TopLine="166"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

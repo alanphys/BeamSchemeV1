@@ -140,7 +140,7 @@ function MinPosNaN(BeamArr:TPArr; LRow,URow:integer):T1DValuePos;
 low value, up to but not including high value. Can search from either end.}
 var I          :integer;
 begin
-Result.Val := MaxDouble;
+Result.Val := Integer.MaxValue;
 Result.Pos := 0;
 if URow < LRow then
    for I:=LRow - 1 downto URow do
@@ -168,7 +168,7 @@ function MinPosNaN(BeamArr:TBeamData; LRow,URow,LCol,UCol:integer):T2DValuePos;
 LRow, LCol up to but not including URow and UCol.}
 var I,J        :integer;
 begin
-Result.Val := MaxDouble;
+Result.Val := Integer.MaxValue;
 Result.Row := 0;
 Result.Col := 0;
 for I:=LRow to URow - 1 do

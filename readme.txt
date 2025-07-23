@@ -54,7 +54,7 @@ There are three normalisation modes. None, CAX or maximum. Normalisation places 
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
 
 Version 1.02
-Documentation is now listed on ReadTheDocs. High DPI awareness is enabled.
+Documentation is now listed on ReadTheDocs. High DPI awareness is enabled. Add 2D Integral and Differential uniformity for Nuclear Medicine. Update Help.
 
 Version 1.01
 FFF parameters according to NCS-70 have been included. Extensive testing of the maths functions has been added. Additional protocol validation has been added. The help web server has been removed. Help is now served directly from file. This version can be run from a single directory such as a usb disk.
@@ -284,7 +284,7 @@ Version 1.00 released 7/2/2023
            remove web server for help
 5/1/2024   fix max pos 1D param
            fix behaviour on invalid protocol
-Version 1.01 released 8//1/2024
+Version 1.01 released 8/1/2024
 11/4/2024  fix profile move on image click
 2/5/2024   refactor about unit
            enable high dpi awareness
@@ -292,3 +292,6 @@ Version 1.01 released 8//1/2024
            fix exit crash if settings dir does not exist
 Version 1.02 released 14/1/2024
 19/3/2025  fix protocol display on exit
+4/6/2025   fix FPU exception bug
+23/7/2025  fix various divide by zero
+           fix integer overflow in DTrackBar

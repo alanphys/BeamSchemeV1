@@ -290,7 +290,7 @@ begin
   fCoM.X := 0.0;
   fCoM.Y := 0.0;
   fMax := 0;
-  fMin := MaxDouble;
+  fMin := Integer.MaxValue;
   fAve := 0;
 end;
 
@@ -379,7 +379,7 @@ end;
 
 function TBasicBeam.GetMin:double;
 begin
-if SameValue(fMin,MaxDouble) then
+if SameValue(fMin,Integer.MaxValue) then
    fMin:= MinPosNan(Data,0,Rows,0,Cols).Val;
 Result := fMin;
 end;
@@ -701,9 +701,11 @@ var L          :longint;
     WNY,
     WPX,
     WPY:double;
+    FPUExceptionMask: TFPUExceptionMask;
 
 begin
-SetExceptionMask(GetExceptionMask + [exInvalidOp]); {have to do this for weird windows bug}
+FPUExceptionMask := GetExceptionMask;
+SetExceptionMask(FPUExceptionMask + [exInvalidOp]); {have to do this for weird windows bug}
 WNX := aX;
 WNY := aY;
 WPX := aX;
@@ -720,7 +722,7 @@ for L:=1 to pWidth do
    WPY := WPY + aXInc;
    AddPoint(ProfY,pIFA,WPX,WPY,LimX,LimY,DTBPL,DTBPU);
    end;
-SetExceptionMask(GetExceptionMask - [exInvalidOp]); {restore exception}
+SetExceptionMask(FPUExceptionMask); {restore exception}
 end;
 
 begin
@@ -813,7 +815,7 @@ PArrY := nil;
 SetLength(PArrX,0);
 PArrX := nil;
 Len := 0;
-fMin.ValueY := MaxDouble;
+fMin.ValueY := Integer.MaxValue;
 fMin.ValueX := 0.0;
 fMin.Pos := 0;
 fMax.ValueY := 0.0;
@@ -864,24 +866,30 @@ end;
 
 
 function TBasicProfile.GetMax:TProfilePos;
+var MaxPV      :T1DValuePos;
+
 begin
 if fMax.ValueY = 0 then
    begin
-   fMax.Pos:= MaxPosNaN(PArrY,0,Len).Pos;
+   MaxPV := MaxPosNaN(PArrY,0,Len);
+   fMax.Pos:= MaxPV.Pos;
    fMax.ValueX := PArrX[fMax.Pos];
-   fMax.ValueY := PArrY[fMax.Pos];
+   fMax.ValueY := MaxPV.Val;
    end;
 Result := fMax;
 end;
 
 
 function TBasicProfile.GetMin:TProfilePos;
+var MinPV      :T1DValuePos;
+
 begin
-if SameValue(fMin.ValueY,MaxDouble) then
+if fMin.ValueY >= Integer.MaxValue then
    begin
-   fMin.Pos:= MinPosNaN(PArrY,0,Len).Pos;
+   MinPV := MinPosNaN(PArrY,0,Len);
+   fMin.Pos:= MinPV.Pos;
    fMin.ValueX := PArrX[fMin.Pos];
-   fMin.ValueY := PArrY[fMin.Pos];
+   fMin.ValueY := MinPV.Val;
    end;
 Result := fMin;
 end;
@@ -901,7 +909,10 @@ if fAve = 0 then
          Sum := Sum + PArrY[I];
          Inc(K);
          end;
-   fAve := Sum/K;
+   if K > 0 then
+      fAve := Sum/K
+     else
+      fAve := 0;
    end;
 Result := fAve;
 end;
