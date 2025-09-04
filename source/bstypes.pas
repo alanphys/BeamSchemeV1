@@ -75,6 +75,8 @@ type
      fPeakInfl,                {value, position and index of inflection peak centre}
      fLeftEdge,                {50% field left edge}
      fRightEdge,               {50% field right edge}
+     fLeft10,                  {10% field left edge}
+     fRight10,                 {10% field right edge}
      fLeftDiff,                {Differential field left edge}
      fRightDiff,               {Differential field right edge}
      fLeftInfl,                {Inflection point field left edge}
@@ -108,8 +110,10 @@ type
      function Normalise(Y:double):double;{scale Y according to Normalisation mode}
      function GetFWXMPos(Value:double; D:Integer):TProfilePos;
      procedure GetDiffPos;          {find left and right max slope}
-     function GetLeftE:TProfilePos; {get left edge of profile}
-     function GetRightE:TProfilePos;{get right edge of profile}
+     function GetLeftE:TProfilePos; {get left edge of profile at 50%}
+     function GetRightE:TProfilePos;{get right edge of profile at 50 %}
+     function GetLeft10:TProfilePos;{get left edge of profile at 10%}
+     function GetRight10:TProfilePos;{get right edge of profile at 10%}
      function GetPeakPosFWHM:TProfilePos;{get centre of profile peak FWHM}
      function GetLEDiff:TProfilePos;{get left max slope}
      function GetREDiff:TProfilePos;{get right max slope}
@@ -128,6 +132,8 @@ type
      function GetPeakRSlope:double;      {get peak right slope}
      property LeftEdge:TProfilePos read GetLeftE;
      property RightEdge:TProfilePos read GetRightE;
+     property Left10:TProfilePos read GetLeft10;
+     property Right10:TProfilePos read GetRight10;
      property PeakFWHM:TProfilePos read GetPeakPosFWHM;
      property LeftDiff:TProfilePos read GetLEDiff;
      property RightDiff:TProfilePos read GetREDiff;
@@ -992,6 +998,12 @@ fLeftEdge.Pos := 0;
 fRightEdge.ValueY := 0.0;
 fRightEdge.ValueX := 0.0;
 fRightEdge.Pos := 0;
+fLeft10.ValueY := 0.0;
+fLeft10.ValueX := 0.0;
+fLeft10.Pos := 0;
+fRight10.ValueY := 0.0;
+fRight10.ValueX := 0.0;
+fRight10.Pos := 0;
 fLeftDiff.ValueY := 0.0;
 fLeftDiff.ValueX := 0.0;
 fLeftDiff.Pos := 0;
@@ -1128,6 +1140,28 @@ begin
 if fRightEdge.ValueY = 0 then
    fRightEdge := GetFWXMPos(0.5,1);
 Result := fRightEdge;
+end;
+
+
+function TSingleProfile.GetLeft10:TProfilePos;
+{Return the value, position and index of the field left edge. The index is the
+first integer index above the field edge.}
+begin
+{for performance only calculate if not previously calculated}
+if fLeft10.ValueY = 0 then
+   fLeft10 := GetFWXMPos(0.1,-1);
+Result := fLeft10;
+end;
+
+
+function TSingleProfile.GetRight10:TProfilePos;
+{Return the value, position and index of the field right 10. The index is the
+first integer index after the field 10.}
+begin
+{for performance only calculate if not previously calculated}
+if fRight10.ValueY = 0 then
+   fRight10 := GetFWXMPos(0.1,1);
+Result := fRight10;
 end;
 
 

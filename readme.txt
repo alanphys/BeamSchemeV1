@@ -48,10 +48,13 @@ DICOM images will usually need to be inverted (by clicking the Invert button) an
 8) Notes on normalising
 The program uses the normalised, corrected 2D array data. No normalisation should be necessary for the 2D arrays if they have been calibrated and zeroed correctly.
 
-There are three normalisation modes. None, CAX or maximum. Normalisation places the minimum of the image at 0 and the CAX or maximum value at 100. If the image contains dead pixels, burn markers or other strange artifacts it is possible for the normalisation to fail and give you strange results. This is not the fault of the program but of the image. See the previous comment about calibration. Normalisation acts on the windowed data and is non-destructive.
+There are three normalisation modes. None, CAX or maximum. Normalisation places the minimum of the image at 0 and the CAX or maximum value at 100. If the image contains dead pixels, burn markers or other strange artifacts it is possible for the normalisation to fail and give you strange results. This is not the fault of the program but of the image. See the previous comment about calibration. Normalisation acts on the windowed data and is non-destructive. For very small fields or point sources use normalisation to maximum.
 
 9) Release notes
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
+
+Version 1.03
+Bug fix release.
 
 Version 1.02
 Documentation is now listed on ReadTheDocs. High DPI awareness is enabled. Add 2D Integral and Differential uniformity for Nuclear Medicine. Update Help.

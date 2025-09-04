@@ -46,8 +46,12 @@ T1DParams = ({field statistics}
              {interpolated params}
              field_edge_left_50_1D,
              field_edge_right_50_1D,
+             field_edge_left_10_1D,
+             field_edge_right_10_1D,
              field_centre_50_1D,
              field_size_50_1D,
+             field_size_10_1D,
+             ratio_10_50_1D,
              pen_8020_left_1D,
              pen_8020_right_1D,
              pen_9010_left_1D,
@@ -124,8 +128,12 @@ function AveIFA1D(ProfileArr:TSingleProfile):string;
 {interpolated params}
 function FieldEdgeLeft501D(ProfileArr:TSingleProfile):string;
 function FieldEdgeRight501D(ProfileArr:TSingleProfile):string;
+function FieldEdgeLeft101D(ProfileArr:TSingleProfile):string;
+function FieldEdgeRight101D(ProfileArr:TSingleProfile):string;
 function FieldCentre501D(ProfileArr:TSingleProfile):string;
 function FieldSize501D(ProfileArr:TSingleProfile):string;
+function FieldSize101D(ProfileArr:TSingleProfile):string;
+function Ratio10501D(ProfileArr:TSingleProfile):string;
 function Penumbra8020Left1D(ProfileArr:TSingleProfile):string;
 function Penumbra8020Right1D(ProfileArr:TSingleProfile):string;
 function Penumbra9010Left1D(ProfileArr:TSingleProfile):string;
@@ -198,8 +206,12 @@ Params1D: array[cax_val_1D..no_func_1D] of T1DParamFuncs = (
    {interpolated params}
    (Name:'1D Field Edge Left 50'; Func:@FieldEdgeLeft501D),
    (Name:'1D Field Edge Right 50'; Func:@FieldEdgeRight501D),
+   (Name:'1D Field Edge Left 10'; Func:@FieldEdgeLeft101D),
+   (Name:'1D Field Edge Right 10'; Func:@FieldEdgeRight101D),
    (Name:'1D Field Centre 50'; Func:@FieldCentre501D),
    (Name:'1D Field Size 50'; Func:@FieldSize501D),
+   (Name:'1D Field Size 10'; Func:@FieldSize101D),
+   (Name:'1D Ratio 10/50'; Func:@Ratio10501D),
    (Name:'1D Penumbra 8020 Left'; Func:@Penumbra8020Left1D),
    (Name:'1D Penumbra 8020 Right'; Func:@Penumbra8020Right1D),
    (Name:'1D Penumbra 9010 Left'; Func:@Penumbra9010Left1D),
@@ -362,6 +374,26 @@ if ProfileArr.RightEdge.ValueY > 0 then
 end;
 
 
+function FieldEdgeLeft101D(ProfileArr:TSingleProfile):string;
+{Returns the position of the left field edge at 10% of max or cax value.}
+begin
+if ProfileArr.Left10.ValueY > 0 then
+   Result := FloatToStrF(ProfileArr.Left10.ValueX,ffFixed,4,Precision) + ' cm'
+  else
+   Result := 'No edge';
+end;
+
+
+function FieldEdgeRight101D(ProfileArr:TSingleProfile):string;
+{Returns the position of the right field edge at 10% of max or cax value.}
+begin
+if ProfileArr.Right10.ValueY > 0 then
+   Result := FloatToStrF(ProfileArr.Right10.ValueX,ffFixed,4,Precision) + ' cm'
+  else
+   Result := 'No edge';
+end;
+
+
 function FieldCentre501D(ProfileArr:TSingleProfile):string;
 {Returns the field centre as given by the 50% field edges}
 begin
@@ -383,6 +415,38 @@ if (ProfileArr.LeftEdge.ValueY > 0) and (ProfileArr.RightEdge.ValueY > 0) then
    FieldSize := abs(ProfileArr.RightEdge.ValueX - ProfileArr.LeftEdge.ValueX);
    Result := FloatToStrF(FieldSize,ffFixed,4,Precision) + ' cm'
    end
+  else
+   Result := 'No edge';
+end;
+
+
+function FieldSize101D(ProfileArr:TSingleProfile):string;
+{Returns the full width tenth maximum.}
+var FieldSize :double;
+begin
+with ProfileArr do
+   if (Left10.ValueY > 0) and (Right10.ValueY > 0) then
+   begin
+   FieldSize := abs(Right10.ValueX - Left10.ValueX);
+   Result := FloatToStrF(FieldSize,ffFixed,4,Precision) + ' cm'
+   end
+  else
+   Result := 'No edge';
+end;
+
+
+function Ratio10501D(ProfileArr:TSingleProfile):string;
+{Returns the full width tenth maximum to the full width half maximum.}
+var Ratio :double;
+begin
+   with ProfileArr do
+      if (Left10.ValueY > 0) and (Right10.ValueY > 0)
+         and (LeftEdge.ValueY > 0) and (RightEdge.ValueY > 0) then
+         begin
+         Ratio := abs(Right10.ValueX - Left10.ValueX)/
+            abs(RightEdge.ValueX - LeftEdge.ValueX);
+         Result := FloatToStrF(Ratio,ffFixed,4,Precision);
+         end
   else
    Result := 'No edge';
 end;
@@ -410,7 +474,7 @@ function Penumbra9010Left1D(ProfileArr:TSingleProfile):string;
 var Penumbra   :double;
 begin
 with ProfileArr do
-   Penumbra := abs(GetFWXMPos(0.1,-1).ValueX - GetFWXMPos(0.9,-1).ValueX);
+   Penumbra := abs(Left10.ValueX - GetFWXMPos(0.9,-1).ValueX);
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
@@ -419,7 +483,7 @@ function Penumbra9010Right1D(ProfileArr:TSingleProfile):string;
 var Penumbra   :double;
 begin
 with ProfileArr do
-   Penumbra := abs(GetFWXMPos(0.1,1).ValueX - GetFWXMPos(0.9,1).ValueX);
+   Penumbra := abs(Right10.ValueX - GetFWXMPos(0.9,1).ValueX);
 Result := FloatToStrF(Penumbra,ffFixed,4,Precision) + ' cm'
 end;
 
@@ -497,7 +561,6 @@ end;
 -------------------------------------------------------------------------------}
 function Dose20LeftDiff1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 20% of the Diffection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -509,7 +572,6 @@ end;
 
 function Dose20RightDiff1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 20% of the Diffection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -521,7 +583,6 @@ end;
 
 function Dose50LeftDiff1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 50% of the Diffection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -533,7 +594,6 @@ end;
 
 function Dose50RightDiff1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 50% of the Diffection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -545,7 +605,6 @@ end;
 
 function Dose60LeftDiff1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 60% of the Diffection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -557,7 +616,6 @@ end;
 
 function Dose60RightDiff1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 60% of the Diffection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -569,7 +627,6 @@ end;
 
 function Dose80LeftDiff1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 80% of the Diffection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -581,7 +638,6 @@ end;
 
 function Dose80RightDiff1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 80% of the Diffection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -666,7 +722,6 @@ end;
 
 function TopInfl1D(ProfileArr:TSingleProfile):string;
 {Return the maximum of the peak of a FFF beam fitted by a parabola}
-var Penumbra   :double;
 begin
 with ProfileArr do
    Result := FloatToStrF(Top.ValueX,ffFixed,4,Precision) + ' cm'
@@ -677,7 +732,6 @@ end;
 -------------------------------------------------------------------------------}
 function Dose20LeftInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 20% of the inflection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -689,7 +743,6 @@ end;
 
 function Dose20RightInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 20% of the inflection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -701,7 +754,6 @@ end;
 
 function Dose50LeftInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 50% of the inflection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -713,7 +765,6 @@ end;
 
 function Dose50RightInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 50% of the inflection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -725,7 +776,6 @@ end;
 
 function Dose60LeftInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 60% of the inflection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -737,7 +787,6 @@ end;
 
 function Dose60RightInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 60% of the inflection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -749,7 +798,6 @@ end;
 
 function Dose80LeftInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 80% of the inflection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin
@@ -761,7 +809,6 @@ end;
 
 function Dose80RightInfl1D(ProfileArr:TSingleProfile):string;
 {Returns the dose at 80% of the inflection point field size on the profile left}
-var Y:         double;
 begin
 with ProfileArr do
    begin

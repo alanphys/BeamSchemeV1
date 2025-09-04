@@ -5,7 +5,7 @@ unit test1Dparams;
 interface
 
 uses
-   Classes, SysUtils, fpcunit, testutils, testregistry, bstypes, param1Dfuncs, math;
+   Classes, SysUtils, fpcunit, testregistry, bstypes, param1Dfuncs, math;
 
 type
 
@@ -36,8 +36,12 @@ type
       {interpolated parameters}
       procedure TestFieldEdgeLeft501D;
       procedure TestFieldEdgeRight501D;
+      procedure TestFieldEdgeLeft101D;
+      procedure TestFieldEdgeRight101D;
       procedure TestFieldCentre501D;
       procedure TestFieldSize501D;
+      procedure TestFieldSize101D;
+      procedure TestRatio10501D;
       procedure TestPenumbra8020Left1D;
       procedure TestPenumbra8020Right1D;
       procedure TestPenumbra9010Left1D;
@@ -58,7 +62,7 @@ type
       procedure TestDose60RightDiff1D;
       procedure TestDose80LeftDiff1D;
       procedure TestDose80RightDiff1D;
-     {inflection point parameters}
+      {inflection point parameters}
       procedure TestFieldInflLeft1D;
       procedure TestFieldInflRight1D;
       procedure TestFieldCentreInfl1D;
@@ -86,7 +90,7 @@ type
       procedure TestPeakSlopeLeft1D;
       procedure TestPeakSlopeRight1D;
       procedure TestPeakSlopeRatio1D;
-     {symmetry parameters}
+      {symmetry parameters}
       procedure TestSymmetryRatio1D;
       procedure TestSymmetryDiff1D;
       procedure TestSymmetryArea1D_Odd;
@@ -260,6 +264,18 @@ AssertEquals('Test field edge right 50%','10.40 cm',FieldEdgeRight501D(fProfile)
 end;
 
 
+procedure Test1DParamFuncs.TestFieldEdgeLeft101D;
+begin
+AssertEquals('Test field edge left 10%','-10.47 cm',FieldEdgeLeft101D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFieldEdgeRight101D;
+begin
+AssertEquals('Test field edge right 10%','11.33 cm',FieldEdgeRight101D(fProfile));
+end;
+
+
 procedure Test1DParamFuncs.TestFieldCentre501D;
 begin
 AssertEquals('Test field centre 50%','0.37 cm',FieldCentre501D(fProfile));
@@ -269,6 +285,18 @@ end;
 procedure Test1DParamFuncs.TestFieldSize501D;
 begin
 AssertEquals('Test field size 50%','20.08 cm',FieldSize501D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestFieldSize101D;
+begin
+AssertEquals('Test field size 10%','21.80 cm',FieldSize101D(fProfile));
+end;
+
+
+procedure Test1DParamFuncs.TestRatio10501D;
+begin
+AssertEquals('Test FWTM/FWHM','1.09',Ratio10501D(fProfile));
 end;
 
 

@@ -22,6 +22,8 @@ type
       procedure TestRightEdge;
       procedure TestLeftEdge_Limits;
       procedure TestRightEdge_Limits;
+      procedure TestLeft10;
+      procedure TestRight10;
       procedure TestMin;
       procedure TestMax;
       procedure TestAve;
@@ -262,6 +264,22 @@ fProfile.Len := 45;
 AssertEquals('Test extreme right edge value',43.205,fProfile.RightEdge.ValueY);
 AssertEquals('Test extreme right edge position',10.6289,fProfile.RightEdge.ValueX);
 AssertEquals('Test extreme right edge index',43,fProfile.RightEdge.Pos);
+end;
+
+
+procedure TestSingleProfile.TestLeft10;
+begin
+AssertEquals('Test left 10 value',9.447,fProfile.Left10.ValueY);
+AssertEquals('Test left 10 position',-10.4741,fProfile.Left10.ValueX);
+AssertEquals('Test left 10 index',6,fProfile.Left10.Pos);
+end;
+
+
+procedure TestSingleProfile.TestRight10;
+begin
+AssertEquals('Test right 10 value',9.447,fProfile.Right10.ValueY);
+AssertEquals('Test right 10 position',11.3285,fProfile.Right10.ValueX);
+AssertEquals('Test right 10 index',48,fProfile.Right10.Pos);
 end;
 
 
