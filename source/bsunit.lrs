@@ -701,7 +701,7 @@ LazarusResources.Add('TBSForm','FORMDATA',[
   +#8'TabOrder'#2#2#0#0#0#10'TStatusBar'#9'StatusBar'#4'Left'#2#0#6'Height'#2'%'
   +#3'Top'#3#195#4#5'Width'#3#136#4#6'Panels'#14#0#10'ParentFont'#8#14'ParentSh'
   +'owHint'#8#8'ShowHint'#9#11'OnDrawPanel'#7#18'StatusBarDrawPanel'#0#0#8'TToo'
-  +'lBar'#7'ToolBar'#4'Left'#2#0#6'Height'#2'F'#3'Top'#2#0#5'Width'#3#6#2#5'Ali'
+  +'lBar'#7'ToolBar'#4'Left'#2#0#6'Height'#2'F'#3'Top'#2#0#5'Width'#3#3#2#5'Ali'
   +'gn'#7#6'alNone'#8'AutoSize'#9#18'BorderSpacing.Left'#2'&'#17'BorderSpacing.'
   +'Top'#2#5#12'ButtonHeight'#2'F'#11'ButtonWidth'#2'F'#7'Caption'#6#7'ToolBar'
   +#11'EdgeBorders'#11#0#6'Images'#7#9'ImageList'#10'ParentFont'#8#8'TabOrder'#2
@@ -709,27 +709,27 @@ LazarusResources.Add('TBSForm','FORMDATA',[
   +#7'Caption'#6#6'tbOpen'#10'ImageIndex'#2#0#14'ParentShowHint'#8#8'ShowHint'#9
   +#7'OnClick'#7#11'miOpenClick'#0#0#11'TToolButton'#11'ToolButton1'#4'Left'#2
   +'G'#6'Height'#2'F'#3'Top'#2#0#7'Caption'#6#11'ToolButton1'#5'Style'#7#12'tbs'
-  +'Separator'#0#0#11'TToolButton'#8'tbInvert'#4'Left'#2'P'#4'Hint'#6#12'Invert'
+  +'Separator'#0#0#11'TToolButton'#8'tbInvert'#4'Left'#2'O'#4'Hint'#6#12'Invert'
   +' image'#3'Top'#2#0#10'AllowAllUp'#9#7'Caption'#6#7'&Invert'#10'ImageIndex'#2
   +#1#14'ParentShowHint'#8#8'ShowHint'#9#5'Style'#7#8'tbsCheck'#7'OnClick'#7#13
-  +'sbInvertClick'#0#0#11'TToolButton'#9'tbNormCax'#4'Left'#3#229#0#4'Hint'#6#16
+  +'sbInvertClick'#0#0#11'TToolButton'#9'tbNormCax'#4'Left'#3#227#0#4'Hint'#6#16
   +'Normalise to CAX'#3'Top'#2#0#10'AllowAllUp'#9#7'Caption'#6#9'tbNormCax'#7'G'
   +'rouped'#9#10'ImageIndex'#2#2#14'ParentShowHint'#8#8'ShowHint'#9#5'Style'#7#8
   +'tbsCheck'#7'OnClick'#7#11'sbNormClick'#0#0#11'TToolButton'#9'tbNormMax'#4'L'
-  +'eft'#3'+'#1#4'Hint'#6#16'Normalise to Max'#3'Top'#2#0#10'AllowAllUp'#9#7'Ca'
+  +'eft'#3')'#1#4'Hint'#6#16'Normalise to Max'#3'Top'#2#0#10'AllowAllUp'#9#7'Ca'
   +'ption'#6#9'tbNormMax'#7'Grouped'#9#10'ImageIndex'#2#3#14'ParentShowHint'#8#8
   +'ShowHint'#9#5'Style'#7#8'tbsCheck'#7'OnClick'#7#14'sbMaxNormClick'#0#0#11'T'
-  +'ToolButton'#8'tbCentre'#4'Left'#3'q'#1#4'Hint'#6#12'Centre image'#3'Top'#2#0
+  +'ToolButton'#8'tbCentre'#4'Left'#3'o'#1#4'Hint'#6#12'Centre image'#3'Top'#2#0
   +#10'AllowAllUp'#9#7'Caption'#6#8'tbCentre'#10'ImageIndex'#2#4#14'ParentShowH'
   +'int'#8#8'ShowHint'#9#7'OnClick'#7#13'sbCentreClick'#0#0#11'TToolButton'#11
-  +'ToolButton2'#4'Left'#3#183#1#6'Height'#2'F'#3'Top'#2#0#7'Caption'#6#11'Tool'
+  +'ToolButton2'#4'Left'#3#181#1#6'Height'#2'F'#3'Top'#2#0#7'Caption'#6#11'Tool'
   +'Button2'#5'Style'#7#12'tbsSeparator'#0#0#11'TToolButton'#5'tbPDF'#4'Left'#3
-  +#192#1#4'Hint'#6#9'Print PDF'#3'Top'#2#0#7'Caption'#6#5'tbPDF'#10'ImageIndex'
+  +#189#1#4'Hint'#6#9'Print PDF'#3'Top'#2#0#7'Caption'#6#5'tbPDF'#10'ImageIndex'
   +#2#5#14'ParentShowHint'#8#8'ShowHint'#9#7'OnClick'#7#10'sbPDFClick'#0#0#11'T'
-  +'ToolButton'#12'tbShowParams'#4'Left'#3#150#0#4'Hint'#6#15'Show parameters'#3
+  +'ToolButton'#12'tbShowParams'#4'Left'#3#149#0#4'Hint'#6#15'Show parameters'#3
   +'Top'#2#0#7'Caption'#6#12'tbShowParams'#10'ImageIndex'#2#8#14'ParentShowHint'
   +#8#8'ShowHint'#9#5'Style'#7#8'tbsCheck'#7'OnClick'#7#17'tbShowParamsClick'#0
-  +#0#11'TToolButton'#11'ToolButton3'#4'Left'#3#220#0#6'Height'#2'F'#3'Top'#2#0
+  +#0#11'TToolButton'#11'ToolButton3'#4'Left'#3#219#0#6'Height'#2'F'#3'Top'#2#0
   +#7'Caption'#6#11'ToolButton3'#5'Style'#7#12'tbsSeparator'#0#0#0#8'TToolBar'
   +#11'ToolBarExit'#4'Left'#3#244#3#6'Height'#2'F'#3'Top'#2#0#5'Width'#3#141#0#5
   +'Align'#7#6'alNone'#8'AutoSize'#9#18'BorderSpacing.Left'#2'&'#17'BorderSpaci'

@@ -106,6 +106,7 @@ TestProtocolImageJ = class(TTestCase)
    procedure TearDown; override;
    published
    procedure TestProtocolBrachy;
+   procedure TestProtocolNMRes;
    end;
 
 
@@ -182,8 +183,8 @@ const Params: array of string = (
 '     Left edge 10%	-10.47 cm',
 '     Right edge 10%	11.33 cm',
 '     Centre	0.37 cm',
-'     FWHM	20.08 cm',
-'     FWTM	21.80 cm',
+'     Field size 50%	20.08 cm',
+'     Field size 10%	21.80 cm',
 '     Ratio 10/50	1.09',
 '     Penumbra	',
 '          80-20%	',
@@ -1678,21 +1679,15 @@ end;
 {-------------------------------------------------------------------------------
  ImageJ Protocol tests
 -------------------------------------------------------------------------------}
-{Validated against ImageJ macro BestWorstProfileV1.0.0.ijm, UniformityV1.0.0.ijm
-and SymmetryV1.0.0.ijm proprietary RadianceTx. ImageJ ver 1.52k}
+
 
 procedure TestProtocolImageJ.SetUp;
 begin
 fBeam := TBeam.Create;
 Centering := detector;
-IFAType := Circular;
-IFAFactor := 0.4;
-RAWOpen('../TestFiles/75dpi_49x49.txt',fBeam);
 sgExpr := TStringGrid.Create(nil);
 sgExpr.Visible := false;
 Prof := TSingleProfile.Create;
-Prof.SetParams(0,0,1);
-fBeam.CreateProfile(Prof,round(fBeam.Max),0);
 end;
 
 
@@ -1708,6 +1703,8 @@ procedure TestProtocolImageJ.TestProtocolBrachy;
 {Verified from 75dpi_49x49.txt. ImageJ macros centre on profile length. ImageJ
 adds 1/2 pixel to CoM to give geometric centre of image. BeamScheme reports top
 left corner of pixel containing CoM}
+{Validated against ImageJ macro BestWorstProfileV1.0.0.ijm, UniformityV1.0.0.ijm
+and SymmetryV1.0.0.ijm proprietary RadianceTx. ImageJ ver 1.52k}
 var I          :integer;
 
 const Params: array of string = (
@@ -1741,6 +1738,11 @@ const Params: array of string = (
 );
 
 begin
+RAWOpen('../TestFiles/75dpi_49x49.txt',fBeam);
+IFAType := Circular;
+IFAFactor := 0.4;
+Prof.SetParams(0,0,1);
+fBeam.CreateProfile(Prof,round(fBeam.Max),0);
 sgExpr.LoadFromCSVFile('../Protocols/Brachy.csv');
 for I:=0 to sgExpr.RowCount - 1 do
    begin
@@ -1760,6 +1762,49 @@ for I:=0 to sgExpr.RowCount - 1 do
 end;
 
 
+procedure TestProtocolImageJ.TestProtocolNMRes;
+{Verified from NMResA.dcm. Validated against ImageJ IAEA plugin}
+var I          :integer;
+
+const Params: array of string = (
+'2D Image Stats	',
+'     CAX value	65.32%',
+'     Max value	100.0%',
+'     CoM pos	(95.00,95.29)',
+'Profile stats ',
+'     Left edge	-0.48 cm',
+'     Right edge	0.39 cm',
+'     Centre	-0.04 cm',
+'     FWHM	0.86 cm',
+'     FWTM	1.65 cm',
+'     Ratio 10/50	1.90',
+'	'
+);
+
+begin
+DICOMOpen('../TestFiles/NMResA.dcm',fBeam);
+IFAType := Square;
+IFAFactor := 20;
+fBeam.Norm := norm_max;
+Prof.SetParams(0,0,5);
+fBeam.CreateProfile(Prof,round(fBeam.Max),0);
+sgExpr.LoadFromCSVFile('../Protocols/NM-Res.csv');
+for I:=0 to sgExpr.RowCount - 1 do
+   begin
+   Prof.sExpr := sgExpr.Cells[1,I];
+   if Prof.sExpr <> '' then
+      begin
+      if LeftStr(Prof.sExpr,2) = '1D' then
+         sgExpr.Cells[2,I] := Calc1DParam(Prof);
+      if LeftStr(Prof.sExpr,2) = '2D' then
+         sgExpr.Cells[2,I] := Calc2DParam(fBeam,Prof.sExpr);
+      end
+     else
+      sgExpr.Cells[2,I] := '';
+   AssertEquals('Line ' + InttoStr(I) + ' ' + sgExpr.Cells[0,I] + ' should be: ',Params[I],
+      sgExpr.Cells[0,I] + #9 + sgExpr.Cells[2,I]);
+   end;
+end;
 
 initialization
    RegisterTest(TestProtocolSNC);

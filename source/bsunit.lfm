@@ -1149,7 +1149,7 @@ object BSForm: TBSForm
     Left = 0
     Height = 70
     Top = 0
-    Width = 518
+    Width = 515
     Align = alNone
     AutoSize = True
     BorderSpacing.Left = 38
@@ -1179,7 +1179,7 @@ object BSForm: TBSForm
       Style = tbsSeparator
     end
     object tbInvert: TToolButton
-      Left = 80
+      Left = 79
       Hint = 'Invert image'
       Top = 0
       AllowAllUp = True
@@ -1191,7 +1191,7 @@ object BSForm: TBSForm
       OnClick = sbInvertClick
     end
     object tbNormCax: TToolButton
-      Left = 229
+      Left = 227
       Hint = 'Normalise to CAX'
       Top = 0
       AllowAllUp = True
@@ -1204,7 +1204,7 @@ object BSForm: TBSForm
       OnClick = sbNormClick
     end
     object tbNormMax: TToolButton
-      Left = 299
+      Left = 297
       Hint = 'Normalise to Max'
       Top = 0
       AllowAllUp = True
@@ -1217,7 +1217,7 @@ object BSForm: TBSForm
       OnClick = sbMaxNormClick
     end
     object tbCentre: TToolButton
-      Left = 369
+      Left = 367
       Hint = 'Centre image'
       Top = 0
       AllowAllUp = True
@@ -1228,14 +1228,14 @@ object BSForm: TBSForm
       OnClick = sbCentreClick
     end
     object ToolButton2: TToolButton
-      Left = 439
+      Left = 437
       Height = 70
       Top = 0
       Caption = 'ToolButton2'
       Style = tbsSeparator
     end
     object tbPDF: TToolButton
-      Left = 448
+      Left = 445
       Hint = 'Print PDF'
       Top = 0
       Caption = 'tbPDF'
@@ -1245,7 +1245,7 @@ object BSForm: TBSForm
       OnClick = sbPDFClick
     end
     object tbShowParams: TToolButton
-      Left = 150
+      Left = 149
       Hint = 'Show parameters'
       Top = 0
       Caption = 'tbShowParams'
@@ -1256,7 +1256,7 @@ object BSForm: TBSForm
       OnClick = tbShowParamsClick
     end
     object ToolButton3: TToolButton
-      Left = 220
+      Left = 219
       Height = 70
       Top = 0
       Caption = 'ToolButton3'

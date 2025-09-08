@@ -193,7 +193,8 @@ unit bsunit;
             fix exit crash if settings dir does not exist
  19/3/2025  fix protocol display on exit
  23/7/2025  fix various divide by zero
-            fix integer overflow in DTrackBar}
+            fix integer overflow in DTrackBar
+ 8/9/2025   fix 2D parameter update on normalise}
 
 
 {$mode objfpc}{$H+}
@@ -1160,6 +1161,7 @@ if tbNormCax.Down then
 DTrackBar.Max := round(Beam.Max);
 DTrackBar.PositionU := round(Beam.Max);
 Beam.Norm := Normalisation;
+Beam.ResetParams;
 DisplayAll;
 end;
 
@@ -1175,6 +1177,7 @@ if tbNormMax.Down then
 DTrackBar.Max := round(Beam.Max);
 DTrackBar.PositionU := round(Beam.Max);
 Beam.Norm := Normalisation;
+Beam.ResetParams;
 DisplayAll;
 end;
 
