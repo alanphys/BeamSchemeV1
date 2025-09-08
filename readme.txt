@@ -54,7 +54,7 @@ There are three normalisation modes. None, CAX or maximum. Normalisation places 
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
 
 Version 1.03
-Bug fix release.
+Bug fix release. Add FWTM and NM-Res protocol for tomographic resolution.
 
 Version 1.02
 Documentation is now listed on ReadTheDocs. High DPI awareness is enabled. Add 2D Integral and Differential uniformity for Nuclear Medicine. Update Help.
