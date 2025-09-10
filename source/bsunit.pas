@@ -194,7 +194,8 @@ unit bsunit;
  19/3/2025  fix protocol display on exit
  23/7/2025  fix various divide by zero
             fix integer overflow in DTrackBar
- 8/9/2025   fix 2D parameter update on normalise}
+ 8/9/2025   fix 2D parameter update on normalise
+ 10/9/2025  fix normalise with no image open}
 
 
 {$mode objfpc}{$H+}
@@ -1158,8 +1159,13 @@ if tbNormCax.Down then
    Normalisation := norm_cax
   else
    Normalisation := no_norm;
-DTrackBar.Max := round(Beam.Max);
-DTrackBar.PositionU := round(Beam.Max);
+if Length(Beam.Data) > 0 then
+   begin
+   DTrackBar.Max := round(Beam.Max);
+   DTrackBar.PositionU := round(Beam.Max);
+   DTrackBar.Min := round (Beam.Min);
+   DTrackBar.PositionL := round(Beam.Min);
+   end;
 Beam.Norm := Normalisation;
 Beam.ResetParams;
 DisplayAll;
@@ -1174,8 +1180,13 @@ if tbNormMax.Down then
    Normalisation := norm_max
   else
    Normalisation := no_norm;
-DTrackBar.Max := round(Beam.Max);
-DTrackBar.PositionU := round(Beam.Max);
+if Length(Beam.Data) > 0 then
+   begin
+   DTrackBar.Max := round(Beam.Max);
+   DTrackBar.PositionU := round(Beam.Max);
+   DTrackBar.Min := round (Beam.Min);
+   DTrackBar.PositionL := round(Beam.Min);
+   end;
 Beam.Norm := Normalisation;
 Beam.ResetParams;
 DisplayAll;

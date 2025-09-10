@@ -1763,7 +1763,8 @@ end;
 
 
 procedure TestProtocolImageJ.TestProtocolNMRes;
-{Verified from NMResA.dcm. Validated against ImageJ IAEA plugin}
+{Verified from NMResA.dcm. Validated against ImageJ IAEA plugin. ImageJ fits
+Gaussian curve and takes parameters from there.}
 var I          :integer;
 
 const Params: array of string = (
@@ -1775,9 +1776,9 @@ const Params: array of string = (
 '     Left edge	-0.48 cm',
 '     Right edge	0.39 cm',
 '     Centre	-0.04 cm',
-'     FWHM	0.87 cm',
-'     FWTM	1.65 cm',
-'     Ratio 10/50	1.90',
+'     FWHM	0.87 cm',             {ImageJ reports 0.81}
+'     FWTM	1.65 cm',             {ImageJ reports 1.48}
+'     Ratio 10/50	1.90',        {ImageJ reports 1.82, this default for a gaussian curve}
 '	'
 );
 

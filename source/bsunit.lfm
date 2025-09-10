@@ -1,12 +1,12 @@
 object BSForm: TBSForm
-  Left = 708
-  Height = 1256
-  Top = 313
+  Left = 712
+  Height = 1157
+  Top = 268
   Width = 1160
   HorzScrollBar.Page = 737
   VertScrollBar.Page = 755
   Caption = 'Beam Scheme'
-  ClientHeight = 1256
+  ClientHeight = 1157
   ClientWidth = 1160
   DesignTimePPI = 168
   Menu = MainMenu
@@ -1137,7 +1137,7 @@ object BSForm: TBSForm
   object StatusBar: TStatusBar
     Left = 0
     Height = 37
-    Top = 1219
+    Top = 1120
     Width = 1160
     Panels = <>
     ParentFont = False
@@ -1433,13 +1433,13 @@ object BSForm: TBSForm
   end
   object ChartToolsetX: TChartToolset
     Left = 977
-    Top = 482
+    Top = 481
     object ChartToolsetXDataPointHintTool: TDataPointHintTool
       OnHint = ChartToolsetXDataPointHintToolHint
     end
   end
   object ChartToolsetY: TChartToolset
-    Left = 440
+    Left = 439
     Top = 1019
     object ChartToolsetYDataPointHintTool: TDataPointHintTool
       OnHint = ChartToolsetYDataPointHintToolHint
@@ -1487,7 +1487,7 @@ object BSForm: TBSForm
     Height = 32
     Width = 32
     Left = 256
-    Top = 440
+    Top = 439
     Bitmap = {
       4C7A0900000020000000200000002E1900000000000078DAED9D075CD5E7B9C7
       4F9B9AB6B735B76993F42637BDED4D6F3FA6CB269A98BAE25664880B90216E94
