@@ -5,7 +5,7 @@
 
 Returns the maximum difference between the max and the min of the :ref:`In Field Area` normalised to the sum of the min and max according to IAEA pub 1394 section 2.3.3 eq 2.
 
-.. math:: {(max-min)} \cfrac {(max+min)} \cdot {100}
+.. math:: {\cfrac {(max-min)} {(max+min)}} \cdot {100}
 
 Where *max* and *min* are the IFA maximum and minimum respectively and *ave* is the average value of the IFA.
 

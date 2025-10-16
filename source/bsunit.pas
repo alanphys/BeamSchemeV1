@@ -195,7 +195,9 @@ unit bsunit;
  23/7/2025  fix various divide by zero
             fix integer overflow in DTrackBar
  8/9/2025   fix 2D parameter update on normalise
- 10/9/2025  fix normalise with no image open}
+ 10/9/2025  fix normalise with no image open
+ 6/10/2025  add *.IMA and *.2 files extensions for DICOM files
+ 16/10/2025 add menu items for normalisation}
 
 
 {$mode objfpc}{$H+}
@@ -222,6 +224,9 @@ type
    HTMLHelpDatabase: THTMLHelpDatabase;
    ImageList: TImageList;
    Label7: TLabel;
+   miCentreField: TMenuItem;
+   miNormMax: TMenuItem;
+   miNormCAX: TMenuItem;
    miShowPoints: TMenuItem;
    pmiShowPoints: TMenuItem;
    miView: TMenuItem;
@@ -254,6 +259,7 @@ type
    sbAddP: TSpeedButton;
    sbDelP: TSpeedButton;
    sbExitP: TSpeedButton;
+   Separator1: TMenuItem;
    StatusBar: TStatusBar;
    StatusMessages: TStringList;
    sgResults: TStringGrid;
@@ -960,7 +966,7 @@ if OpenDialog.Execute then
    begin
    try
    Dummy := Upcase(ExtractFileExt(OpenDialog.Filename));
-   if Dummy = '.DCM' then
+   if (Dummy = '.DCM') or (Dummy = '.IMA') or (Dummy = '.2') then
       DataOK := DICOMOpen(OpenDialog.Filename,Beam);
    if (not DataOK) and (Dummy = '.OPG') then
       DataOK := IBAOpen(OpenDialog.Filename,Beam);
@@ -1155,10 +1161,18 @@ procedure TBSForm.sbNormClick(Sender: TObject);
 begin
 XPArr.ResetCoords;
 YPArr.ResetCoords;
-if tbNormCax.Down then
-   Normalisation := norm_cax
+if Normalisation <> norm_cax then
+   begin
+   Normalisation := norm_cax;
+   tbNormCAX.Down := true;
+   miNormCAX.Checked := true;
+   end
   else
+   begin
    Normalisation := no_norm;
+   tbNormCAX.Down := false;
+   miNormCAX.Checked := false;
+   end;
 if Length(Beam.Data) > 0 then
    begin
    DTrackBar.Max := round(Beam.Max);
@@ -1176,10 +1190,18 @@ procedure TBSForm.sbMaxNormClick(Sender: TObject);
 begin
 XPArr.ResetCoords;
 YPArr.ResetCoords;
-if tbNormMax.Down then
-   Normalisation := norm_max
+if Normalisation <> norm_max then
+   begin
+   Normalisation := norm_max;
+   tbNormMax.Down := true;
+   miNormMax.Checked := true;
+   end
   else
+   begin
    Normalisation := no_norm;
+   tbNormMax.Down := false;
+   miNormMax.Checked := false;
+   end;
 if Length(Beam.Data) > 0 then
    begin
    DTrackBar.Max := round(Beam.Max);

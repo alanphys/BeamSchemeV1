@@ -1,19 +1,19 @@
 object AboutForm: TAboutForm
-  Left = 744
-  Height = 376
-  Top = 420
-  Width = 646
+  Left = 743
+  Height = 439
+  Top = 392
+  Width = 754
   Caption = 'About'
-  ClientHeight = 376
-  ClientWidth = 646
-  DesignTimePPI = 144
+  ClientHeight = 439
+  ClientWidth = 754
+  DesignTimePPI = 168
+  LCLVersion = '4.0.0.4'
   OnCreate = FormCreate
-  LCLVersion = '3.4.0.0'
   object PageControl: TPageControl
     Left = 0
-    Height = 376
+    Height = 439
     Top = 0
-    Width = 646
+    Width = 754
     ActivePage = TabSheet1
     Align = alClient
     ParentFont = False
@@ -21,14 +21,14 @@ object AboutForm: TAboutForm
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'About'
-      ClientHeight = 338
-      ClientWidth = 638
+      ClientHeight = 394
+      ClientWidth = 748
       ParentFont = False
       object mAbout: TMemo
         Left = 0
-        Height = 338
+        Height = 394
         Top = 0
-        Width = 638
+        Width = 748
         Align = alClient
         Font.Name = 'Monospace'
         ParentFont = False
@@ -38,14 +38,14 @@ object AboutForm: TAboutForm
     end
     object TabSheet2: TTabSheet
       Caption = 'Licence'
-      ClientHeight = 338
-      ClientWidth = 638
+      ClientHeight = 394
+      ClientWidth = 748
       ParentFont = False
       object mLicence: TMemo
         Left = 0
-        Height = 338
+        Height = 394
         Top = 0
-        Width = 638
+        Width = 748
         Align = alClient
         Font.Name = 'Monospace'
         ParentFont = False
@@ -55,14 +55,14 @@ object AboutForm: TAboutForm
     end
     object TabSheet3: TTabSheet
       Caption = 'Credits'
-      ClientHeight = 338
-      ClientWidth = 638
+      ClientHeight = 394
+      ClientWidth = 748
       ParentFont = False
       object mCredits: TMemo
         Left = 0
-        Height = 338
+        Height = 394
         Top = 0
-        Width = 638
+        Width = 748
         Align = alClient
         Font.Name = 'Monospace'
         ParentFont = False

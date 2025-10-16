@@ -8,11 +8,8 @@ Normalisation is the scaling of data to defined limits, usually between 0 and 10
 
 Possible normalisation modes are:
 
-.. toctree::
-   :maxdepth: 1
-
-   BSHelp8-2-2.rst
-   BSHelp8-2-3.rst
+*  :ref:`Normalise to CAX`
+*  :ref:`Normalise to MAX`
 
 |Note| The normalisation mode may affect parameter calculations
 

@@ -1,7 +1,7 @@
 object BSForm: TBSForm
-  Left = 712
+  Left = 713
   Height = 1157
-  Top = 268
+  Top = 289
   Width = 1160
   HorzScrollBar.Page = 737
   VertScrollBar.Page = 755
@@ -1338,6 +1338,23 @@ object BSForm: TBSForm
         Caption = 'Show&Points'
         ShowAlwaysCheckable = True
         OnClick = pmiShowPointsClick
+      end
+      object Separator1: TMenuItem
+        Caption = '-'
+      end
+      object miNormCAX: TMenuItem
+        Caption = 'Normalise to &CAX'
+        RadioItem = True
+        OnClick = sbNormClick
+      end
+      object miNormMax: TMenuItem
+        Caption = 'Normalise to &MAX'
+        RadioItem = True
+        OnClick = sbMaxNormClick
+      end
+      object miCentreField: TMenuItem
+        Caption = 'Centre field'
+        OnClick = sbCentreClick
       end
     end
     object miExport: TMenuItem

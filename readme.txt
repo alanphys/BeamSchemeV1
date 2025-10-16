@@ -53,6 +53,9 @@ There are three normalisation modes. None, CAX or maximum. Normalisation places 
 9) Release notes
 These detail new or changed functionality in BeamScheme. Please see the History for bug fixes.
 
+Version 1.04
+Documentation has been revised. Menu items for normalisation have been added. Alternative file extensions for DICOM files have been added.
+
 Version 1.03
 Bug fix release. Add FWTM and NM-Res protocol for tomographic resolution.
 
@@ -298,3 +301,8 @@ Version 1.02 released 14/1/2024
 4/6/2025   fix FPU exception bug
 23/7/2025  fix various divide by zero
            fix integer overflow in DTrackBar
+Version 1.03 released 1/8/2025
+8/9/2025   fix 2D parameter update on normalise
+10/9/2025  fix normalise with no image open
+6/10/2025  add *.IMA and *.2 files extensions for DICOM files
+16/10/2025 add menu items for normalisation

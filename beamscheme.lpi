@@ -168,8 +168,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="155"/>
-        <CursorPos X="45" Y="198"/>
+        <TopLine Value="174"/>
+        <CursorPos Y="188"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -1105,124 +1105,124 @@
     </Build>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="135" Column="30" TopLine="96"/>
+        <Filename Value="source/bstypes.pas"/>
+        <Caret Line="459" Column="18" TopLine="433"/>
       </Position1>
       <Position2>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="147" Column="24" TopLine="108"/>
+        <Filename Value="source/bstypes.pas"/>
+        <Caret Line="475" TopLine="436"/>
       </Position2>
       <Position3>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="194" Column="33" TopLine="155"/>
+        <Filename Value="source/bstypes.pas"/>
+        <Caret Line="453" TopLine="436"/>
       </Position3>
       <Position4>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="899" Column="29" TopLine="875"/>
+        <Filename Value="source/bstypes.pas"/>
+        <Caret Line="456" TopLine="436"/>
       </Position4>
       <Position5>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1429" Column="32" TopLine="1406"/>
+        <Filename Value="source/bstypes.pas"/>
+        <Caret Line="475" Column="2" TopLine="436"/>
       </Position5>
       <Position6>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="983" Column="12" TopLine="970"/>
+        <Filename Value="source/bstypes.pas"/>
+        <Caret Line="465" Column="37" TopLine="436"/>
       </Position6>
       <Position7>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="988" Column="26" TopLine="988"/>
+        <Filename Value="source/bstypes.pas"/>
+        <Caret Line="453" TopLine="436"/>
       </Position7>
       <Position8>
-        <Filename Value="source/bsunit.pas"/>
-        <Caret Line="899" Column="29" TopLine="875"/>
+        <Filename Value="source/bstypes.pas"/>
+        <Caret Line="465" Column="23" TopLine="433"/>
       </Position8>
       <Position9>
         <Filename Value="source/bstypes.pas"/>
-        <Caret Line="453" Column="7" TopLine="430"/>
+        <Caret Line="468" TopLine="433"/>
       </Position9>
       <Position10>
         <Filename Value="source/bstypes.pas"/>
-        <Caret Line="454" TopLine="430"/>
+        <Caret Line="468" Column="45" TopLine="433"/>
       </Position10>
       <Position11>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="459" Column="18" TopLine="433"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="1429" Column="32" TopLine="1403"/>
       </Position11>
       <Position12>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="475" TopLine="436"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="1378" Column="33" TopLine="1355"/>
       </Position12>
       <Position13>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="453" TopLine="436"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="197" Column="49" TopLine="168"/>
       </Position13>
       <Position14>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="456" TopLine="436"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="1178" Column="41" TopLine="1166"/>
       </Position14>
       <Position15>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="475" Column="2" TopLine="436"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="900" Column="29" TopLine="873"/>
       </Position15>
       <Position16>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="465" Column="37" TopLine="436"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="895" Column="93" TopLine="849"/>
       </Position16>
       <Position17>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="453" TopLine="436"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="1189" TopLine="1146"/>
       </Position17>
       <Position18>
         <Filename Value="source/bstypes.pas"/>
-        <Caret Line="465" Column="23" TopLine="433"/>
+        <Caret Line="1175" Column="23" TopLine="1153"/>
       </Position18>
       <Position19>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="468" TopLine="433"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="1169" Column="48" TopLine="1146"/>
       </Position19>
       <Position20>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="468" Column="45" TopLine="433"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="994" Column="78" TopLine="994"/>
       </Position20>
       <Position21>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1429" Column="32" TopLine="1403"/>
+        <Caret Line="198" Column="45" TopLine="155"/>
       </Position21>
       <Position22>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1378" Column="33" TopLine="1355"/>
+        <Caret Line="963" Column="61" TopLine="939"/>
       </Position22>
       <Position23>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="197" Column="49" TopLine="168"/>
+        <Caret Line="964" Column="61" TopLine="940"/>
       </Position23>
       <Position24>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1178" Column="41" TopLine="1166"/>
+        <Caret Line="965" Column="61" TopLine="941"/>
       </Position24>
       <Position25>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="900" Column="29" TopLine="873"/>
+        <Caret Line="966" Column="61" TopLine="942"/>
       </Position25>
       <Position26>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="895" Column="93" TopLine="849"/>
+        <Caret Line="973" Column="61" TopLine="949"/>
       </Position26>
       <Position27>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1189" TopLine="1146"/>
+        <Caret Line="669" TopLine="314"/>
       </Position27>
       <Position28>
-        <Filename Value="source/bstypes.pas"/>
-        <Caret Line="1175" Column="23" TopLine="1153"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="336" TopLine="311"/>
       </Position28>
       <Position29>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="1169" Column="48" TopLine="1146"/>
+        <Caret Line="1160" TopLine="1157"/>
       </Position29>
       <Position30>
         <Filename Value="source/bsunit.pas"/>
-        <Caret Line="994" Column="78" TopLine="994"/>
+        <Caret Line="1482" TopLine="1449"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

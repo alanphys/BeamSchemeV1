@@ -8,12 +8,9 @@ The In Field Area (IFA) refers to the flattened area of WFF beams. A number of v
 
 BeamScheme has a sophisticated and extendible IFA algorithm. The IFA is implemented as a overlay or mask on the data. Data within the mask is processed. Data outside the mask is ignored. Current IFA types are
 
-.. toctree::
-   :maxdepth: 1
-
-   BSHelp9-2-1.rst
-   BSHelp9-2-2.rst
-   BSHelp9-2-3.rst
+*  :ref:`Proportional In Field Area`
+*  :ref:`Circular In Field Area`
+*  :ref:`Square In Field Area`
 
 The field statistics, flatness and symmetry values are all calculated from the IFA. For any discrepancies between values calculated by BeamScheme and other software first examine the defined in field area.
 

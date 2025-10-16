@@ -10,7 +10,7 @@ Protocols are groups of :ref:`parameters<Parameters>`. From version 0.5 BeamSche
    :maxdepth: 2
 
    BSHelp14-1.rst
-   BSHelp8-3-6.rst
+   BSHelp14-3.rst
    BSHelp14-2.rst
 
 |Note| The protocol definition files from previous version of BeamScheme are not compatible with version 1.00 and will give errors.

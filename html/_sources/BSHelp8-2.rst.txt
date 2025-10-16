@@ -10,7 +10,7 @@ For the :ref:`File Menu<The File Menu>` the available buttons are:
 
 *  |open| :ref:`File, Open`
 *  |print| :ref:`Print PDF`
-*  |settings| :ref:`Settings`
+*  |settings| :ref:`Settings Window`
 *  |exit| :ref:`Exit<File, Exit>`
 
 For the :ref:`View Menu<The View Menu>` the available buttons are:
@@ -25,20 +25,6 @@ Other functions available from the Tool Bar are:
 *  |centre| :ref:`Centre Field`
 
 "Normalise to CAX" and "Normalise to MAX" are radio buttons as only one normalisation mode can be in effect at any time.
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   
-   Open File <BSHelp8-3-1-1.rst>
-   BSHelp8-2-1.rst
-   BSHelp8-2-5.rst
-   BSHelp8-2-2.rst
-   BSHelp8-2-3.rst
-   BSHelp8-2-4.rst
-   BSHelp8-3-3.rst
-   Edit Settings <BSHelp8-6.rst>
-   Exit <BSHelp8-3-1-2.rst>
 
 
 .. |open| image:: _static/open.png

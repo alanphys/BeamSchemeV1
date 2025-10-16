@@ -10,7 +10,7 @@ The X profile can be exported to the clipboard or to a file. The profile is expo
 .. toctree::
    :maxdepth: 1
    
-   BSHelp8-3-2-1-1.rst
-   BSHelp8-3-2-1-2.rst
+   BSHelp8-1-5.rst
+   BSHelp8-1-4.rst
 
 .. |params| image:: _static/showparams.png

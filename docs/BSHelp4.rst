@@ -5,12 +5,12 @@
 System Requirements
 ===================
 
-BeamScheme can run on a variety of platforms and operating systems. Currently EPS is
+BeamScheme can run on a variety of platforms and operating systems. Currently BeamScheme is
 compiled for:
 
 - Windows 7 or higher
 
-- Fedora 34 running KDE 5 with Qt 5.6
+- Fedora 42 running KDE 5 with Qt 5.15
 
 The program needs approximately 10 MB of disk space to install. A 19" monitor or
 larger is not essential but will make viewing easier. BeamScheme should not be viewed 

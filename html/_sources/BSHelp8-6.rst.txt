@@ -1,10 +1,8 @@
 
 .. index:: Settings
 
-Settings
-========
-
-Selecting "Settings" under the :ref:`File Menu<The File Menu>` or clicking the "Edit Settings" button |settings| on the :ref:`tool bar<The Tool Bar>` will open the Settings window.
+Settings Window
+===============
 
 BeamScheme has a highly extendible settings module. Here default behavior for the algorithms is configured. The settings consist of key, value pairs with definable values. The values can be changed by selecting the box next to the key and either entering a value or selecting a value from the drop down list. If a setting is changed it must be saved by pressing the "Save Settings" button |save|. The Settings module can be closed by pressing the "Exit Settings" button |exit|. Available settings are:
 

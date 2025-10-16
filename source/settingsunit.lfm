@@ -1,25 +1,25 @@
 object SettingsForm: TSettingsForm
-  Left = 752
-  Height = 603
-  Top = 340
-  Width = 622
+  Left = 751
+  Height = 704
+  Top = 312
+  Width = 726
   Caption = 'Settings'
-  ClientHeight = 603
-  ClientWidth = 622
-  DesignTimePPI = 144
+  ClientHeight = 704
+  ClientWidth = 726
+  DesignTimePPI = 168
+  LCLVersion = '4.0.0.4'
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  LCLVersion = '3.4.0.0'
   object ToolBarLeft: TToolBar
     Left = 0
-    Height = 54
+    Height = 63
     Top = 0
-    Width = 55
+    Width = 64
     Align = alNone
     AutoSize = True
-    ButtonHeight = 54
-    ButtonWidth = 54
+    ButtonHeight = 63
+    ButtonWidth = 63
     Caption = 'ToolBarLeft'
     EdgeInner = esNone
     EdgeOuter = esNone
@@ -31,16 +31,16 @@ object SettingsForm: TSettingsForm
       Top = 0
       Caption = 'tbAdd'
       ImageIndex = 0
-      OnClick = tbAddClick
       ParentShowHint = False
       ShowHint = True
+      OnClick = tbAddClick
     end
   end
   object StatusBar: TStatusBar
     Left = 0
-    Height = 36
-    Top = 567
-    Width = 622
+    Height = 37
+    Top = 667
+    Width = 726
     Panels = <>
     ParentColor = False
     ParentShowHint = False
@@ -49,12 +49,11 @@ object SettingsForm: TSettingsForm
   end
   object vleSettings: TValueListEditor
     Left = 0
-    Height = 507
-    Top = 60
-    Width = 622
+    Height = 592
+    Top = 75
+    Width = 726
     Align = alBottom
-    DefaultColWidth = 300
-    FixedCols = 0
+    DefaultColWidth = 350
     RowCount = 7
     TabOrder = 2
     KeyOptions = [keyEdit, keyUnique]
@@ -67,19 +66,19 @@ object SettingsForm: TSettingsForm
       'Top Radius=2.5'
     )
     ColWidths = (
-      300
-      318
+      350
+      376
     )
   end
   object ToolBarRight: TToolBar
-    Left = 560
-    Height = 54
+    Left = 653
+    Height = 63
     Top = 0
-    Width = 55
+    Width = 64
     Align = alNone
     AutoSize = True
-    ButtonHeight = 54
-    ButtonWidth = 54
+    ButtonHeight = 63
+    ButtonWidth = 63
     Caption = 'ToolBarRight'
     EdgeInner = esNone
     EdgeOuter = esNone
@@ -91,16 +90,16 @@ object SettingsForm: TSettingsForm
       Top = 0
       Caption = 'tbExit'
       ImageIndex = 1
-      OnClick = tbExitClick
       ParentShowHint = False
       ShowHint = True
+      OnClick = tbExitClick
     end
   end
   object ImageList: TImageList
     Height = 32
     Width = 32
-    Left = 542
-    Top = 492
+    Left = 632
+    Top = 574
     Bitmap = {
       4C7A020000002000000020000000710D00000000000078DACD98095454D71D87
       E79CB6E9499A364BD5264D7A6CD3342676CBD2D41835CABE0D0CFB301B5B1014
