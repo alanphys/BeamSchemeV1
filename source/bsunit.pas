@@ -958,7 +958,7 @@ with OpenDialog do
    {$IFDEF WINDOWS}
    Filter := 'DICOM Image|*.dcm|MapCheck Text Files|*.txt|PTW|*.mcc|IBA|*.opg|Windows bitmap|*.bmp|Tiff bitmap|*.tif|JPEG image|*.jpg|HIS image|*.his|All Files|*.*';
    {$ELSE}
-   Filter := 'DICOM Image|*.dcm|MapCheck, XIO, RAW Text Files|*.txt|PTW|*.mcc|IBA|*.opg|Windows bitmap|*.bmp|Tiff bitmap|*.tif;*.tiff|JPEG image|*.jpg;*jpeg|HIS image|*.his|All Files|*';
+   Filter := 'DICOM Image|*.dcm|MapCheck, XIO, RAW Text Files|*.txt|PTW|*.mcc|IBA|*.opg|Windows bitmap|*.bmp|Tiff bitmap|*.tif;*.tiff|JPEG image|*.jpg;*jpeg|HIS image|*.his|Varian XIM|*.xim|All Files|*';
    {$ENDIF}
    Title := 'Open image file';
    end;
@@ -976,12 +976,16 @@ if OpenDialog.Execute then
       DataOK := HISOpen(OpenDialog.Filename,Beam);
    if (not DataOK) and (Dummy = '.BMP') then
       DataOK := BMPOpen(OpenDialog.Filename,Beam);
+   if (not DataOK) and (Dummy = '.PNG') then
+      DataOK := BMPOpen(OpenDialog.Filename,Beam);
    if (not DataOK) and ((Dummy = '.TIF') or (Dummy = '.TIFF')) then
       DataOK := BMPOpen(OpenDialog.Filename,Beam);
    if (not DataOK) and ((Dummy = '.JPG') or (Dummy = '.JPEG')) then
       DataOK := BMPOpen(OpenDialog.Filename,Beam);
    if (not DataOK) and (Dummy = '.ALL') then
       DataOK := XiOOpen(OpenDialog.Filename,Beam);
+   if (not DataOK) and (Dummy = '.XIM') then
+      DataOK := XIMOpen(OpenDialog.Filename,Beam);
    if not DataOK and ((Dummy = '.TXT') or (Dummy = '')) then {assume file is text}
       DataOK := TextOpen(OpenDialog.Filename,Beam);
 

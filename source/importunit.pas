@@ -16,6 +16,7 @@ function XioOpen(sFileName:string; Beam:TBeam):boolean;
 function BrainLabOpen(sFileName:string; Beam:TBeam):boolean;
 function BMPOpen(sFileName:string; Beam:TBeam):boolean;
 function HISOpen(sFileName:string; Beam:TBeam):boolean;
+function XIMOpen(sFileName:string; Beam:TBeam):boolean;
 function RAWOpen(sFileName:string; Beam:TBeam):boolean;
 
 implementation
@@ -367,7 +368,7 @@ var Infile     :file;
     bHdrOK     :boolean = false;
     gDICOMData :DiCOMDATA;
     lBuff,
-    TmpBuff    :bYTEp0;
+    TmpBuff    :Bytep0;
     lBuff16    :WordP0;
     lBuff32    :DWordP0;
 
@@ -904,6 +905,187 @@ if (Beam.Rows > 0) and (Beam.Cols > 0) then
 SrcIntfImage.Free;
 end;
 
+
+function XIMOpen(sFileName:string; Beam:TBeam):boolean;
+{Import Varian XIM image files. This algorithm has been independently derived
+(read reverse engineered) but the author wishes to acknowledge the contributions
+of:
+Varian Medical Systems: https://bitbucket.org/dmoderesearchtools/ximreader/src/master/
+this link appears to be dead. There is a fork at:
+https://github.com/alanphys/xim_reader
+Dinesh Kumar: https://github.com/aryabhatt/ximreader
+James Kern: https://github.com/jrkerns/pylinac/blob/master/pylinac/core/image.py
+class XIM}
+
+type
+   TFormatIdent = record
+   case integer of
+      0: (Words:array[0..1] of int32);
+      1: (Chars:array[0..7] of char);
+      end;
+
+   THeader = packed record
+      FormatIdent:TFormatIdent;
+      FormatVer,
+      XIMWidth,
+      XIMHeight,
+      BitsPerPixel,
+      BytesPerPixel,
+      CompFlag      :int32;
+      end;
+
+var I,J,K,L,M  :integer;
+    Header     :THeader;
+    BufferSize,
+    CompBufSize,
+    LUTSize    :Int32;
+    BitFlags,
+    Flags      :byte;
+    BytesRead  :integer;
+    Diff,
+    Value,
+    R11,
+    R12,
+    R21        :double;
+    Infile     :TFileStream;
+    lBuff      :array of byte;
+    LUT        :array of byte;
+
+    function BytesToFloat(Buffer:array of byte; BytesPerPixel:integer; var Index:integer):double;
+       begin
+       Result := 0;
+       case BytesPerPixel of
+          1:Result := lBuff[Index];
+          2:Result := Int16(lBuff[Index]) + Int16(lBuff[Index + 1]) shl 8;
+          4:Result := Int32(lBuff[Index]) + Int32(lBuff[Index + 1]) shl 8 +
+               Int32(lBuff[Index + 2]) shl 16 + Int32(lBuff[Index + 3]) shl 24;
+          else raise EBSError.Create('Invalid bytes per pixel.',error);
+          end;
+       inc(Index, BytesPerPixel);
+       end;
+
+begin
+Result := false;
+try
+   {open the file for reading}
+   Infile := TFileStream.create(sFileName, fmOpenRead or fmShareDenyWrite);
+
+   {read header}
+   Infile.Read(Header, sizeOf(Header));
+
+   Beam.Cols := Header.XIMWidth;
+   Beam.Rows := Header.XIMHeight;
+   Beam.Width := Header.XIMWidth;
+   Beam.Height := Header.XIMHeight;
+
+   if Header.CompFlag = 0 then
+      begin {image is uncompressed}
+
+      {allocate memory for buffer}
+      Infile.Read(BufferSize, 4);
+      SetLength(lBuff,BufferSize);
+
+      {get pixel data}
+      Infile.Read(lBuff, BufferSize);
+      Infile.Free;
+
+      {assign data to beam}
+      I := 0;
+      SetLength(Beam.Data,Beam.Rows);
+      for J:= 0 to Header.XIMHeight - 1 do
+         begin
+         SetLength(Beam.Data[J],Beam.Cols);
+         for K:=0 to Header.XIMWidth - 1 do
+            Beam.Data[J,K] := BytesToFloat(lBuff,Header.BytesPerPixel,I);
+         end;
+      SetLength(lBuff, 0);
+      end
+     else
+      begin {image is compressed}
+      {read LUT}
+      Infile.Read(LUTSize, 4);
+      SetLength(LUT, LUTSize);
+      Infile.Read(LUT[0], LUTSize);
+
+      {read compressed pixel data}
+      Infile.Read(CompBufSize, 4);
+      SetLength(lBuff, CompBufSize);
+      Infile.Read(lBuff[0], CompBufSize);
+      Infile.Free;
+
+      {assign data to beam}
+      I := 0;
+      SetLength(Beam.Data,Beam.Rows);
+
+      {first row and first pixel of second row are int32}
+      {assign uncompressed first row}
+      J := 0;
+      SetLength(Beam.Data[0],Beam.Cols);
+      for K:=0 to Header.XIMWidth - 1 do
+         Beam.Data[J,K] := BytesToFloat(lBuff,4,I);
+
+      {assign uncompressed first pixel of second row}
+      J := 1;
+      K := 0;
+      SetLength(Beam.Data[1],Beam.Cols);
+      Beam.Data[J,K] := BytesToFloat(lBuff,4,I);
+
+      {uncompress the rest of the rows}
+      K := 1;
+      M := 0;
+      BitFlags := LUT[0];
+      L := 1281;                  {first row + 1 pixel}
+      while (I < CompBufSize) and (J < Header.XIMHeight - 1) do
+         begin
+         if K = Header.XIMWidth then
+            begin
+            Inc(J);
+            SetLength(Beam.Data[J],Beam.Cols);
+            K := 0;
+            end;
+
+         if (L - 1281) mod 4 = 0 then
+            begin
+            BitFlags := LUT[M];
+            Inc(M);
+            end;
+         Flags := BitFlags and $0003;
+         BitFlags := Byte(BitFlags shr 2);
+         case Flags of
+            0:begin  {Diff is 1 byte}
+              Diff := Int8(lBuff[I]);
+              Inc(I);
+              end;
+            1:begin  {Diff is 2 bytes}
+              Diff := Int16(Int16(lBuff[I]) + Int16(lBuff[I + 1]) shl 8);
+              Inc(I, 2);
+              end;
+            2:begin  {Diff is 4 bytes}
+              Diff := Int32(Int32(lBuff[I]) + Int32(lBuff[I + 1]) shl 8 +
+                 Int32(lBuff[I + 2]) shl 16 + Int32(lBuff[I + 3]) shl 24);
+              Inc(I, 4);
+              end;
+            else raise EBSError.Create('Invalid bytes per compressed pixel.',error);
+            end; {of case}
+         R11 := Beam.Data[(L - 1) div Header.XIMWidth - 1, (L - 1) mod Header.XIMWidth];
+         R12 := Beam.Data[L div Header.XIMWidth - 1, L  mod Header.XIMWidth];
+         R21 := Beam.Data[(L - 1) div Header.XIMWidth, (L - 1) mod Header.XIMWidth];
+         Value := Diff - R11 + R12 + R21;
+         Beam.Data[J,K] := Value;
+         Inc(K);
+         Inc(L);
+         end;
+      SetLength(LUT,0);
+      SetLength(lBuff, 0);
+      end;
+
+   Result := true;
+
+except
+   raise EBSError.Create('Not a recognised XIM file!',error);
+   end;
+
+end;
 
 end.
 
