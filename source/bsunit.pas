@@ -935,6 +935,8 @@ var I,
     BMin       :integer;       {integer version of beam min}
     Dummy      :string;
     DataOK     :boolean;
+    StartTime,
+    EndTime    :integer;
 
 begin
 Safe := false;
@@ -964,7 +966,8 @@ with OpenDialog do
    end;
 if OpenDialog.Execute then
    begin
-   try
+   try 
+   StartTime := GetTickCount64;
    Dummy := Upcase(ExtractFileExt(OpenDialog.Filename));
    if (Dummy = '.DCM') or (Dummy = '.IMA') or (Dummy = '.2') then
       DataOK := DICOMOpen(OpenDialog.Filename,Beam);
@@ -1040,6 +1043,8 @@ if OpenDialog.Execute then
          Dummy := leftStr(Dummy, round(Length(Dummy)*cImage.Width/(2*I) - 1)) + '...'
             + RightStr(Dummy, round(Length(Dummy)*cImage.Width/(2*I) - 1));
       cImage.Caption := Dummy;
+      EndTime := GetTickCount64 - StartTime;
+      StatusBar.SimpleText := 'Image loaded in ' + IntToStr(EndTime) + ' ms.';
       if (BMax - BMin) < 20 then BSWarning('Image has a low dynamic range.');
       end
    except
@@ -1416,8 +1421,8 @@ end;
 
 
 procedure TBSForm.seXAngleChange(Sender: TObject);
-var StartTime,
-    EndTime    :integer;
+{var StartTime,
+    EndTime    :integer;}
 
 begin
 if Safe then
@@ -1427,14 +1432,14 @@ if Safe then
    XPArr.sProt := cbProtocol.Text;
    if (iBeam.Picture.Bitmap <> nil) and (length(Beam.Data) <> 0) then
       begin
-      StartTime := GetTickCount64;
+     { StartTime := GetTickCount64;    }
       XPArr.SetParams(seXAngle.Value,-seXOffset.Value,seXWidth.Value);
       XPArr.Draw(iBeam.Picture.Bitmap);
       Beam.CreateProfile(XPArr,DTrackBar.PositionU,DTrackBar.PositionL);
       XPArr.ToSeries(XProfile);
       Show1DResults(XPArr,2);
-      EndTime := GetTickCount64 - StartTime;
-      StatusBar.SimpleText := 'Parameters calculated in ' + IntToStr(EndTime) + ' ms.';
+{      EndTime := GetTickCount64 - StartTime;
+      StatusBar.SimpleText := 'Parameters calculated in ' + IntToStr(EndTime) + ' ms.';  }
       end;
    Safe := true;
    end;

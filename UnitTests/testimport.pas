@@ -26,6 +26,8 @@ type
       procedure TestBrainLabOpen;
       procedure TestBMPOpen;
       procedure TestRAWOpen;
+      procedure TestXIMOpenMV;
+      procedure TestXIMOpenKV;
    end;
 
 implementation
@@ -131,6 +133,36 @@ AssertEquals('Detector Rows',52,fBeam.Rows);
 AssertEquals('Detector Centre',1020226.50,fBeam.Centre,0.01);
 AssertEquals('Detector Max',2147483647.0,fBeam.Max,0.01);
 AssertEquals('Detector Min',0,fBeam.Min);
+end;
+
+
+procedure TTestImport.TestXIMOpenMV;
+begin
+XIMOpen('../TestFiles/BeamProfileCheck.xim',fBeam);
+AssertEquals('Detector Width',43.008,fBeam.Width);
+AssertEquals('Detector Height',43.008,fBeam.Height);
+AssertEquals('Detector XRes',0.0336,fBeam.XRes);
+AssertEquals('Detector YRes',0.0336,fBeam.YRes);
+AssertEquals('Detector Cols',1280,fBeam.Cols);
+AssertEquals('Detector Rows',1280,fBeam.Rows);
+AssertEquals('Detector Centre',4010.50,fBeam.Centre,0.01);
+AssertEquals('Detector Max',65535.0,fBeam.Max,0.01);
+AssertEquals('Detector Min',0,fBeam.Min);
+end;
+
+
+procedure TTestImport.TestXIMOpenKV;
+begin
+XIMOpen('../TestFiles/NormChamber-High1.xim',fBeam);
+AssertEquals('Detector Width',39.7312,fBeam.Width);
+AssertEquals('Detector Height',29.7984,fBeam.Height);
+AssertEquals('Detector XRes',0.0388,fBeam.XRes);
+AssertEquals('Detector YRes',0.0388,fBeam.YRes);
+AssertEquals('Detector Cols',1024,fBeam.Cols);
+AssertEquals('Detector Rows',768,fBeam.Rows);
+AssertEquals('Detector Centre',13176.0,fBeam.Centre,0.01);
+AssertEquals('Detector Max',33775.0,fBeam.Max,0.01);
+AssertEquals('Detector Min',1093.0,fBeam.Min);
 end;
 
 

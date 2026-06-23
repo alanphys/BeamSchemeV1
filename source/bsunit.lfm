@@ -1,7 +1,7 @@
 object BSForm: TBSForm
-  Left = 715
+  Left = 716
   Height = 1157
-  Top = 331
+  Top = 352
   Width = 1160
   HorzScrollBar.Page = 737
   VertScrollBar.Page = 755

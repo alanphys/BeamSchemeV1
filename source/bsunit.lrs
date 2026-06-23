@@ -1,7 +1,7 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TBSForm','FORMDATA',[
-  'TPF0'#7'TBSForm'#6'BSForm'#4'Left'#3#203#2#6'Height'#3#133#4#3'Top'#3'K'#1#5
+  'TPF0'#7'TBSForm'#6'BSForm'#4'Left'#3#204#2#6'Height'#3#133#4#3'Top'#3'`'#1#5
   +'Width'#3#136#4#18'HorzScrollBar.Page'#3#225#2#18'VertScrollBar.Page'#3#243#2
   +#7'Caption'#6#11'Beam Scheme'#12'ClientHeight'#3#133#4#11'ClientWidth'#3#136
   +#4#13'DesignTimePPI'#3#168#0#4'Menu'#7#8'MainMenu'#10'LCLVersion'#6#7'4.0.0.'

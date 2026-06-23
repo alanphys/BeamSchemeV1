@@ -906,6 +906,20 @@ SrcIntfImage.Free;
 end;
 
 
+{$inline on}
+function BytesToInt(BufPtr:PByte; BytesPerPixel:integer; var Index:integer):integer; inline;
+   begin
+   Result := 0;
+   case BytesPerPixel of
+      1:Result := integer(BufPtr[Index]);
+      2:Result := integer(integer(BufPtr[Index]) or integer(BufPtr[Index + 1]) shl 8);
+      4:Result := integer(integer(BufPtr[Index]) or integer(BufPtr[Index + 1]) shl 8 or
+           integer(BufPtr[Index + 2]) shl 16 or integer(BufPtr[Index + 3]) shl 24);
+      end;
+   inc(Index, BytesPerPixel);
+   end;
+
+
 function XIMOpen(sFileName:string; Beam:TBeam):boolean;
 {Import Varian XIM image files. This algorithm has been independently derived
 (read reverse engineered) but the author wishes to acknowledge the contributions
@@ -924,6 +938,12 @@ type
       1: (Chars:array[0..7] of char);
       end;
 
+   TByteToDouble = record
+   case integer of
+      0: (FloatVal:double);
+      1: (Chars:array[0..7] of char);
+   end;
+
    THeader = packed record
       FormatIdent:TFormatIdent;
       FormatVer,
@@ -938,31 +958,23 @@ var I,J,K,L,M  :integer;
     Header     :THeader;
     BufferSize,
     CompBufSize,
-    LUTSize    :Int32;
+    LUTSize,
+    HistogramBins:Int32;
     BitFlags,
     Flags      :byte;
-    BytesRead  :integer;
+    BytesRead,
     Diff,
     Value,
     R11,
     R12,
-    R21        :double;
+    R21,
+    PropsLen,
+    ResPos     :integer;
     Infile     :TFileStream;
-    lBuff      :array of byte;
-    LUT        :array of byte;
-
-    function BytesToFloat(Buffer:array of byte; BytesPerPixel:integer; var Index:integer):double;
-       begin
-       Result := 0;
-       case BytesPerPixel of
-          1:Result := lBuff[Index];
-          2:Result := Int16(lBuff[Index]) + Int16(lBuff[Index + 1]) shl 8;
-          4:Result := Int32(lBuff[Index]) + Int32(lBuff[Index + 1]) shl 8 +
-               Int32(lBuff[Index + 2]) shl 16 + Int32(lBuff[Index + 3]) shl 24;
-          else raise EBSError.Create('Invalid bytes per pixel.',error);
-          end;
-       inc(Index, BytesPerPixel);
-       end;
+    lBuff      :PByte = nil;
+    LUT        :PByte = nil;
+    sProps     :string;
+    FltReader  :TByteToDouble;
 
 begin
 Result := false;
@@ -975,76 +987,68 @@ try
 
    Beam.Cols := Header.XIMWidth;
    Beam.Rows := Header.XIMHeight;
-   Beam.Width := Header.XIMWidth;
-   Beam.Height := Header.XIMHeight;
 
    if Header.CompFlag = 0 then
       begin {image is uncompressed}
 
       {allocate memory for buffer}
       Infile.Read(BufferSize, 4);
-      SetLength(lBuff,BufferSize);
+      GetMem(lBuff,BufferSize);
 
       {get pixel data}
-      Infile.Read(lBuff, BufferSize);
-      Infile.Free;
+      Infile.Read(lBuff[0], BufferSize);
 
       {assign data to beam}
       I := 0;
-      SetLength(Beam.Data,Beam.Rows);
+      SetLength(Beam.Data,Beam.Rows,Beam.Cols);
       for J:= 0 to Header.XIMHeight - 1 do
-         begin
-         SetLength(Beam.Data[J],Beam.Cols);
          for K:=0 to Header.XIMWidth - 1 do
-            Beam.Data[J,K] := BytesToFloat(lBuff,Header.BytesPerPixel,I);
-         end;
-      SetLength(lBuff, 0);
+            Beam.Data[J,K] := BytesToInt(lBuff,Header.BytesPerPixel,I);
       end
      else
       begin {image is compressed}
       {read LUT}
       Infile.Read(LUTSize, 4);
-      SetLength(LUT, LUTSize);
+      GetMem(LUT, LUTSize);
       Infile.Read(LUT[0], LUTSize);
 
       {read compressed pixel data}
       Infile.Read(CompBufSize, 4);
-      SetLength(lBuff, CompBufSize);
+      GetMem(lBuff, CompBufSize);
       Infile.Read(lBuff[0], CompBufSize);
-      Infile.Free;
 
       {assign data to beam}
       I := 0;
-      SetLength(Beam.Data,Beam.Rows);
+      SetLength(Beam.Data,Beam.Rows,Beam.Cols);
 
       {first row and first pixel of second row are int32}
       {assign uncompressed first row}
       J := 0;
-      SetLength(Beam.Data[0],Beam.Cols);
       for K:=0 to Header.XIMWidth - 1 do
-         Beam.Data[J,K] := BytesToFloat(lBuff,4,I);
+         Beam.Data[J,K] := BytesToInt(lBuff,4,I);
 
       {assign uncompressed first pixel of second row}
       J := 1;
       K := 0;
-      SetLength(Beam.Data[1],Beam.Cols);
-      Beam.Data[J,K] := BytesToFloat(lBuff,4,I);
+      R21 := BytesToInt(lBuff,4,I);
+      Beam.Data[J,K] := R21;
 
       {uncompress the rest of the rows}
       K := 1;
       M := 0;
       BitFlags := LUT[0];
-      L := 1281;                  {first row + 1 pixel}
+      L := Header.XIMWidth + 1;                  {first row + 1 pixel}
+      R11 := BytesToInt(lBuff,4,M);              {first element, first row}
+      M := 0;
       while (I < CompBufSize) and (J < Header.XIMHeight - 1) do
          begin
          if K = Header.XIMWidth then
             begin
             Inc(J);
-            SetLength(Beam.Data[J],Beam.Cols);
             K := 0;
             end;
 
-         if (L - 1281) mod 4 = 0 then
+         if (L - Header.XIMWidth - 1) mod 4 = 0 then
             begin
             BitFlags := LUT[M];
             Inc(M);
@@ -1067,25 +1071,52 @@ try
               end;
             else raise EBSError.Create('Invalid bytes per compressed pixel.',error);
             end; {of case}
-         R11 := Beam.Data[(L - 1) div Header.XIMWidth - 1, (L - 1) mod Header.XIMWidth];
-         R12 := Beam.Data[L div Header.XIMWidth - 1, L  mod Header.XIMWidth];
-         R21 := Beam.Data[(L - 1) div Header.XIMWidth, (L - 1) mod Header.XIMWidth];
+         R12 := Round(Beam.Data[L div Header.XIMWidth - 1, L  mod Header.XIMWidth]);
          Value := Diff - R11 + R12 + R21;
          Beam.Data[J,K] := Value;
          Inc(K);
          Inc(L);
+         R11 := R12;
+         R21 := Value;
          end;
-      SetLength(LUT,0);
-      SetLength(lBuff, 0);
       end;
+
+   {skip over uncompressed pixel buffer size}
+   Infile.Seek(4,soCurrent);
+
+   {skip over histogram}
+   Infile.Read(HistogramBins,4);
+   Infile.Seek(HistogramBins*4,soCurrent);
+
+   {read properties into string}
+   PropsLen := Infile.Size - Infile.Position;
+   SetLength(sProps, PropsLen);
+   BytesRead := Infile.Read(sProps[1], PropsLen);
+
+   {find Pixel height and get value}
+   ResPos := Pos('PixelHeight',sProps);
+   ResPos := ResPos + 15;
+   FltReader.Chars := copy(sProps,ResPos,8);
+   Beam.YRes := FltReader.FloatVal;
+   Beam.Height := Header.XIMHeight * Beam.YRes;
+
+   {find pixel width and get value}
+   ResPos := Pos('PixelWidth',sProps);
+   ResPos := ResPos + 14;   
+   FltReader.Chars := copy(sProps,ResPos,8);
+   Beam.XRes := FltReader.FloatVal;
+   Beam.Width := Header.XIMWidth * Beam.XRes;
 
    Result := true;
 
-except
-   raise EBSError.Create('Not a recognised XIM file!',error);
+finally
+   Infile.Free;
+   FreeMemAndNil(LUT);
+   FreeMemAndNil(lBuff);
+   SetLength(sProps,0);
    end;
-
 end;
+{$inline off}
 
 end.
 

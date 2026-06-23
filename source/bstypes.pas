@@ -8,6 +8,8 @@ uses
    Classes, Graphics, sysutils, TASeries;
 
 type
+  PByte = ^byte;
+
   TNorm = (no_norm, norm_cax, norm_max);
 
   TCentre = (peak,detector);
