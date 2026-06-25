@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <MinorVersionNr Value="3"/>
+      <MinorVersionNr Value="4"/>
       <BuildNr Value="147"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable CompanyName="Yenzakahle Medical Physics Inc"/>
@@ -169,8 +169,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="1140"/>
-        <CursorPos X="41" Y="1142"/>
+        <TopLine Value="163"/>
+        <CursorPos X="40" Y="201"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>

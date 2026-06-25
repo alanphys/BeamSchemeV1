@@ -197,7 +197,8 @@ unit bsunit;
  8/9/2025   fix 2D parameter update on normalise
  10/9/2025  fix normalise with no image open
  6/10/2025  add *.IMA and *.2 files extensions for DICOM files
- 16/10/2025 add menu items for normalisation}
+ 16/10/2025 add menu items for normalisation
+ 23/6/2026  add Varian XIM image import}
 
 
 {$mode objfpc}{$H+}
