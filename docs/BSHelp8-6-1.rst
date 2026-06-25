@@ -1,5 +1,5 @@
 .. index::
-   pair Settings; Default Resolution
+   pair: Settings; Default Resolution
 
 Default Resolution
 ==================

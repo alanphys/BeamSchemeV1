@@ -1139,7 +1139,7 @@ end;
 
 procedure TBSForm.miContentsClick(Sender: TObject);
 begin
-ShowHelpOrErrorForKeyword('','HTML/BSHelp.html');
+ShowHelpOrErrorForKeyword('','HTML/index.html');
 end;
 
 

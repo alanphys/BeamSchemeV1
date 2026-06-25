@@ -17,9 +17,11 @@ Supported File Formats
 +----------------+-------------------+-----------------------------------------+
 | :ref:`Image`   |\*.bmp             | Windows bitmap                          |
 +----------------+-------------------+-----------------------------------------+
-|                |\*.tif,\*.tiff     | Tagged Image format files.              |
+|                |\*.tif,\*.tiff     | Tagged Image format files               |
 +----------------+-------------------+-----------------------------------------+
 |                |\*.jpg,\*.jpeg     | Joint Photographic Expert Group files   |
++----------------+-------------------+-----------------------------------------+
+|                |\*.png             | Portable Network Graphic                |
 +----------------+-------------------+-----------------------------------------+
 | :ref:`HIS`     |\*.his             | Raw unstructured data                   |
 +----------------+-------------------+-----------------------------------------+
@@ -28,6 +30,8 @@ Supported File Formats
 | :ref:`iPlan`   |None               | BrainLab iPlan dose plane text file     |
 +----------------+-------------------+-----------------------------------------+
 | :ref:`RAW`     |\*.txt             | Structured text file                    |
++----------------+-------------------+-----------------------------------------+
+| :ref:`XIM`     |\*.xim             | Varian Developer Mode files             |
 +----------------+-------------------+-----------------------------------------+
 
 As the 2D array files have all been reverse engineered there is absolutely no 
@@ -48,3 +52,4 @@ https://github.com/alanphys/BeamSchemeV1/issues and attach the file.
    BSHelp7-7.rst
    BSHelp7-8.rst
    BSHelp7-9.rst
+   BSHelp7-10.rst

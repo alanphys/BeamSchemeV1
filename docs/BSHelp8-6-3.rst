@@ -1,5 +1,5 @@
 .. index::
-   pair Settings; IFA Factor
+   pair: Settings; IFA Factor
 
 IFA Factor
 ==========

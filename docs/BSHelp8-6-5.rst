@@ -1,5 +1,5 @@
 .. index::
-   pair Settings; Centre definition
+   pair: Settings; Centre definition
 
 Centre Definition
 =================

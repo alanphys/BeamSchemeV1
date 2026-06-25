@@ -1,5 +1,5 @@
 .. index::
-   pair Settings; Precision
+   pair: Settings; Precision
 
 Precision
 =========

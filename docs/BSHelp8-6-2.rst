@@ -1,5 +1,5 @@
 .. index::
-   pair Settings; IFA Type
+   pair: Settings; IFA Type
 
 IFA Type
 ========

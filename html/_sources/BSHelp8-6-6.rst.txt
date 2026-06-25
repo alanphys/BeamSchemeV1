@@ -1,5 +1,5 @@
 .. index::
-   pair Settings; Top Radius
+   pair: Settings; Top Radius
 
 Top Radius
 ==========

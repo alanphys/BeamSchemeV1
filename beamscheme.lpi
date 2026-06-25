@@ -157,7 +157,6 @@
       <Unit0>
         <Filename Value="beamscheme.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <CursorPos X="3" Y="2"/>
         <UsageCount Value="200"/>
@@ -169,8 +168,9 @@
         <ComponentName Value="BSForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1418"/>
-        <CursorPos X="26" Y="1425"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="1140"/>
+        <CursorPos X="41" Y="1142"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
@@ -654,9 +654,8 @@
         <CursorPos Y="1095"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
-          <IsVisibleTab Value="True"/>
           <EditorIndex Value="-1"/>
-          <WindowIndex Value="1"/>
+          <WindowIndex Value="-1"/>
           <TopLine Value="491"/>
           <CursorPos X="53" Y="520"/>
         </ExtraEditor1>
@@ -848,123 +847,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1003" TopLine="983"/>
+        <Caret Line="1005" TopLine="983"/>
       </Position1>
       <Position2>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1005" TopLine="983"/>
+        <Caret Line="1006" TopLine="983"/>
       </Position2>
       <Position3>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1006" TopLine="983"/>
+        <Caret Line="1007" TopLine="983"/>
       </Position3>
       <Position4>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1007" TopLine="983"/>
+        <Caret Line="1006" TopLine="983"/>
       </Position4>
       <Position5>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1006" TopLine="983"/>
+        <Caret Line="1007" TopLine="983"/>
       </Position5>
       <Position6>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1007" TopLine="983"/>
+        <Caret Line="1006" TopLine="983"/>
       </Position6>
       <Position7>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1006" TopLine="983"/>
+        <Caret Line="1007" TopLine="983"/>
       </Position7>
       <Position8>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1007" TopLine="983"/>
+        <Caret Line="1125" Column="14" TopLine="1081"/>
       </Position8>
       <Position9>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1125" Column="14" TopLine="1081"/>
+        <Caret Line="919" TopLine="895"/>
       </Position9>
       <Position10>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="919" TopLine="895"/>
+        <Caret Line="1046" Column="36" TopLine="1022"/>
       </Position10>
       <Position11>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1046" Column="36" TopLine="1022"/>
+        <Caret Line="914" Column="19" TopLine="891"/>
       </Position11>
       <Position12>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="914" Column="19" TopLine="891"/>
+        <Caret Line="975" Column="22" TopLine="937"/>
       </Position12>
       <Position13>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="975" Column="22" TopLine="937"/>
+        <Caret Line="910" Column="29" TopLine="903"/>
       </Position13>
       <Position14>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="910" Column="29" TopLine="903"/>
+        <Caret Line="1116" Column="9" TopLine="1050"/>
       </Position14>
       <Position15>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1116" Column="9" TopLine="1050"/>
+        <Caret Line="991" TopLine="980"/>
       </Position15>
       <Position16>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="991" TopLine="980"/>
+        <Caret Line="995" TopLine="980"/>
       </Position16>
       <Position17>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="995" TopLine="980"/>
+        <Caret Line="996" TopLine="980"/>
       </Position17>
       <Position18>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="996" TopLine="980"/>
+        <Caret Line="999" TopLine="980"/>
       </Position18>
       <Position19>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="999" TopLine="980"/>
+        <Caret Line="1018" Column="27" TopLine="983"/>
       </Position19>
       <Position20>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1018" Column="27" TopLine="983"/>
+        <Caret Line="991" TopLine="983"/>
       </Position20>
       <Position21>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="991" TopLine="983"/>
+        <Caret Line="995" TopLine="983"/>
       </Position21>
       <Position22>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="995" TopLine="983"/>
+        <Caret Line="996" TopLine="983"/>
       </Position22>
       <Position23>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="996" TopLine="983"/>
+        <Caret Line="999" TopLine="983"/>
       </Position23>
       <Position24>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="999" TopLine="983"/>
+        <Caret Line="1002" TopLine="983"/>
       </Position24>
       <Position25>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1002" TopLine="983"/>
+        <Caret Line="1003" TopLine="983"/>
       </Position25>
       <Position26>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1003" TopLine="983"/>
+        <Caret Line="1004" TopLine="983"/>
       </Position26>
       <Position27>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1004" TopLine="983"/>
+        <Caret Line="520" Column="53" TopLine="491"/>
       </Position27>
       <Position28>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="520" Column="53" TopLine="491"/>
+        <Caret Line="1106" Column="25" TopLine="980"/>
       </Position28>
       <Position29>
         <Filename Value="source/importunit.pas"/>
-        <Caret Line="1106" Column="25" TopLine="980"/>
+        <Caret Line="1112" Column="21" TopLine="1077"/>
       </Position29>
       <Position30>
-        <Filename Value="source/importunit.pas"/>
-        <Caret Line="1112" Column="21" TopLine="1077"/>
+        <Filename Value="source/bsunit.pas"/>
+        <Caret Line="1426" Column="29" TopLine="1418"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
